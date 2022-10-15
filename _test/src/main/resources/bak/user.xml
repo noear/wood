@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//noear.org//DTD Mapper 3.0//EN" "http://noear.org/dtd/wood-mapper.dtd">
-<mapper namespace="benchmark.jmh.weed.mapper.user"
-        import="benchmark.jmh.weed.model.*"
+<mapper namespace="benchmark.jmh.wood.mapper.user"
+        import="benchmark.jmh.wood.model.*"
         baseMapper="WeedSQLSysUser">
 
     <sql id="userSelect" return="WeedSQLSysUser">

@@ -1,12 +1,9 @@
 package benchmark.jmh;
 
 import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
 import benchmark.jmh.jdbc.JdbcService;
-import benchmark.jmh.weed.WeedService;
+import benchmark.jmh.wood.WoodService;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -24,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Benchmark)
 public class JMHMain {
     JdbcService jdbcService = null;
-    WeedService weedService = null;
+    WoodService woodService = null;
 
     @Setup
     public void init() {
@@ -32,8 +29,8 @@ public class JMHMain {
         jdbcService = new JdbcService();
         jdbcService.init();
 
-        weedService = new WeedService();
-        weedService.init();
+        woodService = new WoodService();
+        woodService.init();
 
     }
 
@@ -57,48 +54,48 @@ public class JMHMain {
 
     /*   Weed3    */
     @Benchmark
-    public void weedInsert() {
-        weedService.addEntity();
+    public void woodInsert() {
+        woodService.addEntity();
     }
 
     @Benchmark
-    public void weedSelectById() {
-        weedService.getEntity();
+    public void woodSelectById() {
+        woodService.getEntity();
     }
 
     @Benchmark
-    public void weedLambdaQuery() {
-        weedService.lambdaQuery();
+    public void woodLambdaQuery() {
+        woodService.lambdaQuery();
     }
 
     @Benchmark
-    public void weedExecuteJdbc() {
-        weedService.executeJdbcSql();
+    public void woodExecuteJdbc() {
+        woodService.executeJdbcSql();
     }
 
     @Benchmark
-    public void weedExecuteJdbc2() throws SQLException {
-        weedService.executeJdbcSql2();
+    public void woodExecuteJdbc2() throws SQLException {
+        woodService.executeJdbcSql2();
     }
 
     @Benchmark
-    public void weedExecuteTemplate() {
-        weedService.executeTemplateSql();
+    public void woodExecuteTemplate() {
+        woodService.executeTemplateSql();
     }
 
     @Benchmark
-    public void weedExecuteTemplate2() throws SQLException{
-        weedService.executeTemplateSql2();
+    public void woodExecuteTemplate2() throws SQLException{
+        woodService.executeTemplateSql2();
     }
 
     @Benchmark
-    public void weedFile() {
-        weedService.sqlFile();
+    public void woodFile() {
+        woodService.sqlFile();
     }
 
     @Benchmark
-    public void weedPageQuery() {
-        weedService.pageQuery();
+    public void woodPageQuery() {
+        woodService.pageQuery();
     }
 
 

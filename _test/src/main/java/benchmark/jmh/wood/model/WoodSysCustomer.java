@@ -1,4 +1,4 @@
-package benchmark.jmh.weed.model;
+package benchmark.jmh.wood.model;
 
 
 import lombok.Data;
@@ -7,7 +7,7 @@ import org.noear.wood.annotation.Table;
 
 @Data
 @Table("sys_customer")
-public class WeedSysCustomer {
+public class WoodSysCustomer {
     @PrimaryKey
     private Integer id;
     private String code;
