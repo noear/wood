@@ -5,7 +5,7 @@
 
     <groupId>org.noear</groupId>
     <artifactId>_test</artifactId>
-    <version>0.0.1</version>
+    <version>dev</version>
     <packaging>jar</packaging>
 
     <name>${project.artifactId}</name>
@@ -55,12 +55,6 @@
             <groupId>org.noear</groupId>
             <artifactId>wood</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-        </dependency>
-
 
         <dependency>
             <groupId>org.noear</groupId>

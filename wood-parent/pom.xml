@@ -84,13 +84,7 @@
             <dependency>
                 <groupId>org.noear</groupId>
                 <artifactId>redisx</artifactId>
-                <version>1.4.3</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.mongodb</groupId>
-                <artifactId>mongo-java-driver</artifactId>
-                <version>3.12.6</version>
+                <version>1.4.4</version>
             </dependency>
 
             <dependency>

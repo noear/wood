@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class MapperInvokeForAnn implements IMapperInvoke {
+public class MapperInvokeForAnn implements IMapperInvoke {
     public Object call(Object proxy, DbContext db, String sqlid, Class<?> caller, MethodWrap mWrap, Object[] args) throws Throwable {
         Sql ann = mWrap.method.getAnnotation(Sql.class);
 

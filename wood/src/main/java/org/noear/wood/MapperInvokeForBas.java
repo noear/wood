@@ -6,7 +6,7 @@ import org.noear.wood.wrap.MethodWrap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-class MapperInvokeForBas implements IMapperInvoke {
+public class MapperInvokeForBas implements IMapperInvoke {
 
     static Map<Object, BaseMapperWrap> _lib = new ConcurrentHashMap<>();
 
