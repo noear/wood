@@ -1,4 +1,4 @@
-package webapp.dso;
+package wooddemo2.xmlsql2;
 
 import java.math.*;
 import java.sql.SQLException;
@@ -13,8 +13,9 @@ import org.noear.wood.xml.Namespace;
 
 import webapp.model.AppxModel;
 
-@Namespace("webapp.dso.SqlMapper")
-public interface SqlMapper{
+@Db("db")
+@Namespace("wooddemo2.xmlsql2.test")
+public interface test{
     //随便取条数据的ID
     int appx_get() throws SQLException;
 
@@ -26,7 +27,9 @@ public interface SqlMapper{
 
     List<AppxModel> appx_getlist(int app_id) throws SQLException;
 
-    List<AppxModel> appx_getlist_byid(int app_id) throws SQLException;
-
     List<Integer> appx_getids() throws SQLException;
+
+    int appx_udp(String tag, String tag1) throws SQLException;
+
+    int appx_udp2(String tag, String tag1) throws SQLException;
 }
