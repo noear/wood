@@ -6,7 +6,7 @@
 
     <groupId>org.noear</groupId>
     <artifactId>wood-parent</artifactId>
-    <version>1.0.0-M1</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
@@ -36,11 +36,11 @@
     </scm>
 
     <properties>
+        <revision>1.0.0-M1</revision>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-
-        <wood.ver>1.0.0-M1</wood.ver>
     </properties>
 
     <dependencyManagement>
@@ -48,37 +48,37 @@
             <dependency>
                 <groupId>org.noear</groupId>
                 <artifactId>wood</artifactId>
-                <version>${wood.ver}</version>
+                <version>${revision}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.noear</groupId>
                 <artifactId>wood-maven-plugin</artifactId>
-                <version>${wood.ver}</version>
+                <version>${revision}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.noear</groupId>
                 <artifactId>wood.cache.ehcache</artifactId>
-                <version>${wood.ver}</version>
+                <version>${revision}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.noear</groupId>
                 <artifactId>wood.cache.j2cache</artifactId>
-                <version>${wood.ver}</version>
+                <version>${revision}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.noear</groupId>
                 <artifactId>wood.cache.memcached</artifactId>
-                <version>${wood.ver}</version>
+                <version>${revision}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.noear</groupId>
                 <artifactId>wood.cache.redis</artifactId>
-                <version>${wood.ver}</version>
+                <version>${revision}</version>
             </dependency>
 
             <dependency>
@@ -213,6 +213,32 @@
                 </configuration>
             </plugin>
 
+            <!-- 版本号管理 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.2.7</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
