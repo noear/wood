@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  org.noear.weed.springboot_starter.ElasticSearchAutoConfiguration

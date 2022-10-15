@@ -233,7 +233,6 @@
         <module>../_extend/wood.cache.memcached</module>
         <module>../_extend/wood.cache.redis</module>
         <module>../_extend/wood.cache.ehcache</module>
-        <module>../_extend/wood.cache.j2cache</module>
 
     </modules>
 
