@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//noear.org//DTD Mapper 3.0//EN" "http://noear.org/dtd/wood-mapper.dtd">
+<mapper namespace="wooddemo2.xmlsql2"
+        import="wood_demo.mapper.*">
+    <sql id="get_group_buying_by_ids" remarks="通过ID获取当前团购"
+         return="List[zm.data.code.pepper.api.models.db.GroupBuyingModel]"
+         caching="cache_pepper"
+         cacheTag="group_buying">
+        SELECT * FROM `group_buying` WHERE gb_id in (@{gb_ids:Iterable[Long]})
+        ORDER BY FIELD (gb_id,${gb_ids:Iterable[Long]}) desc;
+    </sql>
+
+    <sql id="test"
+         param="gb_ids:List[Long]"
+         return="List[zm.data.code.pepper.api.models.db.GroupBuyingModel]">
+        SELECT * FROM `group_buying`
+        <trim prefix="WHERE " trimStart="AND ">
+            <if test="gb_ids.size() gt 0">
+                AND gb_id in (@{gb_ids})
+            </if>
+        </trim>
+        order by gb_id
+</sql>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//noear.org//DTD Mapper 3.0//EN" "http://noear.org/dtd/wood-mapper.dtd">
+<mapper db="db" namespace="wooddemo2.xmlsql2.test">
+    <sql id="appx_get" remarks="随便取条数据的ID" return="int">select app_id from appx limit 1</sql>
+
+    <sql cacheTag="app_${app_id}" caching="test" id="appx_get2" remarks="根据id取条数据" return="webapp.model.AppxModel"
+         usingCache="300">select * from appx where app_id = @{app_id:int} limit 1
+    </sql>
+
+    <sql cacheClear="test" id="appx_get3" remarks="取一批ID" return="Map">select * from ${tb:String} where app_id =
+        @{app_id:int} limit 1
+    </sql>
+
+    <sql id="appx_getlist" return="List[webapp.model.AppxModel]">select * from appx where app_id>@{app_id:int} order by
+        app_id asc limit 4
+    </sql>
+
+    <sql id="appx_getids" return="List[Integer]">select app_id from appx limit 4</sql>
+
+    <sql id="appx_udp" return="int" declare="tag:String,tag1:String">
+        select app_id from appx
+        <if test="tag?! and tag1??">
+            where app_id > 10
+        </if>
+        limit 4
+    </sql>
+
+    <sql id="appx_udp2" return="int" declare="tag:String,tag1:String">
+        select app_id from appx
+        <if test="tag ?! and tag1 ??">
+            where app_id > 10
+        </if>
+        limit 4
+    </sql>
+</mapper>
