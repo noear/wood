@@ -9,6 +9,9 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+/**
+ * 数据据源
+ * */
 public class DbDataSource implements DataSource {
     protected PrintWriter logWriter;
     protected String url;
@@ -44,7 +47,7 @@ public class DbDataSource implements DataSource {
         try {
             Class.forName(driverClass);
         }catch (ClassNotFoundException ex){
-            throw new RuntimeException(ex);
+            throw new IllegalStateException(ex);
         }
     }
 
