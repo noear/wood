@@ -46,10 +46,20 @@ class MapperHandler implements InvocationHandler {
         Class caller = method.getDeclaringClass();
 
         if (method.isDefault()) {
-            if (this.lookup == null) {
-                Constructor<MethodHandles.Lookup> constructor = MethodHandles.Lookup.class.getDeclaredConstructor(Class.class, Integer.TYPE);
-                constructor.setAccessible(true);
-                this.lookup = constructor.newInstance(caller, MethodHandles.Lookup.PRIVATE);
+              if (this.lookup == null) {
+
+                for (Constructor<?> constructor : MethodHandles.Lookup.class.getDeclaredConstructors()) {
+                    if (constructor.getParameterCount() >= 2) {
+                        constructor.setAccessible(true);
+                        if (constructor.getParameterCount() == 2) {
+                            this.lookup = (MethodHandles.Lookup)constructor.newInstance(caller, MethodHandles.Lookup.PRIVATE);
+                        } else if (constructor.getParameterCount() == 3) {
+                            //兼容jdk17+
+                            this.lookup = (MethodHandles.Lookup)constructor.newInstance(caller, null, MethodHandles.Lookup.PRIVATE);
+                        }
+                        break;
+                    }
+                }
             }
 
             return this.lookup.unreflectSpecial(method, caller).bindTo(proxy).invokeWithArguments(args);
