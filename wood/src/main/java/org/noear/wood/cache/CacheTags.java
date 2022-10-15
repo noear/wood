@@ -1,6 +1,6 @@
 package org.noear.wood.cache;
 
-import org.noear.wood.IWeedKey;
+import org.noear.wood.IWoodKey;
 import org.noear.wood.ext.Fun1;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class CacheTags {
     /// 为缓存添加一个标签（异步 Add{end}）
     /// </summary>
     /// <param name="target">目标</param>
-    public void endAdd(IWeedKey target)
+    public void endAdd(IWoodKey target)
     {
         endAdd(target.getWoodKey());
     }
@@ -150,7 +150,7 @@ public class CacheTags {
     }
 
 
-    public void removeTag(String tag, String val, IWeedKey target)
+    public void removeTag(String tag, String val, IWoodKey target)
     {
         removeTag(tag, val, (target.getWoodKey()));
     }

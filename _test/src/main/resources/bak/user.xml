@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//noear.org//DTD Mapper 3.0//EN" "http://noear.org/dtd/wood-mapper.dtd">
 <mapper namespace="benchmark.jmh.wood.mapper.user"
         import="benchmark.jmh.wood.model.*"
-        baseMapper="WeedSQLSysUser">
+        baseMapper="WoodSQLSysUser">
 
-    <sql id="userSelect" return="WeedSQLSysUser">
+    <sql id="userSelect" return="WoodSQLSysUser">
         select * from sys_user where 1=1
         <if test="id??">
             and id = @{id:Integer}

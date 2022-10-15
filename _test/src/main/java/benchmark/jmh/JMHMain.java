@@ -52,7 +52,7 @@ public class JMHMain {
     }
 
 
-    /*   Weed3    */
+    /*   Wood    */
     @Benchmark
     public void woodInsert() {
         woodService.addEntity();

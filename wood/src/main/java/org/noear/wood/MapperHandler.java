@@ -74,7 +74,7 @@ class MapperHandler implements InvocationHandler {
                             String name = method.getName();
                             switch (name) {
                                 case "toString":
-                                    return "Weed mapper: " + mapperClz;
+                                    return "Wood mapper: " + mapperClz;
                                 case "hashCode":
                                     return System.identityHashCode(proxy);
                                 case "equals":

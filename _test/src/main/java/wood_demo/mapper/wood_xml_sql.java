@@ -5,9 +5,9 @@ import java.util.Map;
 import org.noear.wood.SQLBuilder;
 import org.noear.wood.xml.XmlSqlFactory;
 
-public class weed_xml_sql{
+public class wood_xml_sql {
     private static final String _namespace="org.xxx.xxx";
-    public weed_xml_sql(){
+    public wood_xml_sql(){
         XmlSqlFactory.register(_namespace + ".user_add",this::user_add);
         XmlSqlFactory.register(_namespace + ".user_add_if",this::user_add_if);
         XmlSqlFactory.register(_namespace + ".user_del",this::user_del);

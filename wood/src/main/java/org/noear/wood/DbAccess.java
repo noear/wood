@@ -16,7 +16,7 @@ import java.util.Map;
  * Created by noear on 14-9-5.
  * 数据库方问基类
  */
-public abstract class DbAccess<T extends DbAccess> implements IWeedKey,IQuery,Serializable {
+public abstract class DbAccess<T extends DbAccess> implements IWoodKey,IQuery,Serializable {
     /*查询语句*/
     public String commandText = null;
 
@@ -55,15 +55,15 @@ public abstract class DbAccess<T extends DbAccess> implements IWeedKey,IQuery,Se
     }
 
 
-    /*IWeedKey begin*/
+    /*IWoodKey begin*/
     protected String _woodKey;
 
     @Override
     public String getWoodKey() {
-        return buildWeedKey(paramS);
+        return buildWoodKey(paramS);
     }
 
-    protected String buildWeedKey(Collection<Variate> args) {
+    protected String buildWoodKey(Collection<Variate> args) {
         if (_woodKey == null) {
             StringBuilder sb = new StringBuilder();
 
@@ -77,7 +77,7 @@ public abstract class DbAccess<T extends DbAccess> implements IWeedKey,IQuery,Se
         }
         return _woodKey;
     }
-    /*IWeedKey end*/
+    /*IWoodKey end*/
 
     /*获取参数*/
     protected Variate doGet(String paramName) {

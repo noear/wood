@@ -48,8 +48,8 @@ public class DbUtil {
         DataSource source = dbClickHouseCfg();
 
         DbContext db = new DbContext(source).nameSet("rock");
-        //WeedConfig.isUsingSchemaPrefix =true;
-        //WeedConfig.isUsingUnderlineColumnName=true;
+        //WoodConfig.isUsingSchemaPrefix =true;
+        //WoodConfig.isUsingUnderlineColumnName=true;
         db.initMetaData();
         return db;
     }

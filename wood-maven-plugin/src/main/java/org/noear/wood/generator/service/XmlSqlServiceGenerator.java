@@ -92,7 +92,7 @@ public class XmlSqlServiceGenerator {
 
         String packagename = namespace.substring(0,sepindex);
         String classname = namespace.substring(sepindex+1);
-        //String classname = xmlFile.getName().split("\\.")[0]; //namespace.replace(".","_"); //"weed_xml_sql";
+        //String classname = xmlFile.getName().split("\\.")[0]; //namespace.replace(".","_"); //"wood_xml_sql";
 
         StringBuilder sb = new StringBuilder();
 

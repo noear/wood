@@ -140,8 +140,8 @@ public class DbUtil {
         HikariDataSource source = dbMysqlCfg(); // dbH2Cfg(); // dbSqliteCfg(); // dbH2Cfg(); // dbOracleCfg(); //  dbPgsqlCfg(); // dbMssqlCfg(); //
 
         DbContext db = new DbContext(source).nameSet("rock");
-        //WeedConfig.isUsingSchemaPrefix =true;
-        //WeedConfig.isUsingUnderlineColumnName=true;
+        //WoodConfig.isUsingSchemaPrefix =true;
+        //WoodConfig.isUsingUnderlineColumnName=true;
         db.initMetaData();
         return db;
     }

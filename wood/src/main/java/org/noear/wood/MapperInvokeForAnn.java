@@ -29,7 +29,7 @@ class MapperInvokeForAnn implements IMapperInvoke {
             cache_tmp = WoodConfig.libOfCache.get(_caching);
 
             if (cache_tmp == null) {
-                throw new RuntimeException("WeedConfig.libOfCache does not exist:@" + _caching);
+                throw new RuntimeException("WoodConfig.libOfCache does not exist:@" + _caching);
             }
         }
 

@@ -132,7 +132,7 @@ public class DbXmlsqlProcedure extends DbProcedure {
 
             //如果不存在，则提示异常
             if (cmd.cache == null) {
-                throw new RuntimeException("WeedConfig.libOfCache does not exist:@" + block._caching);
+                throw new RuntimeException("WoodConfig.libOfCache does not exist:@" + block._caching);
             }
 
             if (block.isSelect()) {

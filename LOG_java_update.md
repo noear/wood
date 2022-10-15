@@ -69,7 +69,7 @@
 * 增加批量jdbc更新的能力
 
 #### 3.3.21
-* 增加 WeedConfig.isSelectItemEmptyAsNull 配置项
+* 增加 WoodConfig.isSelectItemEmptyAsNull 配置项
 
 #### 3.3.20
 * 修复 MapperBase update(item, bool, wq) 数据没进去的 bug
@@ -104,8 +104,8 @@
 * 取消模板引擎支持，专做xml sql
 
 #### 3.2.16
-* WeedConfig 增加命名策略配置支持
-* WeedConfig 增加字段类型转换器配置支持
+* WoodConfig 增加命名策略配置支持
+* WoodConfig 增加字段类型转换器配置支持
     * 增加数字类型的自由转换；
     * 增加字符串转Date的自动转换;
 * Command::test2() 更名为 Command::toSqlString();
@@ -204,7 +204,7 @@
 * 添加db.exec()接口
 
 ####  3.1.6
-* 将包名：noear.weed 改为：org.noear.weed
+* 将包名：noear.wood 改为：org.noear.wood
 * List<Map<String,Object>> getMapList()
 * Map<String,Object> getMap()
 
@@ -300,7 +300,7 @@
 
 ####  3.0.4.64::
 * 增加对$表达式的验证和过滤
-* WeedConfig::修改.添加 isUsingValueExpression //是否开启$表达式支持（默认开启）
+* WoodConfig::修改.添加 isUsingValueExpression //是否开启$表达式支持（默认开启）
 * DbTableQueryBase::修改.添加 usingExpr(...) //当前操作是否开启$表达式支持（默认为 isUsingValueExpression）
 
 
@@ -329,8 +329,8 @@ db.lastCommand.text; //拿到执行的代码
 * DbTableQueryBase::修改.添加 count(...);
 
 ####  3.0.4.51::
-* WeedConfig::修改.添加 onExecuteAft
-* WeedConfig::修改.添加 onExecuteBef
+* WoodConfig::修改.添加 onExecuteAft
+* WoodConfig::修改.添加 onExecuteBef
 * SQLer::修改.添加 监听的支持（通过:onExecuteAft,onExecuteBef）
 * DbAccess::修改.添加 onCommandBuilt(...); //可再次为cmd做处理
 * DbTableQueryBase::修改.添加 count();
@@ -391,7 +391,7 @@ db.lastCommand.text; //拿到执行的代码
     call()->DbStoredProcedure 改为: call()->DbProcedure//新：根据输入情况反回：DbStoredProcedure 或 DbQueryProcedure
 }
 
-* 添加java版本 demo（即：Weed3Demo）
+* 添加java版本 demo（即：WoodDemo）
 
 ####  3.0.4.38::
 * DbTable::修改.添加 set(k,v) 设置值

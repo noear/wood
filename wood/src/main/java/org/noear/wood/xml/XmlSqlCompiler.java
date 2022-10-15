@@ -33,7 +33,7 @@ public class XmlSqlCompiler {
         int sepindex = namespace.lastIndexOf('.');
 
         String packagename = namespace.substring(0,sepindex);
-        String classname = namespace.substring(sepindex+1); //.replace(".","_"); //namespace.replace(".","_"); //"weed_xml_sql";
+        String classname = namespace.substring(sepindex+1); //.replace(".","_"); //namespace.replace(".","_"); //"wood_xml_sql";
 
         StringBuilder sb = new StringBuilder();
 

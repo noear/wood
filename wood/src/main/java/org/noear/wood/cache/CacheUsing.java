@@ -1,6 +1,6 @@
 package org.noear.wood.cache;
 
-import org.noear.wood.IWeedKey;
+import org.noear.wood.IWoodKey;
 import org.noear.wood.ext.Act0;
 import org.noear.wood.ext.Act2;
 import org.noear.wood.ext.Fun0;
@@ -12,7 +12,7 @@ import org.noear.wood.ext.Fun0Ex;
  * @author noear
  * @since 3.0
  */
-public class CacheUsing implements ICacheUsing<CacheUsing>, IWeedKey {
+public class CacheUsing implements ICacheUsing<CacheUsing>, IWoodKey {
     //#region ICacheControllerState 成员
     public ICacheService outerCaching;
     public int cacheSeconds;

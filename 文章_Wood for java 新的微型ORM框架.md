@@ -1,11 +1,11 @@
-# Weed3 for java 新的微型ORM框架
+# Wood for java 新的微型ORM框架
 
-Weed3，微型ORM框架（支持：java sql，xml sql，annotation sql；template sql；事务；缓存；监听；等...）
+Wood，微型ORM框架（支持：java sql，xml sql，annotation sql；template sql；事务；缓存；监听；等...）
 
 应该算是个功能全面且小巧的ORM框架：0.2Mb，无其它依赖。对外的接口也不多，主要由DbContext上的四个接口发起所有的操作。
 
 
-#### Weed3 特点和理念：
+#### Wood 特点和理念：
 * 高性能：两年前有个同事测过四个ORM框架，它是性能最好的（不知道现在是不是）。
 * 跨平台：可以嵌入到JVM脚本引擎（js, groovy, lua, python, ruby）；也有.net，php版本。
 * 很小巧：0.1Mb（且是功能完整，方案丰富；可极大简化数据库开发）。
@@ -14,7 +14,7 @@ Weed3，微型ORM框架（支持：java sql，xml sql，annotation sql；templat
 
 
 
-#### Weed3 组件： 
+#### Wood 组件： 
 | 组件 | 说明 |
 | --- | --- |
 | org.noear:wood | 主框架（没有任何依赖） |
@@ -32,7 +32,7 @@ Weed3，微型ORM框架（支持：java sql，xml sql，annotation sql；templat
 
 
 
-#### Weed3 meven配置： 
+#### Wood meven配置： 
 
 ```xml 
 <!-- 框架包 -->
@@ -52,7 +52,7 @@ Weed3，微型ORM框架（支持：java sql，xml sql，annotation sql；templat
 
 
 
-#### Weed3 入手流程：
+#### Wood 入手流程：
 
 * 配置DataSource信息
 * 实始化DbContext
@@ -181,7 +181,7 @@ User user = db.mapper("@demo.dso.db.getUserById",args);
 
 ##### （二）db.table()，提供纯java链式操作
 
-  > 这是Weed3最初的样子，这也是我最喜欢的方法。也是具体跨平台嵌入的关键能力。
+  > 这是Wood最初的样子，这也是我最喜欢的方法。也是具体跨平台嵌入的关键能力。
   >
   > BaseMapper内部也是由db.table()实现的，简单几行代就OK了。
   >
@@ -560,7 +560,7 @@ Trans.tran(() -> {
 * 监听异常
 
 ```java
-WeedConfig.onException((cmd,ex)->{
+WoodConfig.onException((cmd,ex)->{
   //可以做个记录
 	ex.printStackTrace();
 });
@@ -569,7 +569,7 @@ WeedConfig.onException((cmd,ex)->{
 * 观察性能
 
 ```java
-WeedConfig.onExecuteAft((cmd)->{
+WoodConfig.onExecuteAft((cmd)->{
   //cmd.timespan()  //获取执行时长（毫秒）
 });
 ```
@@ -577,7 +577,7 @@ WeedConfig.onExecuteAft((cmd)->{
 * 记录行为
 
 ```java
-WeedConfig.onLog((cmd) -> {
+WoodConfig.onLog((cmd) -> {
     if (cmd.isLog >= 0) { //isLog: -1,不需要记录；0,默认；1,需要记录
         //cmd.text;         //执行代码
         //cmd.paramS;   	  //执行参数
@@ -590,7 +590,7 @@ WeedConfig.onLog((cmd) -> {
 
 ```java
 //例：禁止DELETE操作
-WeedConfig.onExecuteBef((cmd)->{
+WoodConfig.onExecuteBef((cmd)->{
     if(cmd.text.indexOf("DELETE ") >=0){
         return false;
     }

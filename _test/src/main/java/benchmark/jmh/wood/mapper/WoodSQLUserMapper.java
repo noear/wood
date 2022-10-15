@@ -8,7 +8,7 @@ import org.noear.wood.xml.Namespace;
 
 import java.util.List;
 
-@Namespace("benchmark.jmh.weed.mapper")
+@Namespace("benchmark.jmh.wood.mapper")
 public interface WoodSQLUserMapper extends BaseMapper<WoodSQLSysUser> {
     @Sql("select * from sys_user where id = ?")
     WoodSQLSysUser selectById(Integer id);

@@ -127,7 +127,7 @@ public class XmlSqlBlock {
     public IXmlSqlBuilder builder;
 
     static final String java_types = ",char,boolean,short,int,long,float,double,Character,Boolean,Short,Integer,Long,Float,Double,Date,LocalDateTime,LocalTime,LocalDate,Object,";
-    static final String weed_types = ",Map,MapList,DateItem,DateList,";
+    static final String wood_types = ",Map,MapList,DateItem,DateList,";
     public String newType(String type ) {
         if(type == null){
             return null;
@@ -146,7 +146,7 @@ public class XmlSqlBlock {
         if (java_types.indexOf("," + type + ",") >= 0) {
             return type;
         }
-        if (weed_types.indexOf("," + type + ",") >= 0) {
+        if (wood_types.indexOf("," + type + ",") >= 0) {
             return type;
         }
 

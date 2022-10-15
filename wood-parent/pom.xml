@@ -29,8 +29,8 @@
         </developer>
     </developers>
     <scm>
-        <connection>scm:git:git@github.com:noear/Weed3.git</connection>
-        <developerConnection>scm:git:git@github.com:noear/Weed3.git</developerConnection>
+        <connection>scm:git:git@github.com:noear/wood.git</connection>
+        <developerConnection>scm:git:git@github.com:noear/wood.git</developerConnection>
         <url>https://github.com/noear/wood</url>
         <tag>master</tag>
     </scm>

@@ -4,12 +4,12 @@
 [![QQ交流群](https://img.shields.io/badge/QQ交流群-22200020-orange)](https://jq.qq.com/?_wv=1027&k=kjB5JNiC)
 
 
-# Weed for java
+# Wood for java
 微型ORM框架（支持：java sql，xml sql，annotation sql，template sql；事务；缓存；监控；等...）
 
 
 
-#### Weed3 特点和理念：
+#### Wood 特点和理念：
 * 跨平台：可以嵌入到JVM脚本引擎（js, groovy, lua, python, ruby）及GraalVM支持的部分语言。
 * 很小巧：0.2Mb（且是功能完整，方案丰富；可极大简化数据库开发）。
 * 有个性：不喜欢反射、不喜欢配置...（除了连接，不需要任何配置）。
