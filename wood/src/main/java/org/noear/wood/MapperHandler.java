@@ -1,16 +1,15 @@
 package org.noear.wood;
 
+import org.noear.wood.utils.InvocationHandlerUtils;
 import org.noear.wood.utils.ThrowableUtils;
 import org.noear.wood.wrap.MethodWrap;
 import org.noear.wood.xml.Namespace;
 
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
 import java.sql.SQLException;
 
 class MapperHandler implements InvocationHandler {
 
-    protected MethodHandles.Lookup lookup;
     protected DbContext db;
     protected Class<?> mapperClz;
 
@@ -46,23 +45,7 @@ class MapperHandler implements InvocationHandler {
         Class caller = method.getDeclaringClass();
 
         if (method.isDefault()) {
-              if (this.lookup == null) {
-
-                for (Constructor<?> constructor : MethodHandles.Lookup.class.getDeclaredConstructors()) {
-                    if (constructor.getParameterCount() >= 2) {
-                        constructor.setAccessible(true);
-                        if (constructor.getParameterCount() == 2) {
-                            this.lookup = (MethodHandles.Lookup)constructor.newInstance(caller, MethodHandles.Lookup.PRIVATE);
-                        } else if (constructor.getParameterCount() == 3) {
-                            //兼容jdk17+
-                            this.lookup = (MethodHandles.Lookup)constructor.newInstance(caller, null, MethodHandles.Lookup.PRIVATE);
-                        }
-                        break;
-                    }
-                }
-            }
-
-            return this.lookup.unreflectSpecial(method, caller).bindTo(proxy).invokeWithArguments(args);
+            return InvocationHandlerUtils.invokeDefault(proxy, method, args);
         } else {
             String sqlid = getSqlid(caller, method);
             MethodWrap mWrap = MethodWrap.get(method);
@@ -113,4 +96,6 @@ class MapperHandler implements InvocationHandler {
             return c_meta.value() + "." + fun_name;
         }
     }
+
+
 }
