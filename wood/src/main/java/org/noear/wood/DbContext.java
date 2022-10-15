@@ -185,15 +185,6 @@ public class DbContext implements Closeable {
         return _codeHint;
     }
 
-
-    /**
-     * 是否配置了schema
-     */
-    @Deprecated
-    public boolean schemaHas() {
-        return getMetaData().getSchema() != null;
-    }
-
     /**
      * 获取schema
      */

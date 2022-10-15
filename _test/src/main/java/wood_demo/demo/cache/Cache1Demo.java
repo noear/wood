@@ -21,7 +21,7 @@ public class Cache1Demo {
         db.call("user_get").set("xxx", 1)
                 .caching(cache)
                 .usingCache(60 * 1000)
-                .getItem(new UserInfoModel());
+                .getItem(UserInfoModel.class);
 
     }
 
@@ -34,7 +34,7 @@ public class Cache1Demo {
                 .caching(cache)
                 .cacheTag("user_"+ 1)
                 .usingCache(60 * 1000)
-                .getItem(new UserInfoModel());
+                .getItem(UserInfoModel.class);
 
 
         //2.1.可根据标签清除缓存
@@ -56,7 +56,7 @@ public class Cache1Demo {
         db.call("user_get").set("xxx", 1)
                 .caching(cache)
                 .usingCache(60 * 100)
-                .getItem(new UserInfoModel(), (cu, t) -> {
+                .getItem(UserInfoModel.class, (cu, t) -> {
                     if (t.user_id == 0) {
                         cu.usingCache(false);
                     }

@@ -40,7 +40,6 @@ public interface IDataItem extends GetHandler, Serializable {
     @Override
     Object get(String name);
     Variate getVariate(String name);
-    <T extends IBinder> T toItem(T item);
 
     short getShort(String name);
     int getInt(String name);

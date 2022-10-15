@@ -42,14 +42,7 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
         return (T) this;
     }
 
-    /**
-     * 通过表达式构建自己（请使用build替代）
-     */
-    @Deprecated
-    public T expre(Act1<T> action) {
-        action.run((T) this);
-        return (T) this;
-    }
+
 
     /**
      * 通过表达式构建自己
@@ -229,7 +222,7 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
             this.andEq(f, data.get(f));
         }
 
-        if (this.exists()) {
+        if (this.selectExists()) {
             return 0;
         }
 
@@ -307,25 +300,6 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
     }
 
 
-    /**
-     * 使用data的数据,根据约束字段自动插入或更新
-     * <p>
-     * 请改用 upsertBy
-     */
-    @Deprecated
-    public void updateExt(IDataItem data, String conditionFields) throws SQLException {
-        upsertBy(data, conditionFields);
-    }
-
-    /**
-     * 使用data的数据,根据约束字段自动插入或更新
-     * <p>
-     * 请改用 upsertBy
-     */
-    @Deprecated
-    public long upsert(IDataItem data, String conditionFields) throws SQLException {
-        return upsertBy(data, conditionFields);
-    }
 
     /**
      * 使用data的数据,根据约束字段自动插入或更新
@@ -346,7 +320,7 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
             this.andEq(f, data.get(f));
         }
 
-        if (this.exists()) {
+        if (this.selectExists()) {
             for (String f : ff) {
                 data.remove(f);
             }
@@ -612,10 +586,6 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
     }
 
 
-    @Deprecated
-    public boolean exists() throws SQLException {
-        return selectExists();
-    }
 
     String _hint = null;
 
@@ -624,17 +594,6 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
         return (T) this;
     }
 
-    @Deprecated
-    public long count() throws SQLException {
-        return selectCount();
-        //return count("COUNT(*)");
-    }
-
-    @Deprecated
-    public long count(String code) throws SQLException {
-        return selectCount(code);
-        //return selectDo(code).getVariate().longValue(0l);
-    }
 
     @Deprecated
     public IQuery select(String columns) {

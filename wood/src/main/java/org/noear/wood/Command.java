@@ -92,10 +92,6 @@ public class Command {
         return _paramMap;
     }
 
-    @Deprecated
-    public String text2() {
-        return toSqlString();
-    }
 
     /**
      * 转为SQL字符串

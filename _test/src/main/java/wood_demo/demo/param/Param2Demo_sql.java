@@ -17,7 +17,7 @@ public class Param2Demo_sql {
 
     public static void demo_value() throws SQLException{
         UserInfoModel m = DbConfig.pc_user.sql("select * from $.user_info where user_id=?", 1)
-                .getItem(new UserInfoModel());
+                .getItem(UserInfoModel.class);
     }
 
     public static List<UserInfoModel> demo_params()  throws SQLException{
@@ -28,7 +28,7 @@ public class Param2Demo_sql {
 
         IQuery sp = DbConfig.pc_user.sql("SELECT * FROM users WHERE mobile IN ( ?... )", mobiles);
 
-        return sp.getList(new UserInfoModel());
+        return sp.getList(UserInfoModel.class);
     }
 
     public static List<UserInfoModel> demo_list()  throws SQLException{
@@ -39,6 +39,6 @@ public class Param2Demo_sql {
 
         IQuery sp = DbConfig.pc_user.sql("SELECT * FROM users WHERE mobile IN (?...)", mobiles);
 
-        return sp.getList(new UserInfoModel());
+        return sp.getList(UserInfoModel.class);
     }
 }

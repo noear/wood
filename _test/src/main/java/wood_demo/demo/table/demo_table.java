@@ -88,7 +88,7 @@ public class demo_table {
         List<UserInfoModel> list = db.table("user_info")
                 .where("user_id<?", 10)
                 .select("user_id,name,sex")
-                .getList(new UserInfoModel());
+                .getList(UserInfoModel.class);
 
         return list;
     }

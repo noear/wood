@@ -15,7 +15,7 @@ public class Store1Demo {
         DbContext db = DbConfig.pc_bcf;
 
         db.call("user_get")
-                .set("_user_id",1).getItem(new UserInfoModel());
+                .set("_user_id",1).getItem(UserInfoModel.class);
     }
 
     public static void demo_updateOrInsert() throws SQLException{
@@ -32,7 +32,7 @@ public class Store1Demo {
 
         db.call("select * from user user_id=@user_id") //查询过程的变量，须使用@号开头
                 .set("@user_id",1)
-                .getItem(new UserInfoModel());
+                .getItem(UserInfoModel.class);
     }
 
     public static void demo_update2() throws SQLException{

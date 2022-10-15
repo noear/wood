@@ -19,7 +19,7 @@ public class Param1Demo_tbl {
         UserInfoModel m = DbConfig.pc_user.table("$.user_info")
                 .where("user_id=?",1)
                 .select("*")
-                .getItem(new UserInfoModel());
+                .getItem(UserInfoModel.class);
     }
 
     public static List<UserInfoModel> demo_params() throws SQLException{
@@ -31,7 +31,7 @@ public class Param1Demo_tbl {
                 .where("mobile IN (?...)", mobiles)
                 .select("*");
 
-        return sp.getList(new UserInfoModel());
+        return sp.getList(UserInfoModel.class);
     }
 
     public static List<UserInfoModel> demo_list() throws SQLException{
@@ -44,6 +44,6 @@ public class Param1Demo_tbl {
                 .where("mobile IN (?...)", mobiles)
                 .select("*");
 
-        return sp.getList(new UserInfoModel());
+        return sp.getList(UserInfoModel.class);
     }
 }

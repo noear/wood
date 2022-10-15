@@ -58,28 +58,7 @@ public class DataList implements Serializable,Iterable<DataItem> {
         return list;
     }
 
-    /**
-     * 将所有列转为类做为数组的数据（类为：IBinder 子类）
-     */
-    @Deprecated
-    public <T extends IBinder> List<T> toList(T model)  {
-        List<T> list = new ArrayList<T>(getRowCount());
 
-        for (DataItem r : _rows) {
-            T item = (T) model.clone();
-
-            if (WoodConfig.isDebug) {
-                if (model.getClass().isInstance(item) == false) {
-                    throw new IllegalArgumentException(model.getClass() + " clone error (" + item.getClass() + ")");
-                }
-            }
-
-            item.bind((key) -> r.getVariate(key));
-
-            list.add(item);
-        }
-        return list;
-    }
 
     /**
      * 将所有列转为类做为数组的数据

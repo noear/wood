@@ -16,7 +16,7 @@ public class demo_query {
         sp.userID = 12;
         sp.sex = 1;//男的
 
-        sp.getList(new UserInfoModel());
+        sp.getList(UserInfoModel.class);
     }
 
     public void demo2() throws SQLException {
@@ -24,7 +24,7 @@ public class demo_query {
 
         sp.userID = 12;
 
-        sp.getItem(new UserInfoModel());
+        sp.getItem(UserInfoModel.class);
     }
 
     public void demo3() throws SQLException {

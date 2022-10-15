@@ -99,21 +99,12 @@ public class DataItem implements IDataItem, Iterable<Map.Entry<String,Object>> {
         }
     }
 
+
     @Override
     public void remove(String name) {
         _data.remove(name);
     }
 
-    /**
-     * 改用：toEntity
-     * */
-    @Deprecated
-    @Override
-    public <T extends IBinder> T toItem(T item) {
-        item.bind((key) -> getVariate(key));
-
-        return item;
-    }
 
     @Override
     public short getShort(String name) {
@@ -248,17 +239,6 @@ public class DataItem implements IDataItem, Iterable<Map.Entry<String,Object>> {
     }
 
 
-    /**
-     * 从Entity 加载数据
-     * <p>
-     * 可改用：setEntity
-     */
-    @Deprecated
-    public void fromEntity(Object obj) {
-        EntityUtils.fromEntity(obj, (k, v) -> {
-            set(k, v);
-        });
-    }
 
     /**
      * 转为Entity

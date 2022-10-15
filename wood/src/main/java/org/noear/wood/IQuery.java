@@ -19,16 +19,6 @@ public interface IQuery extends ICacheController<IQuery> {
      Variate getVariate() throws SQLException;
      Variate getVariate(Act2<CacheUsing,Variate> cacheCondition) throws SQLException;
 
-     @Deprecated
-     <T extends IBinder> T getItem(T model) throws SQLException;
-     @Deprecated
-     <T extends IBinder> T getItem(T model, Act2<CacheUsing, T> cacheCondition) throws SQLException;
-
-     @Deprecated
-     <T extends IBinder> List<T> getList(T model) throws SQLException;
-     @Deprecated
-     <T extends IBinder> List<T> getList(T model, Act2<CacheUsing, List<T>> cacheCondition) throws SQLException;
-
      <T> T getItem(Class<T> cls) throws SQLException;
      <T> T getItem(Class<T> cls,Act2<CacheUsing, T> cacheCondition) throws SQLException;
 

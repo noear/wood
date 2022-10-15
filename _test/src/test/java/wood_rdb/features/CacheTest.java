@@ -59,7 +59,7 @@ public class CacheTest {
                 .whereEq("app_id", 23)
                 .caching(cache)
                 .select("*")
-                .getItem(new AppxModel2(), (uc, m) -> {
+                .getItem(AppxModel2.class, (uc, m) -> {
                     uc.cacheTag("app_" + m.app_id);
                 });
 
@@ -71,7 +71,7 @@ public class CacheTest {
                 .whereEq("app_id", 23)
                 .caching(cache)
                 .select("*")
-                .getItem(new AppxModel2(), (uc, m) -> {
+                .getItem(AppxModel2.class, (uc, m) -> {
                     uc.cacheTag("app_" + m.app_id);
                 });
 
@@ -93,7 +93,7 @@ public class CacheTest {
         sp.app_id = 23;
 
         AppxModel2 tmp = sp.caching(cache)
-                .getItem(new AppxModel2(), (uc, m) -> {
+                .getItem(AppxModel2.class, (uc, m) -> {
                     uc.cacheTag("app_" + m.app_id);
                 });
 
@@ -102,7 +102,7 @@ public class CacheTest {
 
 
         tmp = sp.caching(cache)
-                .getItem(new AppxModel2(), (uc, m) -> {
+                .getItem(AppxModel2.class, (uc, m) -> {
                     uc.cacheTag("app_" + m.app_id);
                 });
 

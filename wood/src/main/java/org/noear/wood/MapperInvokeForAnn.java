@@ -165,11 +165,7 @@ class MapperInvokeForAnn implements IMapperInvoke {
                 //list<Model>
                 //
                 Class<?> rst_clz2 = (Class<?>)rst_type2;
-                if (IBinder.class.isAssignableFrom(rst_clz2)) {
-                    return sp.getList((IBinder) rst_clz2.getDeclaredConstructor().newInstance());
-                } else {
-                    return sp.getList(rst_clz2);
-                }
+                return sp.getList(rst_clz2);
             } else {
                 //list<Map>
                 if (rst_type2_str.indexOf("Map") > 0) {
@@ -183,11 +179,7 @@ class MapperInvokeForAnn implements IMapperInvoke {
 
         //是单实体
         if (rst_type_str.startsWith("java") == false && rst_type_str.indexOf(".") > 0) {
-            if (IBinder.class.isAssignableFrom(rst_type)) {
-                return sp.getItem((IBinder) rst_type.getDeclaredConstructor().newInstance());
-            } else {
-                return sp.getItem(rst_type);
-            }
+            return sp.getItem(rst_type);
         }
 
         Variate val = sp.getVariate();
