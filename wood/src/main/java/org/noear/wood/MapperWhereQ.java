@@ -12,7 +12,7 @@ public class MapperWhereQ extends WhereBase<MapperWhereQ> {
 
     private DbTableQuery _query;
 
-    protected MapperWhereQ(DbTableQuery query) {
+    public MapperWhereQ(DbTableQuery query) {
         super();
 
         _query = query;

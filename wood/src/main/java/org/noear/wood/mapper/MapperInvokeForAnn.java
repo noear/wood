@@ -1,5 +1,6 @@
-package org.noear.wood;
+package org.noear.wood.mapper;
 
+import org.noear.wood.*;
 import org.noear.wood.annotation.Sql;
 import org.noear.wood.cache.ICacheServiceEx;
 import org.noear.wood.utils.StringUtils;
@@ -124,7 +125,7 @@ public class MapperInvokeForAnn implements IMapperInvoke {
                     });
                 }else{
                     String _cacheTag2 = _cacheTag;
-                    sp._cache.usingCache((cu,rst)->{
+                    sp.cacheUsing().usingCache((cu,rst)->{
                         if(rst instanceof DataItem){
                             Arrays.asList(formatTag(_cacheTag2, ((DataItem)rst).getMap()).split(",")).forEach((k)->{
                                 sp.cacheTag(k);

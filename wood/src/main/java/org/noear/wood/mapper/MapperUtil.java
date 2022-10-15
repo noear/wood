@@ -1,5 +1,8 @@
-package org.noear.wood;
+package org.noear.wood.mapper;
 
+import org.noear.wood.DbContext;
+import org.noear.wood.DbProcedure;
+import org.noear.wood.Variate;
 import org.noear.wood.utils.StringUtils;
 import org.noear.wood.xml.XmlSqlBlock;
 import org.noear.wood.xml.XmlSqlFactory;
@@ -22,7 +25,7 @@ public  class MapperUtil {
     /**
      * 获取Mapper
      */
-    protected static <T> T proxy(Class<T> mapperInf, DbContext db) {
+    public static <T> T proxy(Class<T> mapperInf, DbContext db) {
         Object tmp = _proxy_cache.get(mapperInf);
         if (tmp == null) {
             synchronized (_proxy_lock) {

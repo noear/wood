@@ -2,6 +2,8 @@ package org.noear.wood;
 
 import org.noear.wood.dialect.DbDialect;
 import org.noear.wood.ext.*;
+import org.noear.wood.mapper.BaseMapperWrap;
+import org.noear.wood.mapper.MapperUtil;
 import org.noear.wood.utils.StringUtils;
 import org.noear.wood.wrap.DbFormater;
 import org.noear.wood.wrap.DbType;

@@ -1,5 +1,10 @@
-package org.noear.wood;
+package org.noear.wood.mapper;
 
+import org.noear.wood.DbContext;
+import org.noear.wood.IMapperInvoke;
+import org.noear.wood.mapper.MapperInvokeForAnn;
+import org.noear.wood.mapper.MapperInvokeForBas;
+import org.noear.wood.mapper.MapperInvokeForXml;
 import org.noear.wood.utils.InvocationHandlerUtils;
 import org.noear.wood.utils.ThrowableUtils;
 import org.noear.wood.wrap.MethodWrap;

@@ -1,5 +1,6 @@
-package org.noear.wood;
+package org.noear.wood.mapper;
 
+import org.noear.wood.BaseMapper;
 import org.noear.wood.annotation.Table;
 import org.noear.wood.annotation.PrimaryKey;
 import org.noear.wood.wrap.ClassWrap;
@@ -13,7 +14,7 @@ import java.util.Map;
 /**
  * Created by noear on 19-12-11.
  */
-class BaseEntityWrap {
+public class BaseEntityWrap {
     public Class<?> entityClz;
     public String tableName;
     public String pkName;

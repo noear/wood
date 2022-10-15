@@ -1,5 +1,6 @@
-package org.noear.wood;
+package org.noear.wood.mapper;
 
+import org.noear.wood.*;
 import org.noear.wood.ext.Act1;
 import org.noear.wood.ext.Act2;
 import org.noear.wood.impl.IPageImpl;

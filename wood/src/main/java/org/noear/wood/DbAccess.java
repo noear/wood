@@ -341,6 +341,9 @@ public abstract class DbAccess<T extends DbAccess> implements IWoodKey,IQuery,Se
     //
 
     protected CacheUsing _cache = null;
+    public CacheUsing cacheUsing(){
+        return _cache;
+    }
 
     /*引用一个缓存服务*/
     @Override

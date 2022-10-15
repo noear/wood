@@ -1,6 +1,9 @@
-package org.noear.wood;
+package org.noear.wood.mapper;
 
 
+import org.noear.wood.BaseMapper;
+import org.noear.wood.DbContext;
+import org.noear.wood.IMapperInvoke;
 import org.noear.wood.wrap.MethodWrap;
 
 import java.util.Map;
