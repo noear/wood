@@ -625,8 +625,8 @@ _eng.put("db", db);
 ```
 
 ### (八) 语法说明
-* [《WEED3 XML 语法》](https://gitee.com/noear/wood/blob/master/WEED3_XML_%E8%AF%AD%E6%B3%95.mdv)
-* [《WEED3 JAVA 接口字典》](https://gitee.com/noear/wood/blob/master/WEED3_JAVA_%E6%8E%A5%E5%8F%A3%E5%AD%97%E5%85%B8.md)
+* [《WOOD XML 语法》](https://gitee.com/noear/wood/blob/master/WOOD_XML_%E8%AF%AD%E6%B3%95.md)
+* [《WOOD JAVA 接口字典》](https://gitee.com/noear/wood/blob/master/WOOD_JAVA_%E6%8E%A5%E5%8F%A3%E5%AD%97%E5%85%B8.md)
 
 
 

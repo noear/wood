@@ -1,4 +1,4 @@
-##### WEED3 XML SQL更新记录
+##### WOOD XML SQL更新记录
 
 * 2020.09.17:
 1. 添加DTD验证

@@ -213,7 +213,7 @@ db.sql("select * from user id=?",12).getItem(User.class);
 </mapper>
 ```
 
-* 具体参考：[《WEED3 XML 语法》](WEED3_XML_语法.md)
+* 具体参考：[《WOOD XML 语法》](WOOD_XML_语法.md)
 
 ##### （二）Table 语法
 
@@ -254,6 +254,6 @@ db.sql("select * from user id=?",12).getItem(User.class);
 | insert | 插入 |
 | delete | 删除 |
 
-* 更多参考：[《WEED3 JAVA 接口字典》](WEED3_JAVA_接口字典.md)
+* 更多参考：[《WOOD JAVA 接口字典》](WOOD_JAVA_接口字典.md)
 
 
