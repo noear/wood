@@ -55,15 +55,6 @@ db.table(logger)
 
 
 
-#### 相关文章：
-
-* [Wood for java 新的微型ORM框架](https://my.oschina.net/noear/blog/3144349) （推荐一看）
-* [Wood ORM框架专题系列文章](https://www.jianshu.com/nb/40211584?order_by=seq)
-* [Wood for solon DEMO](https://gitee.com/noear/solon_wood_demo)（一个用户写的DEMO）
-
-
-
-
 #### 组件列表： 
 
 | 组件 | 说明 |
