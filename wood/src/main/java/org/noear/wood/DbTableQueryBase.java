@@ -299,6 +299,15 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
         return rst.length > 0;
     }
 
+    /**
+     * 使用data的数据,根据约束字段自动插入或更新
+     * <p>
+     * 请改用 upsertBy
+     */
+    @Deprecated
+    public long upsert(IDataItem data, String conditionFields) throws SQLException {
+        return upsertBy(data, conditionFields);
+    }
 
 
     /**
