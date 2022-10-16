@@ -594,6 +594,23 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
         return (T) this;
     }
 
+    @Deprecated
+    public boolean exists() throws SQLException {
+        return selectExists();
+    }
+
+    @Deprecated
+    public long count() throws SQLException {
+        return selectCount();
+        //return count("COUNT(*)");
+    }
+
+    @Deprecated
+    public long count(String code) throws SQLException {
+        return selectCount(code);
+        //return selectDo(code).getVariate().longValue(0l);
+    }
+
 
     @Deprecated
     public IQuery select(String columns) {
