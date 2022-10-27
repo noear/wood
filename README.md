@@ -204,7 +204,7 @@ db.sql("select * from user id=?",12).getItem(User.class);
 </mapper>
 ```
 
-* 具体参考：[《WOOD XML 语法》](WOOD_XML_语法.md)
+* 具体参考：[《WOOD_mapper_XML_语法》](WOOD_mapper_XML_语法.md)
 
 ##### （二）Table 语法
 
