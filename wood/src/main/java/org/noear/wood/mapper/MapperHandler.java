@@ -49,7 +49,7 @@ class MapperHandler implements InvocationHandler {
     public Object invoke0(Object proxy, Method method, Object[] args) throws Throwable {
         Class caller = method.getDeclaringClass();
 
-        if (method.isDefault()) {
+        if (method.isDefault() || method.getDeclaringClass() == Object.class) {
             return InvocationHandlerUtils.invokeDefault(proxy, method, args);
         } else {
             String sqlid = getSqlid(caller, method);
