@@ -2,9 +2,6 @@ package org.noear.wood.mapper;
 
 import org.noear.wood.DbContext;
 import org.noear.wood.IMapperInvoke;
-import org.noear.wood.mapper.MapperInvokeForAnn;
-import org.noear.wood.mapper.MapperInvokeForBas;
-import org.noear.wood.mapper.MapperInvokeForXml;
 import org.noear.wood.utils.InvocationHandlerUtils;
 import org.noear.wood.utils.ThrowableUtils;
 import org.noear.wood.wrap.MethodWrap;
@@ -49,46 +46,38 @@ class MapperHandler implements InvocationHandler {
     public Object invoke0(Object proxy, Method method, Object[] args) throws Throwable {
         Class caller = method.getDeclaringClass();
 
+        //调用 Default 函数
         if (method.isDefault()) {
             return InvocationHandlerUtils.invokeDefault(proxy, method, args);
-        } else {
-            String sqlid = getSqlid(caller, method);
-            MethodWrap mWrap = MethodWrap.get(method);
+        }
 
-            //1.尝试有@Sql注解的
-            Object tmp = annInvoke.call(proxy, db, sqlid, caller, mWrap, args);
+        //调用 Object 函数
+        if (caller == Object.class) {
+            return InvocationHandlerUtils.invokeObject(mapperClz, proxy, method, args);
+        }
+
+
+        String sqlid = getSqlid(caller, method);
+        MethodWrap mWrap = MethodWrap.get(method);
+
+        //1.尝试有@Sql注解的
+        Object tmp = annInvoke.call(proxy, db, sqlid, caller, mWrap, args);
+
+        if (UOE.equals(tmp)) {
+            //2.尝试有xml的
+            tmp = xmlInvoke.call(proxy, db, sqlid, caller, mWrap, args);
 
             if (UOE.equals(tmp)) {
-                //2.尝试有xml的
-                tmp = xmlInvoke.call(proxy, db, sqlid, caller, mWrap, args);
+                //3.尝试BaseMapper
+                tmp = basInvoke.call(proxy, db, sqlid, caller, mWrap, args);
 
                 if (UOE.equals(tmp)) {
-                    //3.尝试BaseMapper
-                    tmp = basInvoke.call(proxy, db, sqlid, caller, mWrap, args);
-
-                    if (UOE.equals(tmp)) {
-                        //4.尝试Object的
-                        if (Object.class == caller) {
-                            String name = method.getName();
-                            switch (name) {
-                                case "toString":
-                                    return "Wood mapper: " + mapperClz;
-                                case "hashCode":
-                                    return System.identityHashCode(proxy);
-                                case "equals":
-                                    return false;
-                            }
-                        }
-
-                        if (UOE.equals(tmp)) {
-                            throw new RuntimeException("Xmlsql does not exist:@" + sqlid);
-                        }
-                    }
+                    throw new RuntimeException("Xmlsql does not exist:@" + sqlid);
                 }
             }
-
-            return tmp;
         }
+
+        return tmp;
     }
 
     public static String getSqlid(Class<?> mapperClz, Method method) {

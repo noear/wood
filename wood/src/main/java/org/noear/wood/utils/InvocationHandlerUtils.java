@@ -12,7 +12,7 @@ public class InvocationHandlerUtils {
     /**
      * java16+ 支持调用default method的方法
      */
-    public static Method invokeDefaultMethod = null;
+    private static Method invokeDefaultMethod = null;
 
     static {
         //
@@ -36,18 +36,14 @@ public class InvocationHandlerUtils {
     }
 
     /**
-     * 若jdk版本在1.8以上，且被调用的方法是默认方法，直接调用默认实现
-     *
-     * @param proxy
-     * @param method
-     * @param args
-     * @return
+     * 在代理模式下调用接口的默认的函数
      */
     public static Object invokeDefault(Object proxy, Method method, Object[] args) throws Throwable {
         // https://dzone.com/articles/correct-reflective-access-to-interface-default-methods
         // https://gist.github.com/lukaseder/f47f5a0d156bf7b80b67da9d14422d4a
         if (JavaUtils.JAVA_MAJOR_VERSION <= 15) {
-            final Constructor<MethodHandles.Lookup> constructor = MethodHandles.Lookup.class.getDeclaredConstructor(Class.class);
+            final Constructor<MethodHandles.Lookup> constructor = MethodHandles.Lookup.class
+                    .getDeclaredConstructor(Class.class);
             constructor.setAccessible(true);
 
             final Class<?> clazz = method.getDeclaringClass();
@@ -59,6 +55,24 @@ public class InvocationHandlerUtils {
         } else {
             Method invoke = invokeDefaultMethod;
             return invoke.invoke(null, proxy, method, args);
+        }
+    }
+
+    /**
+     * 在代理模式下调用 Object 的默认的函数
+     */
+    public static Object invokeObject(Class<?> interfaceClz, Object proxy, Method method, Object[] args) {
+        String name = method.getName();
+
+        switch (name) {
+            case "toString":
+                return interfaceClz.getName() + ".$Proxy";
+            case "hashCode":
+                return System.identityHashCode(proxy);
+            case "equals":
+                return proxy == args[0];
+            default:
+                throw new UnsupportedOperationException("Unsupported operation: " + interfaceClz.getName() + "::" + method.getName());
         }
     }
 }
