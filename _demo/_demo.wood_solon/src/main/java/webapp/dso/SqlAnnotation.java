@@ -8,9 +8,9 @@ import webapp.model.AppxModel;
 import java.util.List;
 import java.util.Map;
 
-//
-// 注解 sql
-//
+/**
+ * anno sql
+ * */
 @Db
 public interface SqlAnnotation extends BaseMapper<AppxModel> {
     @Sql("select app_id from appx limit 1")

@@ -7,6 +7,9 @@ import org.noear.wood.xml.Namespace;
 
 import webapp.model.AppxModel;
 
+/**
+ * xml sql mapper
+ * */
 @Namespace("webapp.dso")
 public interface SqlMapper extends BaseMapper<AppxModel> {
     //随便取条数据的ID

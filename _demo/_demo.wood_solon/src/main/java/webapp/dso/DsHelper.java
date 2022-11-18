@@ -6,6 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * 初始化 h2 数据库
+ * */
 public class DsHelper {
     private static  boolean inited = false;
     public static void initData(DataSource ds)  {
