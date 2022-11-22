@@ -20,8 +20,7 @@
 
     <properties>
         <jmh.version>1.25</jmh.version>
-
-        <solon.ver>1.10.7</solon.ver>
+        <solon.ver>1.11.0</solon.ver>
     </properties>
 
     <dependencies>
@@ -72,7 +71,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.20</version>
+            <version>1.18.24</version>
         </dependency>
 
         <dependency>
@@ -95,7 +94,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>3.3.1</version>
+            <version>4.0.3</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
