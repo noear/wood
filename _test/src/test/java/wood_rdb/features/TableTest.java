@@ -97,6 +97,13 @@ public class TableTest {
         assert appxD.app_id() == 22;
 
         System.out.println(db.lastCommand.text);
+
+         appxD = DbContext.use("rock").table("appx")
+                .whereEq("app_id", 22)
+                .select("*")
+                .getItem(AppxD.class);
+
+        assert appxD.app_id() == 22;
     }
 
     @Test
