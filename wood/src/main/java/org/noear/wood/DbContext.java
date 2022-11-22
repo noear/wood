@@ -124,6 +124,10 @@ public class DbContext implements Closeable {
         return this;
     }
 
+    public static DbContext use(String name){
+        return WoodConfig.libOfDb.get(name);
+    }
+
     //
     // 构建函数 end
     //
