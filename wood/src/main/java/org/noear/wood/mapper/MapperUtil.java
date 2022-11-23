@@ -19,19 +19,18 @@ public  class MapperUtil {
     // 代理
     ///////////////////////////////
 
-    private static String _proxy_lock = "";
     private static Map<Class<?>, Object> _proxy_cache = new HashMap<>();
 
     /**
-     * 获取Mapper
+     * 获取代理实例（带缓存）
      */
-    public static <T> T proxy(Class<T> mapperInf, DbContext db) {
+    public static <T> T getProxy(Class<T> mapperInf, DbContext db) {
         Object tmp = _proxy_cache.get(mapperInf);
         if (tmp == null) {
-            synchronized (_proxy_lock) {
+            synchronized (_proxy_cache) {
                 tmp = _proxy_cache.get(mapperInf);
                 if (tmp == null) {
-                    tmp = buildProxy(mapperInf, db);
+                    tmp = createProxy(mapperInf, db);
                     _proxy_cache.put(mapperInf, tmp);
                 }
             }
@@ -41,9 +40,9 @@ public  class MapperUtil {
     }
 
     /**
-     * 获取代理实例
+     * 生成代理实例
      */
-    private static <T> T buildProxy(Class<?> mapperInf, DbContext db) {
+    public static <T> T createProxy(Class<?> mapperInf, DbContext db) {
         XmlSqlLoader.tryLoad();
 
         return (T) Proxy.newProxyInstance(
@@ -73,7 +72,7 @@ public  class MapperUtil {
 
         //4.生成命令
         DbProcedure sp = db.call(xsqlid);
-        if(paramS!=null) {
+        if (paramS != null) {
             sp.setMap(paramS);
         }
 
@@ -127,19 +126,19 @@ public  class MapperUtil {
                         Variate valV = sp.getVariate();
 
                         if (valV.getValue() == null) {
-                            if(Integer.TYPE == rType){
+                            if (Integer.TYPE == rType) {
                                 return 0;
                             }
 
-                            if(Long.TYPE == rType){
+                            if (Long.TYPE == rType) {
                                 return 0L;
                             }
 
-                            if(Float.TYPE == rType){
+                            if (Float.TYPE == rType) {
                                 return 0F;
                             }
 
-                            if(Double.TYPE == rType){
+                            if (Double.TYPE == rType) {
                                 return 0D;
                             }
                         } else {
@@ -190,27 +189,28 @@ public  class MapperUtil {
         }
     }
 
-    private  static Class<?> item_type(Type rType, XmlSqlBlock block) throws Exception{
-        if(rType instanceof ParameterizedType) {
+    private static Class<?> item_type(Type rType, XmlSqlBlock block) throws Exception {
+        if (rType instanceof ParameterizedType) {
             return (Class<?>) (((ParameterizedType) rType).getActualTypeArguments()[0]);
         }
 
-        if(StringUtils.isEmpty(block._return_item) == false) {
+        if (StringUtils.isEmpty(block._return_item) == false) {
             return getClass(block._return_item);
         }
 
         return null;
     }
 
-    private static Map<String,Class<?>> _clzMap  =new HashMap<>();
-    private static Class<?> getClass(String fullname) throws Exception{
+    private static Map<String, Class<?>> _clzMap = new HashMap<>();
+
+    private static Class<?> getClass(String fullname) throws Exception {
         Class<?> tmp = _clzMap.get(fullname);
-        if(tmp == null){
-            synchronized (fullname.intern()){
+        if (tmp == null) {
+            synchronized (fullname.intern()) {
                 tmp = _clzMap.get(fullname);
-                if(tmp == null){
+                if (tmp == null) {
                     tmp = Class.forName(fullname);
-                    _clzMap.put(fullname,tmp);
+                    _clzMap.put(fullname, tmp);
                 }
             }
         }

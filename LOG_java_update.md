@@ -1,3 +1,6 @@
+### 1.0.4
+* 取消 DbContext::mapper 接口的缓存特性
+
 ### 1.0.3
 * 增加 DbContext::use 接口
 

@@ -286,7 +286,7 @@ public class DbContext implements Closeable {
      * 印映一个接口代理
      */
     public <T> T mapper(Class<T> clz) {
-        return MapperUtil.proxy(clz, this);
+        return MapperUtil.createProxy(clz, this);
     }
 
     /**
