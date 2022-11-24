@@ -282,11 +282,24 @@ public class DbContext implements Closeable {
         return new BaseMapperWrap<T>(this, clz, tableName);
     }
 
+    private Map<Class<?>, Object> _mapperMap = new HashMap<>();
+
     /**
      * 印映一个接口代理
      */
     public <T> T mapper(Class<T> clz) {
-        return MapperUtil.createProxy(clz, this);
+        Object tmp = _mapperMap.get(clz);
+        if (tmp == null) {
+            synchronized (_mapperMap) {
+                tmp = _mapperMap.get(clz);
+                if (tmp == null) {
+                    tmp = MapperUtil.createProxy(clz, this);
+                    _mapperMap.put(clz, tmp);
+                }
+            }
+        }
+
+        return (T) tmp;
     }
 
     /**
@@ -410,6 +423,7 @@ public class DbContext implements Closeable {
     public void close() throws IOException {
         if (metaData != null) {
             metaData.close();
+            _mapperMap.clear();
         }
     }
 }

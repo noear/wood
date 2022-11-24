@@ -19,26 +19,6 @@ public  class MapperUtil {
     // 代理
     ///////////////////////////////
 
-    private static Map<Class<?>, Object> _proxy_cache = new HashMap<>();
-
-    /**
-     * 获取代理实例（带缓存）
-     */
-    public static <T> T getProxy(Class<T> mapperInf, DbContext db) {
-        Object tmp = _proxy_cache.get(mapperInf);
-        if (tmp == null) {
-            synchronized (_proxy_cache) {
-                tmp = _proxy_cache.get(mapperInf);
-                if (tmp == null) {
-                    tmp = createProxy(mapperInf, db);
-                    _proxy_cache.put(mapperInf, tmp);
-                }
-            }
-        }
-
-        return (T) tmp;
-    }
-
     /**
      * 生成代理实例
      */
