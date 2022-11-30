@@ -1,15 +1,35 @@
-[![Maven Central](https://img.shields.io/maven-central/v/org.noear/wood.svg)](https://mvnrepository.com/search?q=wood)
-[![Apache 2.0](https://img.shields.io/:license-Apache2-blue.svg)](https://license.coscl.org.cn/Apache2/)
-[![JDK-8+](https://img.shields.io/badge/JDK-8+-green.svg)](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
-[![QQ交流群](https://img.shields.io/badge/QQ交流群-22200020-orange)](https://jq.qq.com/?_wv=1027&k=kjB5JNiC)
+<h1 align="center" style="text-align:center;">
+  Wood
+</h1>
+<p align="center">
+微型ORM框架（支持：java sql，xml sql，annotation sql；事务；缓存；监控；等...）
+</p>
+<p align="center">
+    <a target="_blank" href="https://search.maven.org/search?q=org.noear%20wood">
+        <img src="https://img.shields.io/maven-central/v/org.noear/wood.svg?label=Maven%20Central" alt="Maven" />
+    </a>
+    <a target="_blank" href="https://license.coscl.org.cn/Apache2/">
+		<img src="https://img.shields.io/:license-Apache2-blue.svg" alt="Apache 2" />
+	</a>
+    <a target="_blank" href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html">
+		<img src="https://img.shields.io/badge/JDK-8+-green.svg" alt="jdk-8+" />
+	</a>
+    <br />
+    <a target="_blank" href='https://gitee.com/noear/wood/stargazers'>
+		<img src='https://gitee.com/noear/wood/badge/star.svg' alt='gitee star'/>
+	</a>
+    <a target="_blank" href='https://github.com/noear/wood/stargazers'>
+		<img src="https://img.shields.io/github/stars/noear/wood.svg?logo=github" alt="github star"/>
+	</a>
+</p>
+<br/>
+<p align="center">
+	<a href="https://jq.qq.com/?_wv=1027&k=kjB5JNiC">
+	<img src="https://img.shields.io/badge/QQ交流群-22200020-orange"/></a>
+</p>
 
 
-# Wood for java
-微型ORM框架（支持：java sql，xml sql，annotation sql，template sql；事务；缓存；监控；等...）
-
-
-
-#### Wood 特点和理念：
+#### 特点和理念：
 * 跨平台：可以嵌入到JVM脚本引擎（js, groovy, lua, python, ruby）及GraalVM支持的部分语言。
 * 很小巧：0.2Mb（且是功能完整，方案丰富；可极大简化数据库开发）。
 * 有个性：不喜欢反射、不喜欢配置...（除了连接，不需要任何配置）。
