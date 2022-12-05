@@ -3,6 +3,8 @@ package org.noear.wood;
 import org.noear.wood.ext.Act2;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.Set;
 
@@ -39,15 +41,20 @@ public interface IDataItem extends GetHandler, Serializable {
     Object get(int index);
     @Override
     Object get(String name);
+
+    <T> T getOrDef(String name, T def);
+
     Variate getVariate(String name);
 
-    short getShort(String name);
-    int getInt(String name);
-    long getLong(String name);
-    double getDouble(String name);
-    float getFloat(String name);
+    Short getShort(String name);
+    Integer getInt(String name);
+    Long getLong(String name);
+    Float getFloat(String name);
+    Double getDouble(String name);
+    BigDecimal getBigDecimal(String name);
+    BigInteger getBigInteger(String name);
     String getString(String name);
-    boolean getBoolean(String name);
+    Boolean getBoolean(String name);
     Date getDateTime(String name);
 
     void forEach(Act2<String, Object> action);

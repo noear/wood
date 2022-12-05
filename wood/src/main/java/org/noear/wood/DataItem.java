@@ -6,6 +6,8 @@ import org.noear.wood.ext.LinkedCaseInsensitiveMap;
 import org.noear.wood.utils.EntityUtils;
 import org.noear.wood.wrap.ClassWrap;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -50,6 +52,11 @@ public class DataItem implements IDataItem, Iterable<Map.Entry<String,Object>> {
     }
 
     @Override
+    public void remove(String name) {
+        _data.remove(name);
+    }
+
+    @Override
     public DataItem set(String name, Object value) {
         _data.put(name, value);
         return this;
@@ -91,6 +98,11 @@ public class DataItem implements IDataItem, Iterable<Map.Entry<String,Object>> {
     }
 
     @Override
+    public <T> T getOrDef(String name, T def) {
+        return (T) _data.getOrDefault(name, def);
+    }
+
+    @Override
     public Variate getVariate(String name) {
         if (_data.containsKey(name)) {
             return new Variate(name, get(name));
@@ -101,34 +113,63 @@ public class DataItem implements IDataItem, Iterable<Map.Entry<String,Object>> {
 
 
     @Override
-    public void remove(String name) {
-        _data.remove(name);
-    }
-
-
-    @Override
-    public short getShort(String name) {
-        return (short) get(name);
-    }
-
-    @Override
-    public int getInt(String name) {
-        return ((Number) get(name)).intValue();
+    public Short getShort(String name) {
+        Number tmp = (Number) get(name);
+        if (tmp == null) {
+            return null;
+        } else {
+            return tmp.shortValue();
+        }
     }
 
     @Override
-    public long getLong(String name) {
-        return ((Number) get(name)).longValue();
+    public Integer getInt(String name) {
+        Number tmp = (Number) get(name);
+        if (tmp == null) {
+            return null;
+        } else {
+            return tmp.intValue();
+        }
     }
 
     @Override
-    public double getDouble(String name) {
-        return ((Number) get(name)).doubleValue();
+    public Long getLong(String name) {
+        Number tmp = (Number) get(name);
+        if (tmp == null) {
+            return null;
+        } else {
+            return tmp.longValue();
+        }
     }
 
     @Override
-    public float getFloat(String name) {
-        return ((Number) get(name)).floatValue();
+    public Double getDouble(String name) {
+        Number tmp = (Number) get(name);
+        if (tmp == null) {
+            return null;
+        } else {
+            return tmp.doubleValue();
+        }
+    }
+
+    @Override
+    public BigDecimal getBigDecimal(String name) {
+        return  (BigDecimal) get(name);
+    }
+
+    @Override
+    public BigInteger getBigInteger(String name) {
+        return  (BigInteger) get(name);
+    }
+
+    @Override
+    public Float getFloat(String name) {
+        Number tmp = (Number) get(name);
+        if (tmp == null) {
+            return null;
+        } else {
+            return tmp.floatValue();
+        }
     }
 
     @Override
@@ -137,8 +178,8 @@ public class DataItem implements IDataItem, Iterable<Map.Entry<String,Object>> {
     }
 
     @Override
-    public boolean getBoolean(String name) {
-        return (boolean) get(name);
+    public Boolean getBoolean(String name) {
+        return (Boolean) get(name);
     }
 
     @Override

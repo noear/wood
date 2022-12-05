@@ -1,8 +1,11 @@
+### 1.0.6
+* 增强 IDataItem 能力
+
 ### 1.0.5
 * Db 注解增加作用范围（增加参数注入）
 
 ### 1.0.4
-* 取消 DbContext::mapper 接口的缓存特性
+* 调整 DbContext::mapper 接口的缓存特性
 
 ### 1.0.3
 * 增加 DbContext::use 接口
