@@ -8,6 +8,9 @@ import org.noear.wood.wrap.ClassWrap;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -185,6 +188,39 @@ public class DataItem implements IDataItem, Iterable<Map.Entry<String,Object>> {
     @Override
     public Date getDateTime(String name) {
         return (Date) get(name);
+    }
+
+    @Override
+    public LocalDateTime getLocalDateTime(String name) {
+        java.sql.Timestamp tmp = (java.sql.Timestamp) get(name);
+
+        if (tmp == null) {
+            return null;
+        } else {
+            return tmp.toLocalDateTime();
+        }
+    }
+
+    @Override
+    public LocalDate getLocalDate(String name) {
+        java.sql.Date tmp = (java.sql.Date) get(name);
+
+        if (tmp == null) {
+            return null;
+        } else {
+            return tmp.toLocalDate();
+        }
+    }
+
+    @Override
+    public LocalTime getLocalTime(String name) {
+        java.sql.Time tmp = (java.sql.Time) get(name);
+
+        if (tmp == null) {
+            return null;
+        } else {
+            return tmp.toLocalTime();
+        }
     }
 
     @Override

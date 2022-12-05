@@ -5,6 +5,9 @@ import org.noear.wood.ext.Act2;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -56,6 +59,11 @@ public interface IDataItem extends GetHandler, Serializable {
     String getString(String name);
     Boolean getBoolean(String name);
     Date getDateTime(String name);
+    LocalDateTime getLocalDateTime(String name);
+    LocalDate getLocalDate(String name);
+    LocalTime getLocalTime(String name);
+
+
 
     void forEach(Act2<String, Object> action);
 }
