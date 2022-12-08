@@ -59,4 +59,17 @@ public class _PageTest2 {
 
         System.out.println(db2.lastCommand.text);
     }
+
+    @Test
+    public void test_page4() throws Exception{
+        IPage<AppxModel> list = db2.table("appx")
+                .whereEq("app_id",2)
+                .orderByAsc("app_id")
+                .selectPage("*", AppxModel.class);
+
+        assert  list.getList().size() == 1;
+        assert list.getList().get(0).app_id == 2;
+
+        System.out.println(db2.lastCommand.text);
+    }
 }

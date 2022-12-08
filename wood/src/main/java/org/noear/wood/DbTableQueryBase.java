@@ -670,10 +670,12 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
         int limit_start_bak = limit_start;
         int limit_size_bak = limit_size;
         int limit_top_bak = limit_top;
+        StringBuilder _orderBy_bak = _orderBy;
 
         limit_start = 0;
         limit_size = 0;
         limit_top = 0;
+        _orderBy = null;
 
         try {
             return selectDo(column).getVariate().longValue(0L);
@@ -682,6 +684,7 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
             limit_start = limit_start_bak;
             limit_size = limit_size_bak;
             limit_top = limit_top_bak;
+            _orderBy = _orderBy_bak;
         }
     }
 
