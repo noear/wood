@@ -1,3 +1,6 @@
+### 1.0.7
+* 修复 selectPage 接口，在有 orderBy 时会出错的问题（pgsql）
+
 ### 1.0.6
 * 增强 IDataItem 能力
 
