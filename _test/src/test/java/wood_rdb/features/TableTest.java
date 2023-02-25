@@ -35,6 +35,12 @@ public class TableTest {
                 .update();
     }
 
+    public void demo3() throws Exception {
+        db.table("appx_copy")
+                .orderBy("grade when sort ='1' then 1 when sort ='2' then 2 when sort ='3' then 3 end")
+                .selectMapList("a");
+    }
+
     @Test
     public void test0() throws Exception {
         Map<String, Object> map = db.table("appx").whereEq("app_id", 1).select("*").getMap();
