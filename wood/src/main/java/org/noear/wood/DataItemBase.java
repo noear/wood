@@ -231,19 +231,6 @@ public abstract class DataItemBase<Y extends DataItemBase> implements IDataItem{
     }
 
 
-    //============================
-    public static IDataItem create(IDataItem schema, GetHandler source) {
-        DataItem item = new DataItem();
-        for (String key : schema.keys()) {
-            Object val = source.get(key);
-            if (val != null) {
-                item.set(key, val);
-            }
-        }
-        return item;
-    }
-
-
     /**
      * 从map加载数据
      */

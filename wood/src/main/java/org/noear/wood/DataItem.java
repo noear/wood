@@ -71,5 +71,20 @@ public class DataItem extends DataItemBase<DataItem> implements Map<String,Objec
     public Set<Entry<String, Object>> entrySet() {
         return _data.entrySet();
     }
+
+
+
+
+    //============================
+    public static DataItem create(IDataItem schema, GetHandler source) {
+        DataItem item = new DataItem();
+        for (String key : schema.keys()) {
+            Object val = source.get(key);
+            if (val != null) {
+                item.set(key, val);
+            }
+        }
+        return item;
+    }
 }
 
