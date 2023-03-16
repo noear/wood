@@ -1,6 +1,6 @@
 package org.noear.wood.wrap;
 
-import org.noear.wood.DataItem;
+import org.noear.wood.IDataItem;
 import org.noear.wood.WoodConfig;
 import org.noear.wood.annotation.Table;
 import org.noear.wood.ext.Act2;
@@ -137,7 +137,7 @@ public class ClassWrap {
     }
 
     //将 data 转为 entity
-    public <T> T toEntity(DataItem data) {
+    public <T> T toEntity(IDataItem data) {
         try {
             if (recordable()) {
                 Parameter[] argsP = recordParams();

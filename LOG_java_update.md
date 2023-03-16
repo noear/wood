@@ -1,3 +1,8 @@
+### 1.0.8
+* 增加 Blob,Clob 转 String 的支持
+* 增加 Blob,Clob 转 InputStream 的支持
+* 增加 DataItem 支持 Map 接口，方便 json 化
+
 ### 1.0.7
 * 修复 selectPage 接口，在有 orderBy 时会出错的问题（pgsql）
 

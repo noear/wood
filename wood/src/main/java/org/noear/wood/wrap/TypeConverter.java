@@ -1,12 +1,14 @@
 package org.noear.wood.wrap;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
+import org.noear.wood.utils.IOUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.*;
 import java.time.*;
 
 public class TypeConverter {
-    public Object convert(Object val, Class<?> target){
+    public Object convert(Object val, Class<?> target) throws SQLException, IOException {
         if (val instanceof Number) {
             Number number = (Number) val;
 
@@ -34,16 +36,36 @@ public class TypeConverter {
                 return number.intValue() > 0;
             }
 
-            if(Date.class == target){
+            if (Date.class == target) {
                 return new Date(number.longValue());
             }
 
-            if(LocalDateTime.class == target){
+            if (LocalDateTime.class == target) {
                 return new Timestamp(number.longValue()).toLocalDateTime();
             }
         }
 
-        if(target == java.util.Date.class) {
+        if (target == String.class) {
+            if (val instanceof Blob) {
+                return IOUtils.transferToString(((Blob) val).getBinaryStream());
+            }
+
+            if (val instanceof Clob) {
+                return IOUtils.transferToString(((Clob) val).getAsciiStream());
+            }
+        }
+
+        if (target == InputStream.class) {
+            if (val instanceof Blob) {
+                return ((Blob) val).getBinaryStream();
+            }
+
+            if (val instanceof Clob) {
+                return ((Clob) val).getAsciiStream();
+            }
+        }
+
+        if (target == java.util.Date.class) {
             if (val instanceof String) {
                 return Timestamp.valueOf((String) val);
             }

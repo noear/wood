@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -64,6 +65,7 @@ public interface IDataItem extends GetHandler, Serializable {
     LocalTime getLocalTime(String name);
 
 
-
     void forEach(Act2<String, Object> action);
+
+    Map<String, Object> getMap();
 }

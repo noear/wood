@@ -20,7 +20,7 @@
 
     <properties>
         <jmh.version>1.25</jmh.version>
-        <solon.ver>1.11.3</solon.ver>
+        <solon.ver>2.2.4</solon.ver>
     </properties>
 
     <dependencies>

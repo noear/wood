@@ -63,7 +63,7 @@ public class FieldWrap {
             } else {
                 _setter.invoke(tObj, new Object[]{val});
             }
-        } catch (IllegalArgumentException ex) {
+        } catch (Exception ex) {
             if (val == null) {
                 throw new IllegalArgumentException(name + "(" + field.getType().getSimpleName() + ")类型接收失败!", ex);
             }

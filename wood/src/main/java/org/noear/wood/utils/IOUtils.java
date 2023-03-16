@@ -1,9 +1,6 @@
 package org.noear.wood.utils;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.Enumeration;
 
@@ -65,5 +62,63 @@ public class IOUtils {
         }
 
         return urls;
+    }
+
+
+    public static String transferToString(InputStream ins) throws IOException {
+        return transferToString(ins, "utf-8");
+    }
+
+    /**
+     * 将输入流转换为字符串
+     *
+     * @param ins     输入流
+     * @param charset 字符集
+     */
+    public static String transferToString(InputStream ins, String charset) throws IOException {
+        if (ins == null) {
+            return null;
+        }
+
+        ByteArrayOutputStream outs = transferTo(ins, new ByteArrayOutputStream());
+
+        if (StringUtils.isEmpty(charset)) {
+            return outs.toString();
+        } else {
+            return outs.toString(charset);
+        }
+    }
+
+    /**
+     * 将输入流转换为byte数组
+     *
+     * @param ins 输入流
+     */
+    public static byte[] transferToBytes(InputStream ins) throws IOException {
+        if (ins == null) {
+            return null;
+        }
+
+        return transferTo(ins, new ByteArrayOutputStream()).toByteArray();
+    }
+
+    /**
+     * 将输入流转换为输出流
+     *
+     * @param ins 输入流
+     * @param out 输出流
+     */
+    public static <T extends OutputStream> T transferTo(InputStream ins, T out) throws IOException {
+        if (ins == null || out == null) {
+            return null;
+        }
+
+        int len = 0;
+        byte[] buf = new byte[512];
+        while ((len = ins.read(buf)) != -1) {
+            out.write(buf, 0, len);
+        }
+
+        return out;
     }
 }
