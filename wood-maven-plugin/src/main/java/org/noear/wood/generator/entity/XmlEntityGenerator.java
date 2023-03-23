@@ -129,19 +129,6 @@ public class XmlEntityGenerator {
             sb.append("import org.noear.wood.annotation.*;").append("\n");
         }
 
-        if (code.contains("@Inject")) {
-            sb.append("import org.noear.solon.annotation.Inject;").append("\n");
-        }
-
-        if (code.contains("@Dao")) {
-            sb.append("import org.noear.solon.extend.aspect.annotation.Dao;").append("\n");
-        }
-
-        if (code.contains("@Service")) {
-            sb.append("import org.noear.solon.extend.aspect.annotation.Service;").append("\n");
-        }
-
-
         sb.append(code);
 
         String dir = (sourceDir.getAbsolutePath() + "/" + entityBlock.targetPackage.replace(".", "/") + "/");

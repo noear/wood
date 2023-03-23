@@ -105,7 +105,7 @@ public class XmlSqlServiceGenerator {
         sb.append("import java.util.*;\n\n");
 
         sb.append("import org.noear.solon.annotation.Inject;\n");
-        sb.append("import org.noear.solon.extend.aspect.annotation.Service;\n");
+        sb.append("import org.noear.solon.annotation.ProxyComponent;\n");
         sb.append("import org.noear.wood.DataItem;\n");
         sb.append("import org.noear.wood.DataList;\n");
         sb.append("import org.noear.wood.annotation.Db;\n");
@@ -132,7 +132,7 @@ public class XmlSqlServiceGenerator {
             }
         }
 
-        sb2.append("@Service\n");
+        sb2.append("@ProxyComponent\n");
         sb2.append("public class ").append(classname);
         sb2.append("{\n");
         sb2.append("    @Inject\n");

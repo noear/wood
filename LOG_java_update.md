@@ -1,3 +1,6 @@
+### 1.0.9
+* 调整生成器的代码
+
 ### 1.0.8
 * 增加 Blob,Clob 转 String 的支持
 * 增加 Blob,Clob 转 InputStream 的支持
