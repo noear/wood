@@ -12,6 +12,19 @@
     </parent>
 
 
-    <artifactId>wood</artifactId>
+    <artifactId>wood.plus</artifactId>
     <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.noear</groupId>
+            <artifactId>wood</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.noear</groupId>
+            <artifactId>liquor</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+    </dependencies>
 </project>

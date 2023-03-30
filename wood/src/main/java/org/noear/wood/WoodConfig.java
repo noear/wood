@@ -4,6 +4,8 @@ import org.noear.wood.cache.ICacheServiceEx;
 import org.noear.wood.ext.Act1;
 import org.noear.wood.ext.Act2;
 import org.noear.wood.ext.Fun1;
+import org.noear.wood.impl.IMapperAdaptorImpl;
+import org.noear.wood.mapper.IMapperAdaptor;
 import org.noear.wood.wrap.NamingStrategy;
 import org.noear.wood.wrap.TypeConverter;
 
@@ -35,6 +37,11 @@ public final class WoodConfig {
      * 字段类型转换器
      * */
     public static TypeConverter typeConverter  = new TypeConverter();
+
+    /**
+     * Mapper 适配器
+     * */
+    public static IMapperAdaptor mapperAdaptor = new IMapperAdaptorImpl();
 
     /**
      * 链接工厂

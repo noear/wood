@@ -1,8 +1,8 @@
 package org.noear.wood.mapper;
 
 import org.noear.wood.BaseMapper;
-import org.noear.wood.annotation.Table;
 import org.noear.wood.annotation.PrimaryKey;
+import org.noear.wood.annotation.Table;
 import org.noear.wood.wrap.ClassWrap;
 import org.noear.wood.wrap.FieldWrap;
 

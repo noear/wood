@@ -1,10 +1,9 @@
-package org.noear.wood;
+package org.noear.wood.xml;
 
+import org.noear.wood.*;
 import org.noear.wood.utils.EntityUtils;
 import org.noear.wood.utils.StringUtils;
 import org.noear.wood.utils.ThrowableUtils;
-import org.noear.wood.xml.XmlSqlBlock;
-import org.noear.wood.xml.XmlSqlFactory;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,7 +21,7 @@ public class DbXmlsqlProcedure extends DbProcedure {
         super(context);
     }
 
-    protected DbXmlsqlProcedure sql(String sqlid) {
+    public DbXmlsqlProcedure sql(String sqlid) {
         _sqlid = sqlid;
 
         this.commandText = sqlid;

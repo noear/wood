@@ -2,12 +2,9 @@ package org.noear.wood;
 
 import org.noear.wood.dialect.DbDialect;
 import org.noear.wood.ext.*;
-import org.noear.wood.mapper.BaseMapperWrap;
-import org.noear.wood.mapper.MapperUtil;
 import org.noear.wood.utils.StringUtils;
 import org.noear.wood.wrap.DbFormater;
 import org.noear.wood.wrap.DbType;
-import org.noear.wood.xml.XmlSqlLoader;
 
 import javax.sql.DataSource;
 import java.io.Closeable;
@@ -124,6 +121,9 @@ public class DbContext implements Closeable {
         return this;
     }
 
+    /**
+     * 使用一个有名字的实例
+     * */
     public static DbContext use(String name){
         return WoodConfig.libOfDb.get(name);
     }
@@ -275,11 +275,11 @@ public class DbContext implements Closeable {
     //
 
     public <T> BaseMapper<T> mapperBase(Class<T> clz) {
-        return new BaseMapperWrap<T>(this, clz, null);
+        return WoodConfig.mapperAdaptor.createMapperBase(this, clz, null);
     }
 
     public <T> BaseMapper<T> mapperBase(Class<T> clz, String tableName) {
-        return new BaseMapperWrap<T>(this, clz, tableName);
+        return WoodConfig.mapperAdaptor.createMapperBase(this, clz, tableName);
     }
 
     private Map<Class<?>, Object> _mapperMap = new HashMap<>();
@@ -293,7 +293,7 @@ public class DbContext implements Closeable {
             synchronized (_mapperMap) {
                 tmp = _mapperMap.get(clz);
                 if (tmp == null) {
-                    tmp = MapperUtil.createProxy(clz, this);
+                    tmp = WoodConfig.mapperAdaptor.createMapper(this,clz);
                     _mapperMap.put(clz, tmp);
                 }
             }
@@ -308,7 +308,7 @@ public class DbContext implements Closeable {
      * @param xsqlid @{namespace}.{id}
      */
     public <T> T mapper(String xsqlid, Map<String, Object> args) throws Exception {
-        return (T) MapperUtil.exec(this, xsqlid, args, null, null);
+        return (T) WoodConfig.mapperAdaptor.createMapper(this, xsqlid, args);
     }
 
 
@@ -326,8 +326,7 @@ public class DbContext implements Closeable {
      */
     public DbProcedure call(String process) {
         if (process.startsWith("@")) {
-            XmlSqlLoader.tryLoad();
-            return new DbXmlsqlProcedure(this).sql(process.substring(1));
+            return WoodConfig.mapperAdaptor.createXmlProcedure(this, process, null);
         }
 
         if (process.lastIndexOf(" ") > 0) {
@@ -344,8 +343,7 @@ public class DbContext implements Closeable {
      */
     public DbProcedure call(String process, Map<String, Object> args) {
         if (process.startsWith("@")) {
-            XmlSqlLoader.tryLoad();
-            return new DbXmlsqlProcedure(this).sql(process.substring(1)).setMap(args);
+            return WoodConfig.mapperAdaptor.createXmlProcedure(this, process, args);
         }
 
         if (process.lastIndexOf(" ") > 0) {

@@ -7,7 +7,8 @@ import org.noear.wood.utils.ThrowableUtils;
 import org.noear.wood.wrap.MethodWrap;
 import org.noear.wood.xml.Namespace;
 
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 
 class MapperHandler implements InvocationHandler {

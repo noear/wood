@@ -52,7 +52,7 @@
 
         <dependency>
             <groupId>org.noear</groupId>
-            <artifactId>wood</artifactId>
+            <artifactId>wood.plus</artifactId>
         </dependency>
 
         <dependency>
