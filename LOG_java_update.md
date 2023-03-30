@@ -1,3 +1,8 @@
+### 1.1.0
+* 将 xml 和 mapper 的功能分离到 wood.plus
+  * 需要 xml 和 mapper 的，则使用 'wood.plus'
+  * 不需要的则使用 'wood'
+
 ### 1.0.9
 * 调整生成器的代码
 
