@@ -83,19 +83,20 @@ db.table(logger)
 
 #### 组件列表： 
 
-| 组件 | 说明 |
-| --- | --- |
-| org.noear:wood | 主框架（没有任何依赖） |
+| 组件                  | 说明                          |
+|---------------------|-----------------------------|
+| org.noear:wood      | 主框架（没有任何依赖）                 |
+| org.noear:wood.plus | 增强框架（支持 Mapper 和 XmlMapper） |
 
 
-| 可选组件 | 说明 |
-| --- | --- |
-| org.noear:wood-maven-plugin| Maven插件，用于生成Xml sql mapper |
-| | |
+| 可选组件 | 说明                     |
+| --- |------------------------|
+| org.noear:wood-maven-plugin| Maven插件，用于生成 XmlMapper |
+| |                        |
 | org.noear:wood.cache.memcached| 基于 Memcached 适配的扩展缓存服务 |
-| org.noear:wood.cache.redis| 基于 Redis 适配的扩展缓存服务 |
-| org.noear:wood.cache.ehcache| 基于 ehcache 适配的扩展缓存服务 |
-| org.noear:wood.cache.j2cache| 基于 j2cache 适配的扩展缓存服务 |
+| org.noear:wood.cache.redis| 基于 Redis 适配的扩展缓存服务     |
+| org.noear:wood.cache.ehcache| 基于 ehcache 适配的扩展缓存服务   |
+| org.noear:wood.cache.j2cache| 基于 j2cache 适配的扩展缓存服务   |
 
 
 
