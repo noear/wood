@@ -1,0 +1,12 @@
+[
+  {
+    "name": "org.noear.wood.impl.IMapperAdaptorPlusImpl",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ],
+    "allDeclaredConstructors": true
+  }
+]
