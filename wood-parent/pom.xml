@@ -36,11 +36,13 @@
     </scm>
 
     <properties>
-        <revision>1.1.1</revision>
+        <revision>1.1.2</revision>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+
+        <redisx.version>1.4.8</redisx.version>
     </properties>
 
     <dependencyManagement>
@@ -90,7 +92,7 @@
             <dependency>
                 <groupId>org.noear</groupId>
                 <artifactId>redisx</artifactId>
-                <version>1.4.4</version>
+                <version>${redisx.version}</version>
             </dependency>
 
             <dependency>
@@ -176,19 +178,6 @@
                     </plugin>
                 </plugins>
             </build>
-
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>oss</id>
-                    <name>snapshots</name>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-                </snapshotRepository>
-                <repository>
-                    <id>oss</id>
-                    <name>releases</name>
-                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-                </repository>
-            </distributionManagement>
         </profile>
     </profiles>
 
