@@ -128,6 +128,17 @@ public class MapperTest {
         assert m11.size() > 20;
     }
 
+
+
+    @Test
+    public void test_select_list_order() {
+        //selectList
+        List<AppxModel> m15 = mapper.selectList(mq -> mq.orderByAsc("app_id").andByAsc("agroup_id"));
+        System.out.println("list_order: " + m15.size() +" :" + db2.lastCommand.fullText());
+        assert db2.lastCommand.fullText().contains("ORDER BY");
+        assert m15.size() > 5;
+    }
+
     @Test
     public void test_select_page_m12() {
         //selectPage

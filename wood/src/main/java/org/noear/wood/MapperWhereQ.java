@@ -22,6 +22,17 @@ public class MapperWhereQ extends WhereBase<MapperWhereQ> {
     }
 
     @Override
+    protected MapperWhereQ orderByDo(String code) {
+        super.orderByDo(code);
+
+        if (_query != null) {
+            _query._orderBy = _orderBy;
+        }
+
+        return this;
+    }
+
+    @Override
     public MapperWhereQ orderBy(String code) {
         super.orderBy(code);
 
