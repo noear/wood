@@ -804,6 +804,9 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
     }
 
     private boolean _usingNull = WoodConfig.isUsingValueNull;
+    protected boolean usingNull(){
+        return _usingNull;
+    }
 
     /**
      * 充许使用null插入或更新
@@ -815,6 +818,9 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
 
     private boolean _usingExpression = WoodConfig.isUsingValueExpression;
 
+    protected boolean usingExpr(){
+        return _usingExpression;
+    }
     /**
      * 充许使用$表达式构建sql
      */

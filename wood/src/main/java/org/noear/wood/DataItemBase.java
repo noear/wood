@@ -256,7 +256,7 @@ public abstract class DataItemBase<Y extends DataItemBase> implements IDataItem{
      */
     public Y setEntity(Object obj) {
         //
-        //保持也where的相同逻辑
+        //保持与where的相同逻辑
         //
         return setEntityIf(obj, (k, v) -> v != null);
     }

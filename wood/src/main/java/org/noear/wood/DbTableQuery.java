@@ -65,8 +65,11 @@ public class DbTableQuery extends DbTableQueryBase<DbTableQuery> {
     }
 
     public DbTableQuery setMap(Map<String,Object> data) {
-        item_init();
-        _item.setMap(data);
+        if (usingNull()) {
+            setMapIf(data, (k, v) -> true);
+        } else {
+            setMapIf(data, (k, v) -> v != null);
+        }
 
         return this;
     }
@@ -79,8 +82,11 @@ public class DbTableQuery extends DbTableQueryBase<DbTableQuery> {
     }
 
     public DbTableQuery setEntity(Object data) {
-        item_init();
-        _item.setEntity(data);
+        if (usingNull()) {
+            setEntityIf(data, (k, v) -> true);
+        } else {
+            setEntityIf(data, (k, v) -> v != null);
+        }
 
         return this;
     }

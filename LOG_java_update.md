@@ -1,3 +1,8 @@
+
+### 1.1.4
+
+* 调整 qr.setEntity(data)，qr.setMap(data) 根据 usingNull() 做为过滤条件
+
 ### 1.1.0
 * 将 xml 和 mapper 的功能分离到 wood.plus
   * 需要 xml 和 mapper 的，则使用 'wood.plus'

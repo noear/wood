@@ -57,7 +57,7 @@ public class _TimeTest {
             map.date1 = null;
         }
 
-        db.table("appx_copy")
+        db.table("appx_copy").usingNull(true)
                 .setEntityIf(map, (k, v) -> v != null)
                 .upsertBy("app_id");
         System.out.println(db.lastCommand.text);

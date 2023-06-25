@@ -69,7 +69,7 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         if (excludeNull) {
             data.setEntityIf(entity, (k, v) -> v != null);
         } else {
-            data.setEntity(entity);
+            data.setEntityIf(entity, (k, v) -> true);
         }
 
         return RunUtils.call(()
@@ -119,7 +119,7 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         if (excludeNull) {
             data.setEntityIf(entity, (k, v) -> v != null);
         } else {
-            data.setEntity(entity);
+            data.setEntityIf(entity, (k, v) -> true);
         }
 
         Object id = data.get(pk());
@@ -135,7 +135,7 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         if (excludeNull) {
             data.setEntityIf(entity, (k, v) -> v != null);
         } else {
-            data.setEntity(entity);
+            data.setEntityIf(entity, (k, v) -> true);
         }
 
         return RunUtils.call(() -> {
@@ -168,7 +168,7 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         if (excludeNull) {
             data.setEntityIf(entity, (k, v) -> v != null);
         } else {
-            data.setEntity(entity);
+            data.setEntityIf(entity, (k, v) -> true);
         }
 
         Object id = data.get(pk());
@@ -187,7 +187,7 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         if (excludeNull) {
             data.setEntityIf(entity, (k, v) -> v != null);
         } else {
-            data.setEntity(entity);
+            data.setEntityIf(entity, (k, v) -> true);
         }
 
         return RunUtils.call(() -> getQr().upsertBy(data, conditionFields));
