@@ -1,4 +1,8 @@
 
+### 1.1.5
+
+* 增加 db.table("table").selectVariate("SUM(num)").longValue(0L);
+
 ### 1.1.4
 
 * 调整 qr.setEntity(data)，qr.setMap(data) 根据 usingNull() 做为过滤条件

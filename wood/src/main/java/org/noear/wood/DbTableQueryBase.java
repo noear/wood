@@ -688,6 +688,10 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
         }
     }
 
+    public Variate selectVariate(String column) throws SQLException {
+        return selectDo(column).getVariate();
+    }
+
     public Object selectValue(String column) throws SQLException {
         return selectDo(column).getValue();
     }
