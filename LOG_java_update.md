@@ -2,6 +2,7 @@
 ### 1.1.4
 
 * 调整 qr.setEntity(data)，qr.setMap(data) 根据 usingNull() 做为过滤条件
+* 修复 BaseMapper 对 excludeNull 条件无效的问题
 
 ### 1.1.0
 * 将 xml 和 mapper 的功能分离到 wood.plus
