@@ -50,7 +50,7 @@ public class MapperTest2 {
     public void test2_3() throws Exception {
         SqlMapper mapper = db2.mapper(SqlMapper.class);
 
-        assert mapper.testBaseExt2().contains("test");
+        assert mapper.testBaseExt2().contains("app");
 
         //assert  mapper.appx_get2(22).app_id == 22;
     }

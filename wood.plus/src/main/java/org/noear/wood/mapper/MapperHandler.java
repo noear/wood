@@ -1,5 +1,6 @@
 package org.noear.wood.mapper;
 
+import org.noear.wood.BaseMapper;
 import org.noear.wood.DbContext;
 import org.noear.wood.IMapperInvoke;
 import org.noear.wood.utils.InvocationHandlerUtils;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 public class MapperHandler implements InvocationHandler {
     private static IMapperInvoke annInvoke = new MapperInvokeForAnn();
     private static IMapperInvoke xmlInvoke = new MapperInvokeForXml();
-    private static IMapperInvoke basInvoke = new MapperInvokeForBas();
+    private static MapperInvokeForBas basInvoke = new MapperInvokeForBas();
 
 
     protected DbContext db;
@@ -57,6 +58,11 @@ public class MapperHandler implements InvocationHandler {
         //调用 Object 函数
         if (caller == Object.class) {
             return InvocationHandlerUtils.invokeObject(mapperClz, proxy, method, args);
+        }
+
+        //调用 BaseMapper 函数
+        if (caller == BaseMapper.class) {
+            return basInvoke.callDo(proxy, db, method, args);
         }
 
 

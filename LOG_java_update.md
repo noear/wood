@@ -1,7 +1,8 @@
 
-### 1.1.6
+### 1.1.7
 
 * 增加 BaseMapper::db,tableName,tablePk,eneityClz 接口，提供扩展支持
+* 优化 BaseMapper 函数的调用路径，可提高性能
 
 ### 1.1.5
 

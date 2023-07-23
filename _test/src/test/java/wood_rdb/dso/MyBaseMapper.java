@@ -11,5 +11,7 @@ public interface MyBaseMapper<T> extends BaseMapper<T> {
         return "test base ext";
     }
 
-    String testBaseExt2();
+    default String testBaseExt2(){
+        return tableName();
+    }
 }
