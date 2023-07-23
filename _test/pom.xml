@@ -20,7 +20,7 @@
 
     <properties>
         <jmh.version>1.25</jmh.version>
-        <solon.ver>2.2.4</solon.ver>
+        <solon.version>2.4.0</solon.version>
     </properties>
 
     <dependencies>
@@ -58,13 +58,13 @@
         <dependency>
             <groupId>org.noear</groupId>
             <artifactId>solon-web</artifactId>
-            <version>${solon.ver}</version>
+            <version>${solon.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.noear</groupId>
             <artifactId>solon-test</artifactId>
-            <version>${solon.ver}</version>
+            <version>${solon.version}</version>
             <scope>test</scope>
         </dependency>
 

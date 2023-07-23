@@ -11,7 +11,11 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 
-class MapperHandler implements InvocationHandler {
+public class MapperHandler implements InvocationHandler {
+    private static IMapperInvoke annInvoke = new MapperInvokeForAnn();
+    private static IMapperInvoke xmlInvoke = new MapperInvokeForXml();
+    private static IMapperInvoke basInvoke = new MapperInvokeForBas();
+
 
     protected DbContext db;
     protected Class<?> mapperClz;
@@ -21,9 +25,7 @@ class MapperHandler implements InvocationHandler {
         this.mapperClz = mapperClz;
     }
 
-    private static IMapperInvoke annInvoke = new MapperInvokeForAnn();
-    private static IMapperInvoke xmlInvoke = new MapperInvokeForXml();
-    private static IMapperInvoke basInvoke = new MapperInvokeForBas();
+
 
     protected static UnsupportedOperationException UOE = new UnsupportedOperationException();
 
@@ -73,7 +75,7 @@ class MapperHandler implements InvocationHandler {
                 tmp = basInvoke.call(proxy, db, sqlid, caller, mWrap, args);
 
                 if (UOE.equals(tmp)) {
-                    throw new RuntimeException("Xmlsql does not exist:@" + sqlid);
+                    throw new RuntimeException("Mapper is not implemented:@" + sqlid);
                 }
             }
         }
@@ -91,6 +93,4 @@ class MapperHandler implements InvocationHandler {
             return c_meta.value() + "." + fun_name;
         }
     }
-
-
 }

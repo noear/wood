@@ -22,7 +22,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
 
-        <wood.ver>1.1.5</wood.ver>
+        <wood.version>1.1.6</wood.version>
     </properties>
 
     <dependencies>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>org.noear</groupId>
             <artifactId>wood.plus</artifactId>
-            <version>${wood.ver}</version>
+            <version>${wood.version}</version>
         </dependency>
 
         <dependency>
@@ -73,7 +73,7 @@
             <plugin>
                 <groupId>org.noear</groupId>
                 <artifactId>wood-maven-plugin</artifactId>
-                <version>${wood.ver}</version>
+                <version>${wood.version}</version>
             </plugin>
 
             <plugin>

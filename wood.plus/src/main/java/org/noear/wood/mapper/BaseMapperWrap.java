@@ -22,14 +22,17 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
     private String _tabelName;
 
     private Class<?> _entityType;
-
+    /**
+     * 实体类型
+     * */
     protected Class<?> entityType() {
         return _entityType;
     }
 
+
     public BaseMapperWrap(DbContext db, Class<?> entityType, String tableName) {
         _db = db;
-        _entityType = entityType;
+        _entityType = entityType; //给 BaseEntityWrap 用的
         _table = BaseEntityWrap.get(this);
 
         if (StringUtils.isEmpty(tableName)) {
@@ -45,19 +48,30 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         _tabelName = _table.tableName;
     }
 
-    private DbContext db() {
+    @Override
+    public DbContext db() {
         return _db;
     }
-
-    private String tableName() {
+    /**
+     * 表名
+     * */
+    @Deprecated
+    public String tableName() {
         return _tabelName;
     }
-
-    private String pk() {
+    /**
+     * 主键
+     * */
+    @Override
+    public String tablePk() {
         return _table.pkName;
     }
 
-    private Class<?> entityClz() {
+    /**
+     * 实体类
+     * */
+    @Override
+    public Class<?> entityClz() {
         return _table.entityClz;
     }
 
@@ -90,13 +104,13 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
     @Override
     public Integer deleteById(Object id) {
         return RunUtils.call(()
-                -> getQr().whereEq(pk(), id).delete());
+                -> getQr().whereEq(tablePk(), id).delete());
     }
 
     @Override
     public Integer deleteByIds(Iterable idList) {
         return RunUtils.call(()
-                -> getQr().whereIn(pk(), idList).delete());
+                -> getQr().whereIn(tablePk(), idList).delete());
     }
 
     @Override
@@ -122,10 +136,10 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
             data.setEntityIf(entity, (k, v) -> true);
         }
 
-        Object id = data.get(pk());
+        Object id = data.get(tablePk());
 
         return RunUtils.call(()
-                -> getQr().whereEq(pk(), id).update(data));
+                -> getQr().whereEq(tablePk(), id).update(data));
     }
 
     @Override
@@ -171,12 +185,12 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
             data.setEntityIf(entity, (k, v) -> true);
         }
 
-        Object id = data.get(pk());
+        Object id = data.get(tablePk());
 
         if (id == null) {
             return RunUtils.call(() -> getQr().insert(data));
         } else {
-            return RunUtils.call(() -> getQr().upsertBy(data, pk()));
+            return RunUtils.call(() -> getQr().upsertBy(data, tablePk()));
         }
     }
 
@@ -196,7 +210,7 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
     @Override
     public boolean existsById(Object id) {
         return RunUtils.call(()
-                -> getQr().whereEq(pk(), id).selectExists());
+                -> getQr().whereEq(tablePk(), id).selectExists());
     }
 
     @Override
@@ -211,7 +225,7 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         Class<T> clz = (Class<T>) entityClz();
 
         return RunUtils.call(()
-                -> getQr().whereEq(pk(), id).limit(1).selectItem("*", clz));
+                -> getQr().whereEq(tablePk(), id).limit(1).selectItem("*", clz));
     }
 
     @Override
@@ -219,7 +233,7 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         Class<T> clz = (Class<T>) entityClz();
 
         return RunUtils.call(()
-                -> getQr().whereIn(pk(), idList).selectList("*", clz));
+                -> getQr().whereIn(tablePk(), idList).selectList("*", clz));
     }
 
     @Override
@@ -329,11 +343,17 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         return RunUtils.call(() -> getQr(c).top(size).selectMapList("*"));
     }
 
-    private DbTableQuery getQr() {
+    /**
+     * 获取查询器
+     * */
+    protected DbTableQuery getQr() {
         return db().table(tableName());
     }
 
-    private DbTableQuery getQr(Act1<MapperWhereQ> c) {
+    /**
+     * 获取带条件的查询器
+     * */
+    protected DbTableQuery getQr(Act1<MapperWhereQ> c) {
         DbTableQuery qr = db().table(tableName());
 
         if (c != null) {

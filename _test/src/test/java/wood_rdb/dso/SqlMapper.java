@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Namespace("webapp.dso.SqlMapper")
-public interface SqlMapper extends BaseMapper<AppxModel> {
+public interface SqlMapper extends MyBaseMapper<AppxModel> {
     //随便取条数据的ID
     int appx_get() throws SQLException;
 

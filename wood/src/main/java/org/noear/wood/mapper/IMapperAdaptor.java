@@ -14,6 +14,13 @@ import java.util.Map;
  */
 public interface IMapperAdaptor {
     /**
+     * 是否为 BaseMapper
+     * */
+    default boolean isMapperBase(Class<?> caller){
+        return BaseMapper.class == caller;
+    }
+
+    /**
      * 生成 xml 处理器
      */
     DbProcedure createXmlProcedure(DbContext db, String process, Map<String, Object> args);

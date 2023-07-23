@@ -11,6 +11,24 @@ import java.util.Map;
  * @author noear
  */
 public interface BaseMapper<T> {
+    /**
+     * 当前数据源
+     * */
+    DbContext db();
+    /**
+     * 当前表名
+     * */
+    String tableName();
+    /**
+     * 当前表主键
+     * */
+    String tablePk();
+    /**
+     * 当前实体类
+     * */
+    Class<?> entityClz();
+
+
     Long insert(T entity, boolean excludeNull);
     void insertList(List<T> list);
 

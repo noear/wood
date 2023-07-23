@@ -37,6 +37,25 @@ public class MapperTest2 {
     }
 
 
+    @Test
+    public void test2_2() throws Exception {
+        SqlMapper mapper = db2.mapper(SqlMapper.class);
+
+        assert mapper.testBaseExt().contains("test");
+
+        //assert  mapper.appx_get2(22).app_id == 22;
+    }
+
+    @Test
+    public void test2_3() throws Exception {
+        SqlMapper mapper = db2.mapper(SqlMapper.class);
+
+        assert mapper.testBaseExt2().contains("test");
+
+        //assert  mapper.appx_get2(22).app_id == 22;
+    }
+
+
     public void test3() {
         SqlMapper mapper = db2.mapper(SqlMapper.class);
 
