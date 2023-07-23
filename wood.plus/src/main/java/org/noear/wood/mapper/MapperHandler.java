@@ -75,7 +75,7 @@ public class MapperHandler implements InvocationHandler {
                 tmp = basInvoke.call(proxy, db, sqlid, caller, mWrap, args);
 
                 if (UOE.equals(tmp)) {
-                    throw new RuntimeException("Mapper is not implemented:@" + sqlid);
+                    throw new RuntimeException("Mapper is not implemented(or no xmlsql):@" + sqlid);
                 }
             }
         }
