@@ -1,4 +1,8 @@
 
+### 1.1.6
+
+* 增加 BaseMapper::db,tableName,tablePk,eneityClz 接口，提供扩展支持
+
 ### 1.1.5
 
 * 增加 db.table("table").selectVariate("SUM(num)").longValue(0L);
