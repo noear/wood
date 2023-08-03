@@ -3,7 +3,9 @@ package org.noear.wood.wrap;
 import org.noear.wood.DbContext;
 import org.noear.wood.dialect.DbDialect;
 
-/** 提供格式处理 */
+/**
+ * 提供格式处理
+ * */
 public class DbFormater{
     protected DbContext ctx;
     public DbFormater(DbContext ctx){

@@ -1,4 +1,8 @@
 
+### 1.1.8
+
+* 增加 DbContext::setDialect 接口，初始化后可以换掉
+
 ### 1.1.7
 
 * 增加 BaseMapper::db,tableName,tablePk,eneityClz 接口，提供扩展支持

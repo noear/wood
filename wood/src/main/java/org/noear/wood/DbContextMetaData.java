@@ -104,6 +104,11 @@ public class DbContextMetaData implements Closeable {
         return type;
     }
 
+    public void setType(DbType type) {
+        init();
+        this.type = type;
+    }
+
     /**
      * 获取方言
      */
@@ -112,9 +117,9 @@ public class DbContextMetaData implements Closeable {
         return dialect;
     }
 
-    public void setDialect(DbDialect adapter) {
+    public void setDialect(DbDialect dialect) {
         init();
-        dialect = adapter;
+        this.dialect = dialect;
     }
 
     public Collection<TableWrap> getTableAll() {

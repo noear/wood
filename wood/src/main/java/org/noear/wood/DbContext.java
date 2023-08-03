@@ -90,6 +90,17 @@ public class DbContext implements Closeable {
     }
 
     /**
+     * 设置方言（如果内置的方言不适合当前数据源）
+     *
+     * @param dbType    数据库类型
+     * @param dbDialect 数据库方言
+     */
+    public void setDialect(DbType dbType, DbDialect dbDialect) {
+        getMetaData().setDialect(dbDialect);
+        getMetaData().setType(dbType);
+    }
+
+    /**
      * 获取链接
      */
     public Connection getConnection() throws SQLException {
@@ -123,8 +134,8 @@ public class DbContext implements Closeable {
 
     /**
      * 使用一个有名字的实例
-     * */
-    public static DbContext use(String name){
+     */
+    public static DbContext use(String name) {
         return WoodConfig.libOfDb.get(name);
     }
 
@@ -293,7 +304,7 @@ public class DbContext implements Closeable {
             synchronized (_mapperMap) {
                 tmp = _mapperMap.get(clz);
                 if (tmp == null) {
-                    tmp = WoodConfig.mapperAdaptor.createMapper(this,clz);
+                    tmp = WoodConfig.mapperAdaptor.createMapper(this, clz);
                     _mapperMap.put(clz, tmp);
                 }
             }
