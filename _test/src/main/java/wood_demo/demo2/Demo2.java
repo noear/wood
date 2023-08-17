@@ -39,7 +39,7 @@ public class Demo2 {
             qr.andEq("type", type);
         }
 
-        return qr.limit(50).select("*").getMapList();
+        return qr.limit(50).selectMapList("*");
     }
 
     public Object searchBy2(Integer id, String name, Integer type) throws Exception {
@@ -49,7 +49,7 @@ public class Demo2 {
                 .andIf(name != null, "name=?", name)
                 .andIf(type != null && type > 2, "type=?", type)
                 .limit(50)
-                .select("*").getMapList();
+                .selectMapList("*");
     }
 
     public Object demo1(String name, String akey) throws Exception {
@@ -63,7 +63,7 @@ public class Demo2 {
             qr.and("akey=?", akey);
         }
 
-        return qr.limit(1).select("*").getMapList();
+        return qr.limit(1).selectMapList("*");
     }
 
     public Object demo1_2(String name, String akey) throws Exception {
@@ -75,7 +75,7 @@ public class Demo2 {
             if (akey != null) {
                 qr.and("akey=?", akey);
             }
-        }).limit(1).select("*").getMapList();
+        }).limit(1).selectMapList("*");
     }
 
     public Object demo1_3(String name, String akey) throws Exception {
@@ -83,7 +83,7 @@ public class Demo2 {
                 .where("1=1")
                 .andIf(name != null, "name=?", name)
                 .andIf(akey != null, "akey=?", akey)
-                .limit(1).select("*").getMapList();
+                .limit(1).selectMapList("*");
     }
 
 

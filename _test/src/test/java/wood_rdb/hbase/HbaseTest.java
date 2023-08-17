@@ -38,7 +38,7 @@ public class HbaseTest {
             System.out.println(db.lastCommand.fullText());
         }
 
-        List<Map<String,Object>> dl = db.table("us_population").limit(2).select("*").getMapList();
+        List<Map<String,Object>> dl = db.table("us_population").limit(2).selectMapList("*");
 
         System.out.println(db.lastCommand.fullText());
 

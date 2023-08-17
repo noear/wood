@@ -46,8 +46,8 @@ public class GetTest {
     public void test12() throws Exception {
         db.table("appx")
                 .whereLt("app_id", 22)
-                .select("*")
-                .getDataList().forEach(item -> item.getInt("app_id"));
+                .selectDataList("*")
+                .forEach(item -> item.getInt("app_id"));
 
     }
 

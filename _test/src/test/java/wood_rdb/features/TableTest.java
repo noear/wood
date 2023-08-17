@@ -43,7 +43,7 @@ public class TableTest {
 
     @Test
     public void test0() throws Exception {
-        Map<String, Object> map = db.table("appx").whereEq("app_id", 1).select("*").getMap();
+        Map<String, Object> map = db.table("appx").whereEq("app_id", 1).selectMap("*");
 
         map.remove("app_id");
 
@@ -58,7 +58,7 @@ public class TableTest {
 
     @Test
     public void test0_2() throws Exception {
-        Map<String, Object> map = db.table("appx").whereEq("app_id", 1).select("*").getMap();
+        Map<String, Object> map = db.table("appx").whereEq("app_id", 1).selectMap("*");
 
         map.put("app_id",11);
 
@@ -71,7 +71,7 @@ public class TableTest {
 
     @Test
     public void test02() throws Exception {
-        Map<String, Object> map = db.table("appx").whereEq("app_id", 1).select("*").getMap();
+        Map<String, Object> map = db.table("appx").whereEq("app_id", 1).selectMap("*");
 
         map.remove("app_id");
 
@@ -87,8 +87,7 @@ public class TableTest {
     public void test1() throws Exception {
         assert db.table("appx")
                 .whereEq("app_id", 22)
-                .select("*")
-                .getItem(AppxModel.class).app_id == 22;
+                .selectItem("*", AppxModel.class).app_id == 22;
 
         System.out.println(db.lastCommand.text);
     }
@@ -97,8 +96,7 @@ public class TableTest {
     public void test1_2() throws Exception {
         AppxD appxD = db.table("appx")
                 .whereEq("app_id", 22)
-                .select("*")
-                .getItem(AppxD.class);
+                .selectItem("*",AppxD.class);
 
         assert appxD.app_id() == 22;
 
@@ -106,8 +104,7 @@ public class TableTest {
 
          appxD = DbContext.use("rock").table("appx")
                 .whereEq("app_id", 22)
-                .select("*")
-                .getItem(AppxD.class);
+                .selectItem("*",AppxD.class);
 
         assert appxD.app_id() == 22;
     }
@@ -116,8 +113,7 @@ public class TableTest {
     public void test12() throws Exception {
         assert db.table("appx")
                 .whereEq("app_id", null)
-                .select("*")
-                .getItem(AppxModel.class).app_id == null;
+                .selectItem("*", AppxModel.class).app_id == null;
 
         System.out.println(db.lastCommand.text);
 
@@ -165,8 +161,8 @@ public class TableTest {
         //查
         assert db.table("test")
                 .whereEq("id", id)
-                .select("v1")
-                .getVariate().longValue(0l) == 10;
+                .selectVariate("v1")
+                .longValue(0l) == 10;
     }
 
     @Test

@@ -41,7 +41,7 @@ public class demo_table {
 
         //1
         db.table("test")
-                .where("id IN (?...)", db.table("user_info").where("user_id<?", 16).select("user_id"))
+                .where("id IN (?...)", db.table("user_info").where("user_id<?", 16).selectQ("user_id"))
                 .update(new DataItem().set("txt", "NOW()xx").set("num", 44));
     }
 
@@ -51,44 +51,37 @@ public class demo_table {
                 .delete();
     }
 
-    public static DataList demo_select() throws SQLException{
-        DataList list = db.table("user_info")
+    public static DataList demo_select() throws SQLException {
+        return db.table("user_info")
                 .where("user_id<?", 10)
-                .select("user_id,name,sex")
-                .getDataList();
-
-        return list;
+                .selectDataList("user_id,name,sex");
     }
 
     public static void demo_select1() throws SQLException {
         db.table("user_info u")
                 .innerJoin("user_ex e").on("u.useer_id = e.user_id")
                 .where("u.user_id<?", 10)
-                .select("u.user_id,u.name,u.sex")
-                .getDataList();
+                .selectDataList("u.user_id,u.name,u.sex");
 
 
         db.table("user_info u")
                 .innerJoin("user_ex e").on("u.useer_id = e.user_id")
                 .where("u.user_id<?", 10)
                 .limit(10,20)
-                .select("u.user_id,u.name,u.sex")
-                .getDataList();
+                .selectDataList("u.user_id,u.name,u.sex");
 
         db.table("user_info u")
                 .innerJoin("user_ex e").on("u.useer_id = e.user_id")
                 .where("u.user_id<?", 10)
                 .groupBy("u.user_id")
                 .limit(10,20)
-                .select("u.user_id,COUNT(e.row_id)")
-                .getDataList();
+                .selectDataList("u.user_id,COUNT(e.row_id)");
     }
 
     public static List<UserInfoModel> demo_select2() throws SQLException{
         List<UserInfoModel> list = db.table("user_info")
                 .where("user_id<?", 10)
-                .select("user_id,name,sex")
-                .getList(UserInfoModel.class);
+                .selectList("user_id,name,sex" ,UserInfoModel.class);
 
         return list;
     }
@@ -98,7 +91,7 @@ public class demo_table {
                 .innerJoin("user_info b").on("b.user_id=a.id")
                 .where("a.id<?", 20)
                 .limit(100)
-                .select("a.*,b.name").getDataList();
+                .selectDataList("a.*,b.name");
 
 
         int count = dt.getRowCount();
@@ -112,8 +105,7 @@ public class demo_table {
                 .where("a.id<15")
                 .groupBy("a.num HAVING a.num>1")
                 .orderBy("a.num DESC")
-                .select("num,COUNT(b.user_id)")
-                .getDataList();
+                .selectDataList("num,COUNT(b.user_id)");
 
         int count = dt.getRowCount();
         if (count > 0)
@@ -150,7 +142,7 @@ public class demo_table {
         qr.orderBy("invite_id DESC")
                 .limit(start, pageSize);
 
-        dl = qr.select("*").getDataList();
+        dl = qr.selectDataList("*");
 
         return dl;
     }
@@ -162,20 +154,17 @@ public class demo_table {
         List<Integer> rids = db.table("BCF_Resource r")
                 .innerJoin("BCF_Resource_Linked rl").on("r.RSID=rl.RSID")
                 .where("rl.LK_OBJT_ID=? AND rl.LK_OBJT=?", 12737, 7)
-                .select("r.RSID")
-                .getArray("RSID");
+                .selectArray("r.RSID");
 
         //2.找出资源相关的组id
         List<Integer> pids = db.table("BCF_Resource_Linked rl")
                 .where("rl.LK_OBJT=? AND rl.RSID IN (?...)", 2, rids)
-                .select("DISTINCT rl.LK_OBJT_ID")
-                .getArray("LK_OBJT_ID");
+                .selectArray("DISTINCT rl.LK_OBJT_ID");
 
         //3.找出相关组的诚意情
         return db.table("BCF_Group")
                 .where("PGID IN (?...) AND Is_Disabled=0 AND Is_Visibled=1", pids)
                 .orderBy("Order_Index")
-                .select("*")
-                .getDataList();
+                .selectDataList("*");
     }
 }

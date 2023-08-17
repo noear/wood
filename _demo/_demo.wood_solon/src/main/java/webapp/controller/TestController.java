@@ -25,8 +25,7 @@ public class TestController {
                 .with("ax", db2.table("appx").selectQ("*"))
                 .with("ag", db2.table("appx_agroup").where("agroup_id < 10").selectQ("*"))
                 .with("ah", "select * from appx_agroup where agroup_id<?", 10)
-                .select("ax.*")
-                .getMapList();
+                .selectMapList("ax.*");
 
         if (sql == null) {
             return tmp;
@@ -44,8 +43,7 @@ public class TestController {
                 .orderByDesc("app_id")
                 .limit(2)
                 .with("ax", db2.table("appx").selectQ("*"))
-                .select("ax.*")
-                .getMapList();
+                .selectMapList("ax.*");
 
         if (sql == null) {
             return tmp;

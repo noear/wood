@@ -43,7 +43,7 @@ public class Tran1Demo {
 
         //1.建立主事务，并执于
         Trans.tran(() -> {
-            db.table("").select("");
+            db.table("test").select("*");
 
             db.sql("insert into test(txt) values(?)", "cc").execute();
             db.sql("insert into test(txt) values(?)", "dd").execute();
