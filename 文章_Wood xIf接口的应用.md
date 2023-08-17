@@ -19,7 +19,7 @@ public Object searchBy(Integer id, String name,Integer type) throws Exception {
         qr.and("type=?", type);
     }
 
-    return qr.limit(50).select("*").getMapList();
+    return qr.limit(50).selectMapList("*");
 }
 ```
 
@@ -32,7 +32,7 @@ public Object searchBy(Integer id, String name,Integer type) throws Exception {
             .andIf(name != null, "name=?", name)
             .andIf(type != null && type > 2, "type=?", type)
             .limit(50)
-            .select("*").getMapList()
+            .selectMapList("*");
 }
 ```
 

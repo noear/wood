@@ -80,8 +80,7 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
      * 例：db.table("user u")
      * .with("a","select type num from group by type")
      * .where("u.type in(select a.type) and u.type2 in (select a.type)")
-     * .select("u.*")
-     * .getMapList();
+     * .selectMapList("u.*");
      */
     public T with(String name, String code, Object... args) {
         if (_builder_bef.length() < 6) {

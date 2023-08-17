@@ -28,8 +28,7 @@
 //例: db.table("user u")
 //      .with("a","select type num from group by type")
 //      .where("u.type in(select a.type) and u.type2 in (select a.type)")
-//      .select("u.*")
-//      .getMapList();
+//      .selectMapList("u.*");
 -with(name:String,code:String,args:Object...) -> self //添加SQL with 语句
 
 -whereTrue()-> self
