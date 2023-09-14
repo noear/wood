@@ -193,13 +193,32 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
             return 0;
         }
 
+        return insertCompile(data).insert();
+    }
+
+    /**
+     * 插入编译并获取命令
+     * */
+    public Command insertAsCmd(IDataItem data) {
+        if (data == null || data.count() == 0) {
+            return null;
+        }
+
+        return insertCompile(data).getCommand();
+    }
+
+    /**
+     * 插入编译
+     * */
+    protected DbQuery insertCompile(IDataItem data) {
         _builder.clear();
 
         _context.getDialect()
                 .buildInsertOneCode(_context, _table, _builder, this::isSqlExpr, _usingNull, data);
 
-        return compile().insert();
+        return compile();
     }
+
 
     /**
      * 根据约束进行插入
@@ -374,6 +393,25 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
         }
 
 
+        return updateCompile(data).execute();
+    }
+
+    /**
+     * 更新编译并返回命令
+     * */
+    public Command updateAsCmd(IDataItem data) {
+        if (data == null || data.count() == 0) {
+            return null;
+        }
+
+
+        return updateCompile(data).getCommand();
+    }
+
+    /**
+     * 更新编译
+     * */
+    protected DbQuery updateCompile(IDataItem data)  {
         List<Object> args = new ArrayList<Object>();
         StringBuilder sb = new StringBuilder();
 
@@ -394,11 +432,11 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
             }
         }
 
-        int rst = compile().execute();
+        DbQuery query = compile();
 
         _builder.restore();
 
-        return rst;
+        return query;
     }
 
     private void updateItemsBuild0(IDataItem data, StringBuilder buf, List<Object> args) {
@@ -529,6 +567,20 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
      * 执行删除，并返回影响行数
      */
     public int delete() throws SQLException {
+        return deleteCompile().execute();
+    }
+
+    /**
+     * 删除编译并返回命令
+     * */
+    public Command deleteAsCmd(){
+        return deleteCompile().getCommand();
+    }
+
+    /**
+     * 删除编译
+     * */
+    protected DbQuery deleteCompile()  {
         StringBuilder sb = new StringBuilder();
 
         _context.getDialect().deleteCmd(sb, _table, _builder.indexOf(" FROM ") < 0);
@@ -546,7 +598,7 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
             throw new RuntimeException("Lack of delete condition!!!");
         }
 
-        return compile().execute();
+        return compile();
     }
 
 
@@ -625,14 +677,24 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
         return selectDo(columns);
     }
 
-    protected IQuery selectDo(String columns) {
-        select_do(columns, true);
+    public Command selectAsCmd(String columns){
+       return selectCompile(columns).getCommand();
+    }
 
-        DbQuery rst = compile();
+    protected IQuery selectDo(String columns) {
+        DbQuery rst = selectCompile(columns);
 
         if (_cache != null) {
             rst.cache(_cache);
         }
+
+        return rst;
+    }
+
+    protected DbQuery selectCompile(String columns) {
+        select_do(columns, true);
+
+        DbQuery rst = compile();
 
         _builder.restore();
 

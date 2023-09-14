@@ -111,6 +111,14 @@ public class DbTableQuery extends DbTableQueryBase<DbTableQuery> {
         }
     }
 
+    public Command insertAsCmd() {
+        if (_item == null) {
+            return null;
+        } else {
+            return insertAsCmd(_item);
+        }
+    }
+
     /**
      * 根据字段和数据自动形成插入条件
      * */
@@ -132,6 +140,14 @@ public class DbTableQuery extends DbTableQueryBase<DbTableQuery> {
         }
         else {
             return update(_item);
+        }
+    }
+
+    public Command updateAsCmd() throws SQLException {
+        if (_item == null) {
+            return null;
+        } else {
+            return updateAsCmd(_item);
         }
     }
 
