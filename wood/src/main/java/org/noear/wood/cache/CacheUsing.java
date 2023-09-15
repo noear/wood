@@ -89,7 +89,7 @@ public class CacheUsing implements ICacheUsing<CacheUsing>, IWoodKey {
     /// <param name="exec">执行方法</param>
     /// <param name="woodKey">缓存关健字</param>
     /// <returns></returns>
-    public <T> T get(String woodKey, Fun0<T> exec) {
+    public <T> T get(String woodKey, Class<T> clz,  Fun0<T> exec) {
         if (this.cacheController == CacheState.NonUsing)
             return exec.run();
 
@@ -98,7 +98,7 @@ public class CacheUsing implements ICacheUsing<CacheUsing>, IWoodKey {
         T cacheT = null;
 
         if (this.cacheController == CacheState.Using) //如果是刷新，则不从缓存获取
-            cacheT = (T) outerCaching.get(_woodKey);
+            cacheT = (T) outerCaching.get(_woodKey, clz);
 
         if (cacheT == null) {
             cacheT = exec.run();
@@ -119,7 +119,7 @@ public class CacheUsing implements ICacheUsing<CacheUsing>, IWoodKey {
         return cacheT;
     }
 
-    public <T,E extends Throwable> T getEx(String woodKey, Fun0Ex<T,E> exec) throws E{
+    public <T,E extends Throwable> T getEx(String woodKey, Class<T> clz, Fun0Ex<T,E> exec) throws E{
         if (this.cacheController == CacheState.NonUsing)
             return exec.run();
 
@@ -128,7 +128,7 @@ public class CacheUsing implements ICacheUsing<CacheUsing>, IWoodKey {
         T cacheT = null;
 
         if (this.cacheController == CacheState.Using) //如果是刷新，则不从缓存获取
-            cacheT = (T) outerCaching.get(_woodKey);
+            cacheT = (T) outerCaching.get(_woodKey, clz);
 
         if (cacheT == null) {
             cacheT = exec.run();
@@ -149,11 +149,11 @@ public class CacheUsing implements ICacheUsing<CacheUsing>, IWoodKey {
         return cacheT;
     }
 
-    public <T> T getOnly(String woodKey)
+    public <T> T getOnly(String woodKey, Class<T> clz)
     {
         _woodKey = woodKey;
 
-        return (T) outerCaching.get(_woodKey);
+        return (T) outerCaching.get(_woodKey, clz);
     }
 
     public void storeOnly(String woodKey,Object data)

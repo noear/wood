@@ -13,7 +13,7 @@ public class EmptyCache implements ICacheServiceEx {
     }
 
     @Override
-    public Object get(String s) {
+    public <T> T get(String s, Class<T> clz) {
         return null;
     }
 

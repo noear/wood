@@ -76,11 +76,11 @@ public class EhCache implements ICacheServiceEx {
     }
 
     @Override
-    public Object get(String key) {
+    public <T> T get(String key, Class<T> clz) {
         if (_cache != null) {
             String newKey = newKey(key);
             try {
-                return _cache.get(newKey);
+                return (T)_cache.get(newKey);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 return null;

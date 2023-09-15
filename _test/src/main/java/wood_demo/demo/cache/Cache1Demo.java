@@ -41,7 +41,7 @@ public class Cache1Demo {
         cache.clear("user_" + 1);
 
         //2.2.可根据标签更新缓存
-        cache.update("user_" + 1, (UserInfoModel m)->{
+        cache.update("user_" + 1, UserInfoModel.class, (UserInfoModel m)->{
             m.name = "xxx";
             return m;
         });

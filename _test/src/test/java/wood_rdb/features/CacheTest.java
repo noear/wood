@@ -25,7 +25,7 @@ public class CacheTest {
         System.out.println("tmp.app_id = " + tmp.app_id);
         assert tmp.app_id == 23;
 
-        cache.tags().update("app_23", (DataItem di) -> {
+        cache.tags().update("app_23", DataItem.class, (DataItem di) -> {
             AppxModel m = di.toEntity(AppxModel.class);
             assert m.app_id == 23;
             return di;
@@ -45,7 +45,7 @@ public class CacheTest {
         System.out.println("tmp.app_id = " + tmp.app_id);
         assert tmp.app_id == 23;
 
-        cache.tags().update("app_23", (DataItem di) -> {
+        cache.tags().update("app_23",  DataItem.class, (DataItem di) -> {
             AppxModel m = di.toEntity(AppxModel.class);
             System.out.println("tmp.app_id = " + tmp.app_id);
             assert m.app_id == 23;
@@ -79,7 +79,7 @@ public class CacheTest {
         assert tmp.app_id == 23;
 
 
-        cache.tags().update("app_23", (DataItem di) -> {
+        cache.tags().update("app_23", DataItem.class,(DataItem di) -> {
             AppxModel2 m = di.toEntity(AppxModel2.class);
             System.out.println("tmp.app_id = " + m.app_id);
             assert m.app_id == 23;
@@ -110,7 +110,7 @@ public class CacheTest {
         assert tmp.app_id == 23;
 
 
-        cache.tags().update("app_23", (DataItem di) -> {
+        cache.tags().update("app_23",  DataItem.class, (DataItem di) -> {
             AppxModel2 m = di.toEntity(AppxModel2.class);
             System.out.println("tmp.app_id = " + m.app_id);
             assert m.app_id == 23;

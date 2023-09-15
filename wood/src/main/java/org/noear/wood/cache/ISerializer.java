@@ -14,9 +14,9 @@ public interface ISerializer<T> {
     /**
      * 序列化
      * */
-    T serialize(Object obj) throws Exception ;
+    T serialize(Object fromObj) throws Exception ;
     /**
      * 反序列化
      * */
-    Object deserialize(T dta) throws Exception ;
+    Object deserialize(T fromDta, Class<?> toClz) throws Exception ;
 }

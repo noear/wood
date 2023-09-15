@@ -27,7 +27,7 @@ public class JavabinSerializer implements ISerializer<String> {
     }
 
     @Override
-    public Object deserialize(String dta) throws Exception {
+    public Object deserialize(String dta, Class<?> clz) throws Exception {
         if(dta == null){
             return null;
         }

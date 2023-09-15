@@ -185,7 +185,7 @@ public abstract class DbAccess<T extends DbAccess> implements IWoodKey,IQuery,Se
             rst = new SQLer().getVariate(cmd);
         } else {
             _cache.usingCache(cacheCondition);
-            rst = _cache.getEx(this.getWoodKey(), () -> (new SQLer().getVariate(cmd)));
+            rst = _cache.getEx(this.getWoodKey(), Variate.class, () -> (new SQLer().getVariate(cmd)));
         }
         if (rst == null) {
             return new Variate();
@@ -291,7 +291,7 @@ public abstract class DbAccess<T extends DbAccess> implements IWoodKey,IQuery,Se
             rst = new SQLer().getTable(cmd);
         } else {
             _cache.usingCache(cacheCondition);
-            rst = _cache.getEx(this.getWoodKey(), () -> (new SQLer().getTable(cmd)));
+            rst = _cache.getEx(this.getWoodKey(), DataList.class, () -> (new SQLer().getTable(cmd)));
         }
 
         if (rst == null) {
@@ -320,7 +320,7 @@ public abstract class DbAccess<T extends DbAccess> implements IWoodKey,IQuery,Se
             rst = new SQLer().getRow(cmd);
         } else {
             _cache.usingCache(cacheCondition);
-            rst = _cache.getEx(this.getWoodKey(), () -> (new SQLer().getRow(cmd)));
+            rst = _cache.getEx(this.getWoodKey(), DataItem.class, () -> (new SQLer().getRow(cmd)));
         }
 
         if (rst == null) {

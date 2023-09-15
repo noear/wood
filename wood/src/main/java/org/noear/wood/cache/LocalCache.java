@@ -63,10 +63,10 @@ public class LocalCache implements ICacheServiceEx {
     }
 
     @Override
-    public Object get(String key) {
+    public <T> T get(String key,Class<T> clz) {
         Entity ent = _data.get(key);
 
-        return ent == null ? null : ent.value;
+        return ent == null ? null : (T) ent.value;
     }
 
     @Override

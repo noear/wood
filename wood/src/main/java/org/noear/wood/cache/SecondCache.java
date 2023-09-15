@@ -30,10 +30,10 @@ public class SecondCache implements ICacheServiceEx {
     }
 
     @Override
-    public Object get(String key) {
-        Object temp = cache1.get(key);
+    public <T> T get(String key, Class<T> clz) {
+        T temp = cache1.get(key, clz);
         if (temp == null) {
-            temp = cache2.get(key);
+            temp = cache2.get(key, clz);
             if (bufferSeconds > 0 && temp != null) {
                 cache1.store(key, temp, bufferSeconds);
             }
@@ -71,8 +71,8 @@ public class SecondCache implements ICacheServiceEx {
     }
 
     @Override
-    public <T> void update(String tag, Fun1<T, T> setter) {
-        cache1.update(tag, setter);
-        cache2.update(tag, setter);
+    public <T> void update(String tag, Class<T> clz, Fun1<T, T> setter) {
+        cache1.update(tag, clz, setter);
+        cache2.update(tag, clz, setter);
     }
 }

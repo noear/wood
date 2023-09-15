@@ -88,12 +88,12 @@ public class RedisCache implements ICacheServiceEx {
     }
 
     @Override
-    public Object get(String key) {
+    public <T> T get(String key, Class<T> clz) {
         if (_cache != null) {
             String newKey = newKey(key);
             String val = _cache.openAndGet((ru) -> ru.key(newKey).get());
             try {
-                return _serializer.deserialize(val);
+                return (T)_serializer.deserialize(val, clz);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 throw new RuntimeException(ex);

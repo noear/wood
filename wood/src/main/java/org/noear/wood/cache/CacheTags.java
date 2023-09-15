@@ -100,11 +100,11 @@ public class CacheTags {
         return this;
     }
 
-    public <T extends Object> void update(String tag, Fun1<T,T> setter) {
+    public <T extends Object> void update(String tag, Class<T> clz,  Fun1<T,T> setter) {
         List<String> keys = getCacheKeys(tag);
 
         for (String key : keys) {
-            Object temp = _Cache.get(key);
+            Object temp = _Cache.get(key, clz);
             if (temp == null) {
                 continue;
             }
@@ -165,7 +165,7 @@ public class CacheTags {
     }
 
     private List<String> $(String key) {
-        Object temp = _Cache.get(key);
+        Object temp = _Cache.get(key, ArrayList.class);
 
         if (temp == null)
             return new ArrayList<String>();

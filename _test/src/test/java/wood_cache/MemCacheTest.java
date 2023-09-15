@@ -19,15 +19,15 @@ public class MemCacheTest {
     public void test() throws Exception{
         cache.remove("key");
 
-        cache.getBy(6, "key", (uc) -> {
+        cache.getBy(6, "key", Long.class, (uc) -> {
             return null;
         });
 
-        long tmp = cache.getBy(6, "key", (uc) -> {
+        long tmp = cache.getBy(6, "key",  Long.class,(uc) -> {
             return System.currentTimeMillis();
         });
 
-        long tmp2 = cache.getBy(6, "key", (uc) -> {
+        long tmp2 = cache.getBy(6, "key", Long.class, (uc) -> {
             return System.currentTimeMillis();
         });
 
@@ -37,7 +37,7 @@ public class MemCacheTest {
 
         Thread.sleep(1000 * 5);
 
-        tmp2 = cache.getBy(6, "key", (uc) -> {
+        tmp2 = cache.getBy(6, "key", Long.class, (uc) -> {
             return System.currentTimeMillis();
         });
 
@@ -46,7 +46,7 @@ public class MemCacheTest {
 
         Thread.sleep(1000 * 3);
 
-        tmp2 = cache.getBy(6, "key", (uc) -> {
+        tmp2 = cache.getBy(6, "key",  Long.class,(uc) -> {
             return System.currentTimeMillis();
         });
 
@@ -58,11 +58,11 @@ public class MemCacheTest {
     public void test2() throws Exception{
         cache.remove("key2");
 
-        long tmp = cache.getBy(30, "key2", (uc) -> {
+        long tmp = cache.getBy(30, "key2",  Long.class,(uc) -> {
             return System.currentTimeMillis();
         });
 
-        long tmp2 = cache.getBy(30, "key2", (uc) -> {
+        long tmp2 = cache.getBy(30, "key2",  Long.class,(uc) -> {
             return System.currentTimeMillis();
         });
 
@@ -72,7 +72,7 @@ public class MemCacheTest {
 
         Thread.sleep(1000 * 20);
 
-        tmp2 = cache.getBy(30, "key2", (uc) -> {
+        tmp2 = cache.getBy(30, "key2", Long.class, (uc) -> {
             return System.currentTimeMillis();
         });
 

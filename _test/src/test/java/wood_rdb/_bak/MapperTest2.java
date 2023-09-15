@@ -113,7 +113,7 @@ public class MapperTest2 {
     public void test6() throws Exception {
         SqlMapper mapper = db2.mapper(SqlMapper.class);
 
-        DbUtil.cache.getBy(12, "test", (cu) -> mapper.test());
+        DbUtil.cache.getBy(12, "test",String.class,  (cu) -> mapper.test());
 
         System.out.println(mapper.test());
     }

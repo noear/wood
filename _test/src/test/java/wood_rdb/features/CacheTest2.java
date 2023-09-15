@@ -12,12 +12,12 @@ public class CacheTest2 {
 
     @Test
     public void test() throws Exception{
-        long time1 = cache.getBy(6,"cache_test",(cu)->{
+        long time1 = cache.getBy(6,"cache_test", Long.class,(cu)->{
             return System.currentTimeMillis();
         });
 
 
-        long time2 = cache.getBy(6,"cache_test",(cu)->{
+        long time2 = cache.getBy(6,"cache_test", Long.class,(cu)->{
             return System.currentTimeMillis();
         });
 
@@ -26,7 +26,7 @@ public class CacheTest2 {
         Thread.sleep(1000 * 5);
 
 
-        long time3 = cache.getBy(6,"cache_test",(cu)->{
+        long time3 = cache.getBy(6,"cache_test", Long.class,(cu)->{
             return System.currentTimeMillis();
         });
 
@@ -37,7 +37,7 @@ public class CacheTest2 {
         Thread.sleep(1000 * 2);
 
 
-        long time4 = cache.getBy(6,"cache_test",(cu)->{
+        long time4 = cache.getBy(6,"cache_test", Long.class,(cu)->{
             return System.currentTimeMillis();
         });
 
