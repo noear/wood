@@ -1,6 +1,6 @@
 ### 1.2.0
 
-* 调整 ICacheService 接口
+* 调整 ICacheService 接口（增加类型化 get）
 * redisx 升为 1.2.0
 
 ### 1.1.9
