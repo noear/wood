@@ -65,6 +65,12 @@ db.table("user u")
   .limit(100,20)
   .selectList("u.*,e.sex,e.label", User.class);
 
+db.table("user u")
+  .innerJoin("user_ext e").onEq("u.id","e.user_id")
+  .whereEq("u.type",11)
+  .limit(100,20)
+  .selectAsCmd("u.*,e.sex,e.label"); //构建查询命令（即查询语句）
+
 //Table 接口，拼装条件查询（特别适合管理后台）
 db.table(logger)
   .where("1 = 1")
@@ -165,6 +171,7 @@ StatModel stat = userDao.userStat(20201010);
 //增::
 db.table("user").setEntity(user).insert();
 db.table("user").setMap(map).insert();
+db.table("user").setMap(map).insertAsCmd();
 //删::
 db.table("user").whereEq("id",2).delete();
 //改::

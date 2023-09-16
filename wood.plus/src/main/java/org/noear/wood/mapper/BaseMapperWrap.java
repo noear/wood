@@ -55,7 +55,6 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
     /**
      * 表名
      * */
-    @Deprecated
     public String tableName() {
         return _tabelName;
     }
