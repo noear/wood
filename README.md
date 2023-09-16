@@ -2,7 +2,7 @@
   Wood
 </h1>
 <p align="center">
-微型ORM框架（支持：java sql，xml sql，annotation sql；事务；缓存；监控；等...）
+微型ORM框架（支持：java sql，xml sql，annotation sql；事务；缓存；监控；等...），无依赖！
 </p>
 <p align="center">
     <a target="_blank" href="https://search.maven.org/search?q=org.noear%20wood">
