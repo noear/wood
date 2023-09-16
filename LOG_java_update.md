@@ -5,7 +5,7 @@
 
 ### 1.1.9
 
-* 增加代码生成接口
+* 增加代码生成接口（selectAsCmd, insertAsCmd, updateAsCmd, deleteAsCmd）
 
 ### 1.1.8
 
