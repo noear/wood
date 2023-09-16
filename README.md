@@ -136,9 +136,8 @@ db.table(logger)
 //DbContext db  = new DbContext(properties); //使用Properties配置的示例
 //DbContext db  = new DbContext(map); //使用Map配置的示例
 //DbContext db  = new DbContext("user","proxool.xxx_db"); //使用proxool线程池配置的示例
-//DbContext db  = new DbContext("user",new HikariDataSource(...)); //使用DataSource配置的示例
-DbContext db  = new DbContext("user","jdbc:mysql://x.x.x:3306/user","root","1234");
-
+//DbContext db  = new DbContext("user","jdbc:mysql://x.x.x:3306/user","root","1234");
+DbContext db  = new DbContext("user",new HikariDataSource(...)); //使用DataSource配置的示例
 
 /** 2.1.Mapper用法 */
 @Namespace("demo.dso.db")
