@@ -369,3 +369,4 @@ public interface BaseMapper<T> {
     List<Map<String, Object>> selectMapTop(int size, Act1<MapperWhereQ> condition);
 }
 ```
+
