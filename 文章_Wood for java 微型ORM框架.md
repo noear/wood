@@ -1,6 +1,6 @@
 # Wood
 
-微型ORM框架（支持：java sql，xml sql，annotation sql；事务；缓存；监控；等...），无依赖！
+微型 Java ORM 框架（支持：java sql，xml sql，annotation sql；事务；缓存；监控；等...），无依赖！
 
 
 #### Wood 特点和理念：
@@ -123,16 +123,10 @@ DbContext db = WaterClient.Config.get("demo.db").getDb();
 
 ##### （一）db.mapper()，提供mapper操作支持
 
- > mapper风格，是现在极为流行的一种。大多人都在用。
- >
- > 此接口提供了BaseMapper模式，@Sql注入模式，Xml sql配置模式。其中，Xml sql 的内部处理会在启动时预编译为Java class；性能应该是靠谱的（好像有点儿jsp的预编译味道）。
+ > mapper风格（需要引入增强包：wood.plus），是现在极为流行的一种。此接口提供了BaseMapper模式，@Sql注入模式，Xml sql配置模式。其中，Xml sql 的内部处理会在启动时预编译为Java class；性能应该是靠谱的（好像有点儿jsp的预编译味道）。
 
-* 1.db.mapperBase(clz) 获取BaseMapper实例
+* 1.db.mapperBase(clz) 获取BaseMapper实例 
 
-  > 自Xxx-plus之后，要是个没有BaseMapper，好像都不好意思说自己是个ORM框架了。
-  >
-  > 这个接口确实带来了极大的方法，简单的CRUD完全省掉了。
-  
 ```java
 //直接使用BaseMapper
 BaseMapper<User> userDao= db.mapperBase(User.class);
