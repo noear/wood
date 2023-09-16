@@ -171,7 +171,7 @@ StatModel stat = userDao.userStat(20201010);
 //增::
 db.table("user").setEntity(user).insert();
 db.table("user").setMap(map).insert();
-db.table("user").setMap(map).insertAsCmd();
+db.table("user").setMap(map).insertAsCmd(); //构建查询命令（即查询语句）
 //删::
 db.table("user").whereEq("id",2).delete();
 //改::
