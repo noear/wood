@@ -1,34 +1,39 @@
-# Wood for java 新的微型ORM框架
+# Wood
 
-Wood，微型ORM框架（支持：java sql，xml sql，annotation sql；template sql；事务；缓存；监听；等...）
-
-应该算是个功能全面且小巧的ORM框架：0.2Mb，无其它依赖。对外的接口也不多，主要由DbContext上的四个接口发起所有的操作。
+微型ORM框架（支持：java sql，xml sql，annotation sql；事务；缓存；监控；等...），无依赖！
 
 
 #### Wood 特点和理念：
-* 高性能：两年前有个同事测过四个ORM框架，它是性能最好的（不知道现在是不是）。
-* 跨平台：可以嵌入到JVM脚本引擎（js, groovy, lua, python, ruby）；也有.net，php版本。
-* 很小巧：0.1Mb（且是功能完整，方案丰富；可极大简化数据库开发）。
-* 有个性：不喜欢反射、不喜欢配置...（除了连接，不需要任何配置）。
+
+* 跨平台：可以嵌入到JVM脚本引擎（js, groovy, lua, python, ruby）及GraalVM支持的部分语言。
+* 很小巧：0.2Mb（且是功能完整，方案丰富；可极大简化数据库开发）。
+* 有个性：不喜欢反射（主打弱类型）、不喜欢配置（除了连接，不需要其它配置）。
 * 其它的：支持缓存控制和跨数据库事务。
 
 
+#### 核心对象和功能：
+
+* 上下文：DbContext db
+* 四个接口：db.mapper(), db.table(), db.call(), db.sql()
+
 
 #### Wood 组件： 
-| 组件 | 说明 |
-| --- | --- |
-| org.noear:wood | 主框架（没有任何依赖） |
+
+| 组件                  | 说明                          |
+|---------------------|-----------------------------|
+| org.noear:wood      | 主框架（没有任何依赖）                 |
+| org.noear:wood.plus | 增强框架（支持 Mapper 和 XmlMapper） |
 
 
-| 可选组件 | 说明 |
-| --- | --- |
-| org.noear:wood-maven-plugin| Maven插件，用于生成Xml sql mapper |
-| org.noear:wood-solon-plugin | Solon插件，支持@Db注解、Mapper直接注入 |
-| | |
+| 可选组件 | 说明                     |
+| --- |------------------------|
+| org.noear:wood-maven-plugin| Maven插件，用于生成 XmlMapper |
+| |                        |
 | org.noear:wood.cache.memcached| 基于 Memcached 适配的扩展缓存服务 |
-| org.noear:wood.cache.redis| 基于 Redis 适配的扩展缓存服务 |
-| org.noear:wood.cache.ehcache| 基于 ehcache 适配的扩展缓存服务 |
-| org.noear:wood.cache.j2cache| 基于 j2cache 适配的扩展缓存服务 |
+| org.noear:wood.cache.redis| 基于 Redis 适配的扩展缓存服务     |
+| org.noear:wood.cache.ehcache| 基于 ehcache 适配的扩展缓存服务   |
+| org.noear:wood.cache.j2cache| 基于 j2cache 适配的扩展缓存服务   |
+
 
 
 
@@ -54,19 +59,19 @@ Wood，微型ORM框架（支持：java sql，xml sql，annotation sql；template
 
 #### Wood 入手流程：
 
-* 配置DataSource信息
-* 实始化DbContext
-* 调用DbContext上的接口（需要大至了解一下语法...）
+* 配置 DataSource 信息
+* 构建 DbContext 实例
+* 调用 DbContext 的接口（需要大至了解一下语法...）
 
 
 
 ### 一、 上下文对象 DbContext
 
-##### 所有wood的操作，都是基于DbContext上的接口的操作。即，一切从实例化DbContext开始：
+##### 所有 wood 的操作，都是基于 DbContext 上的接口的操作。即，一切从构建 DbContext 实例开始：
 
-* 1.使用`application.yml`配置数据源（或别的格式配置，或配置服务），格式示例：
+* 1.使用`app.yml`配置数据源（或别的格式配置，或配置服务），格式示例：
 
-```ini
+```yml
 #这是DbContext原生配置；如果是为连接池，请参考对方的配置；
 demo.db:
     schema: demo
