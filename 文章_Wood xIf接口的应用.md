@@ -58,3 +58,4 @@ public void insertUser(Map<String, Object> map) throws Exception {
     db.table("user").setMapIf(map, (k, v) -> v != null).insert();
 }
 ```
+
