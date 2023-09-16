@@ -100,7 +100,7 @@ public class CacheTags {
         return this;
     }
 
-    public <T extends Object> void update(String tag, Class<T> clz,  Fun1<T,T> setter) {
+    public <T extends Object> void update(String tag, Class<?> clz,  Fun1<T,T> setter) {
         List<String> keys = getCacheKeys(tag);
 
         for (String key : keys) {

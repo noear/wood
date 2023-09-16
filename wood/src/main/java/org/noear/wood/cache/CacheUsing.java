@@ -23,24 +23,21 @@ public class CacheUsing implements ICacheUsing<CacheUsing>, IWoodKey {
 
     //#region ICacheUsing<Q> 成员
 
-    public CacheUsing usingCache(boolean isCache)
-    {
+    public CacheUsing usingCache(boolean isCache) {
         this.cacheController = (isCache ? CacheState.Using : CacheState.NonUsing);
         return this;
     }
 
-    public CacheUsing usingCache(int seconds)
-    {
+    public CacheUsing usingCache(int seconds) {
         if (this.cacheController != CacheState.Refurbish)
             this.cacheController = CacheState.Using;
 
-        this.cacheSeconds   = seconds ;
+        this.cacheSeconds = seconds;
         return this;
     }
 
-    public <T> CacheUsing usingCache(Act2<CacheUsing,T> condition)
-    {
-        if(condition!=null) {
+    public <T> CacheUsing usingCache(Act2<CacheUsing, T> condition) {
+        if (condition != null) {
 
             if (this.cacheController != CacheState.Refurbish)
                 this.cacheController = CacheState.Using;
@@ -51,20 +48,17 @@ public class CacheUsing implements ICacheUsing<CacheUsing>, IWoodKey {
         return this;
     }
 
-    public CacheUsing refurbishCache()
-    {
+    public CacheUsing refurbishCache() {
         this.cacheController = CacheState.Refurbish;
         return this;
     }
 
-    public CacheUsing refurbishCache(boolean isRefubish)
-    {
+    public CacheUsing refurbishCache(boolean isRefubish) {
         this.cacheController = (isRefubish ? CacheState.Refurbish : CacheState.Using);
         return this;
     }
 
-    public CacheUsing removeCache()
-    {
+    public CacheUsing removeCache() {
         this.cacheController = CacheState.Remove;
         return this;
     }
@@ -74,7 +68,9 @@ public class CacheUsing implements ICacheUsing<CacheUsing>, IWoodKey {
     //===================================
     public String _woodKey = null;
 
-    public String getWoodKey(){return _woodKey;}
+    public String getWoodKey() {
+        return _woodKey;
+    }
 
     public CacheUsing(ICacheService cache) {
         this.outerCaching = cache;
@@ -89,7 +85,12 @@ public class CacheUsing implements ICacheUsing<CacheUsing>, IWoodKey {
     /// <param name="exec">执行方法</param>
     /// <param name="woodKey">缓存关健字</param>
     /// <returns></returns>
-    public <T> T get(String woodKey, Class<T> clz,  Fun0<T> exec) {
+
+    public <T> T get(String woodKey, Fun0<T> exec) {
+        return get(woodKey, Object.class, exec);
+    }
+
+    public <T> T get(String woodKey, Class<?> clz, Fun0<T> exec) {
         if (this.cacheController == CacheState.NonUsing)
             return exec.run();
 
@@ -119,7 +120,11 @@ public class CacheUsing implements ICacheUsing<CacheUsing>, IWoodKey {
         return cacheT;
     }
 
-    public <T,E extends Throwable> T getEx(String woodKey, Class<T> clz, Fun0Ex<T,E> exec) throws E{
+    public <T, E extends Throwable> T getEx(String woodKey, Fun0Ex<T, E> exec) throws E {
+        return getEx(woodKey, Object.class, exec);
+    }
+
+    public <T, E extends Throwable> T getEx(String woodKey, Class<?> clz, Fun0Ex<T, E> exec) throws E {
         if (this.cacheController == CacheState.NonUsing)
             return exec.run();
 
@@ -149,15 +154,18 @@ public class CacheUsing implements ICacheUsing<CacheUsing>, IWoodKey {
         return cacheT;
     }
 
-    public <T> T getOnly(String woodKey, Class<T> clz)
-    {
+    public <T> T getOnly(String woodKey) {
+        return getOnly(woodKey, Object.class);
+    }
+
+
+    public <T> T getOnly(String woodKey, Class<?> clz) {
         _woodKey = woodKey;
 
         return (T) outerCaching.get(_woodKey, clz);
     }
 
-    public void storeOnly(String woodKey,Object data)
-    {
+    public void storeOnly(String woodKey, Object data) {
         _woodKey = woodKey;
 
         if (data != null) {
@@ -166,21 +174,19 @@ public class CacheUsing implements ICacheUsing<CacheUsing>, IWoodKey {
     }
 
     //============
-    CacheTags cacheTags =null;
-    Act0 onExecH   =null;
+    CacheTags cacheTags = null;
+    Act0 onExecH = null;
 
     /// <summary>
     /// 添加缓存标签 (统一缓存维护,以便统一删除和直接获取)
     /// </summary>
     /// <param name="tag">标签名</param>
     /// <param name="val">标签值</param>
-    public CacheUsing cacheTag(String tag)
-    {
-        if (cacheTags == null)
-        {
+    public CacheUsing cacheTag(String tag) {
+        if (cacheTags == null) {
             cacheTags = new CacheTags(this.outerCaching);
 
-            onExecH =()->{
+            onExecH = () -> {
                 cacheTags.endAdd(this);
             };
         }
@@ -195,10 +201,8 @@ public class CacheUsing implements ICacheUsing<CacheUsing>, IWoodKey {
     /// </summary>
     /// <param name="tag">标签名</param>
     /// <param name="val">标签值</param>
-    public void clearCache(String tag)
-    {
+    public void clearCache(String tag) {
         if (cacheTags != null)
             cacheTags.clear(tag);
     }
-
 }
