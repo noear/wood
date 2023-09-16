@@ -44,14 +44,14 @@
 <dependency>
     <groupId>org.noear</groupId>
     <artifactId>wood</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
 </dependency>
 
 <!-- maven 插件，用于生成Xml sql mapper接口 -->
 <plugin>
     <groupId>org.noear</groupId>
     <artifactId>wood-maven-plugin</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
 </plugin>
 ```
 
