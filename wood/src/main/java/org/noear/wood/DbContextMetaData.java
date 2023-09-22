@@ -1,6 +1,7 @@
 package org.noear.wood;
 
 import org.noear.wood.dialect.*;
+import org.noear.wood.ext.Act1Ex;
 import org.noear.wood.wrap.*;
 
 import javax.sql.DataSource;
@@ -149,11 +150,18 @@ public class DbContextMetaData implements Closeable {
     /**
      * 初始化
      */
-    public synchronized void init() {
+    public void init() {
         if (dialect != null) {
             return;
         }
-        initDo();
+
+        synchronized (this) {
+            if (dialect != null) {
+                return;
+            }
+
+            initDo();
+        }
     }
 
     private void initPrintln(String x) {
@@ -166,14 +174,10 @@ public class DbContextMetaData implements Closeable {
 
     private void initDo() {
         //这段不能去掉
-        initPrintln("Init metadata");
+        initPrintln("Init metadata dialect");
 
-        Connection conn = null;
-        try {
-            initPrintln("Start testing database connectivity...");
-            conn = getMetaConnection();
+        openMetaConnection(conn -> {
             DatabaseMetaData md = conn.getMetaData();
-
 
             url = md.getURL();
             productName = md.getDatabaseProductName();
@@ -186,22 +190,7 @@ public class DbContextMetaData implements Closeable {
                 //2.
                 setSchema(conn);
             }
-
-            initPrintln("The connection is successful");
-
-
-        } catch (Throwable ex) {
-            initPrintln("The connection error");
-            ex.printStackTrace();
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }
+        });
     }
 
     private void setDatabaseType(String jdbcUrl) {
@@ -289,35 +278,23 @@ public class DbContextMetaData implements Closeable {
     }
 
     private void initTables() {
-        if (tableAll == null) {
-            initTablesDo();
-        }
-    }
-
-    private synchronized void initTablesDo() {
         if (tableAll != null) {
             return;
         }
 
-        tableAll = new HashMap<>();
-
-        //这段不能去掉
-        initPrintln("Init metadata tables");
-
-        Connection conn = null;
-        try {
-            conn = getMetaConnection();
-            initTablesLoadDo(conn.getMetaData());
-        } catch (Throwable ex) {
-            ex.printStackTrace();
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+        synchronized (this){
+            if (tableAll != null) {
+                return;
             }
+
+            tableAll = new HashMap<>();
+
+            //这段不能去掉
+            initPrintln("Init metadata tables");
+
+            openMetaConnection(conn->{
+                initTablesLoadDo(conn.getMetaData());
+            });
         }
     }
 
@@ -369,6 +346,27 @@ public class DbContextMetaData implements Closeable {
                 tWrap.addPk(idName);
             }
             rs.close();
+        }
+    }
+
+    private void openMetaConnection(Act1Ex<Connection,Exception> callback) {
+        Connection conn = null;
+        try {
+            initPrintln("The db metadata connectivity...");
+            conn = getMetaConnection();
+            callback.run(conn);
+            initPrintln("The db metadata is loaded successfully");
+        } catch (Throwable ex) {
+            initPrintln("The db metadata is loaded failed");
+            ex.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     }
 
