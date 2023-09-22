@@ -19,7 +19,7 @@ public class DbContextMetaData implements Closeable {
     private String productVersion;
     private String url;
 
-    private transient Map<String, TableWrap> tableAll = new HashMap<>();
+    private transient Map<String, TableWrap> tableAll;
     private transient DbType type = DbType.Unknown;
     private transient DbDialect dialect;
 
@@ -122,19 +122,16 @@ public class DbContextMetaData implements Closeable {
 
     public Collection<TableWrap> getTableAll() {
         init();
+        initTables();
+
         return tableAll.values();
     }
 
     public TableWrap getTable(String tableName) {
         init();
+        initTables();
 
-        for (Map.Entry<String, TableWrap> kv : tableAll.entrySet()) {
-            if (tableName.equalsIgnoreCase(kv.getKey())) {
-                return kv.getValue();
-            }
-        }
-
-        return null;
+        return tableAll.get(tableName.toLowerCase());
     }
 
     public String getTablePk1(String tableName) {
@@ -192,8 +189,6 @@ public class DbContextMetaData implements Closeable {
 
             initPrintln("The connection is successful");
 
-            //3.
-            setTables(md);
 
         } catch (Throwable ex) {
             initPrintln("The connection error");
@@ -293,7 +288,40 @@ public class DbContextMetaData implements Closeable {
         }
     }
 
-    private void setTables(DatabaseMetaData md) throws SQLException {
+    private void initTables() {
+        if (tableAll == null) {
+            initTablesDo();
+        }
+    }
+
+    private synchronized void initTablesDo() {
+        if (tableAll != null) {
+            return;
+        }
+
+        tableAll = new HashMap<>();
+
+        //这段不能去掉
+        initPrintln("Init metadata tables");
+
+        Connection conn = null;
+        try {
+            conn = getMetaConnection();
+            initTablesLoadDo(conn.getMetaData());
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void initTablesLoadDo(DatabaseMetaData md) throws SQLException {
         ResultSet rs = null;
 
         rs = getDialect().getTables(md, catalog, schema);
@@ -301,11 +329,11 @@ public class DbContextMetaData implements Closeable {
             String name = rs.getString("TABLE_NAME");
             String remarks = rs.getString("REMARKS");
             TableWrap tWrap = new TableWrap(name, remarks);
-            tableAll.put(name, tWrap);
+            tableAll.put(name.toLowerCase(), tWrap);
         }
         rs.close();
 
-        List<ColumnWrap> columnAll  = new ArrayList<>();
+        List<ColumnWrap> columnAll = new ArrayList<>();
         rs = md.getColumns(catalog, schema, "%", "%");
         while (rs.next()) {
             int digit = 0;
@@ -329,13 +357,13 @@ public class DbContextMetaData implements Closeable {
         rs.close();
 
 
-        for (String key : tableAll.keySet()) {
+        for (String key : tableAll.keySet()) { //key 为小写
             TableWrap tWrap = tableAll.get(key);
-            columnAll.stream().filter(c1->key.equals(c1.getTable())).forEach(c1->{
+            columnAll.stream().filter(c1 -> key.equals(c1.getTable())).forEach(c1 -> {
                 tWrap.addColumn(c1);
             });
 
-            rs = md.getPrimaryKeys(catalog, schema, key);
+            rs = md.getPrimaryKeys(catalog, schema, tWrap.getName());
             while (rs.next()) {
                 String idName = rs.getString("COLUMN_NAME");
                 tWrap.addPk(idName);

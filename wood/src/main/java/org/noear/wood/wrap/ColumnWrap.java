@@ -10,7 +10,7 @@ public class ColumnWrap {
     private final String remarks;
 
     public ColumnWrap(String table, String name, Integer sqlType, Integer size, Integer digit, String isNullable, String remarks) {
-        this.table = table;
+        this.table = table.toLowerCase();
         this.name = name;
         this.sqlType = sqlType;
         this.size = size;
