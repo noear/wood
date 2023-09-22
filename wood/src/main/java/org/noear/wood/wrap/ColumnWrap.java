@@ -1,6 +1,7 @@
 package org.noear.wood.wrap;
 
 public class ColumnWrap {
+    private final String table;
     private final String name;
     private final Integer sqlType;
     private final Integer size;
@@ -8,7 +9,8 @@ public class ColumnWrap {
     private final String isNullable;
     private final String remarks;
 
-    public ColumnWrap(String name, Integer sqlType, Integer size, Integer digit, String isNullable, String remarks) {
+    public ColumnWrap(String table, String name, Integer sqlType, Integer size, Integer digit, String isNullable, String remarks) {
+        this.table = table;
         this.name = name;
         this.sqlType = sqlType;
         this.size = size;
@@ -18,6 +20,9 @@ public class ColumnWrap {
     }
 
 
+    public String getTable() {
+        return table;
+    }
 
     public String getName() {
         return name;

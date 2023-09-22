@@ -10,9 +10,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DbContextMetaData implements Closeable {
     private String schema;
@@ -307,29 +305,35 @@ public class DbContextMetaData implements Closeable {
         }
         rs.close();
 
+        List<ColumnWrap> columnAll  = new ArrayList<>();
+        rs = md.getColumns(catalog, schema, "%", "%");
+        while (rs.next()) {
+            int digit = 0;
+            Object o = rs.getObject("DECIMAL_DIGITS");
+            if (o != null) {
+                digit = ((Number) o).intValue();
+            }
+
+            ColumnWrap cw = new ColumnWrap(
+                    rs.getString("TABLE_NAME"),
+                    rs.getString("COLUMN_NAME"),
+                    rs.getInt("DATA_TYPE"),
+                    rs.getInt("COLUMN_SIZE"),
+                    digit,
+                    rs.getString("IS_NULLABLE"),
+                    rs.getString("REMARKS")
+            );
+
+            columnAll.add(cw);
+        }
+        rs.close();
+
+
         for (String key : tableAll.keySet()) {
             TableWrap tWrap = tableAll.get(key);
-            rs = md.getColumns(catalog, schema, key, "%");
-
-            while (rs.next()) {
-                int digit = 0;
-                Object o = rs.getObject("DECIMAL_DIGITS");
-                if (o != null) {
-                    digit = ((Number) o).intValue();
-                }
-
-                ColumnWrap cw = new ColumnWrap(
-                        rs.getString("COLUMN_NAME"),
-                        rs.getInt("DATA_TYPE"),
-                        rs.getInt("COLUMN_SIZE"),
-                        digit,
-                        rs.getString("IS_NULLABLE"),
-                        rs.getString("REMARKS")
-                );
-
-                tWrap.addColumn(cw);
-            }
-            rs.close();
+            columnAll.stream().filter(c1->key.equals(c1.getTable())).forEach(c1->{
+                tWrap.addColumn(c1);
+            });
 
             rs = md.getPrimaryKeys(catalog, schema, key);
             while (rs.next()) {
