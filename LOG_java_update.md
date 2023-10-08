@@ -1,3 +1,7 @@
+### 1.2.2
+
+* DbContextMetaData::getTableAll 改为懒加载
+
 ### 1.2.1
 
 * 增加旧版兼容性
