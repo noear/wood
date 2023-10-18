@@ -132,12 +132,29 @@ db.table(logger)
 
 #### 入门示例：
 ```java
-/** 1.实例化上下文 */
+/** 1.1.实例化上下文 */
 //DbContext db  = new DbContext(properties); //使用Properties配置的示例
 //DbContext db  = new DbContext(map); //使用Map配置的示例
 //DbContext db  = new DbContext("user","proxool.xxx_db"); //使用proxool线程池配置的示例
 //DbContext db  = new DbContext("user","jdbc:mysql://x.x.x:3306/user","root","1234");
 DbContext db  = new DbContext("user",new HikariDataSource(...)); //使用DataSource配置的示例
+
+
+/** 1.2.配置事件，执行后打印sql */
+public class DemoApp {
+    public static void main(String[] args) {
+        //如果有需要，自己再加点条件
+        WoodConfig.onExecuteAft(cmd -> {
+            System.out.println("[Wood]" + cmd.text + "\r\n" + cmd.paramMap());
+        });
+    }
+}
+
+/** 1.3.多实例切换 */
+new DbContext(...).nameSet("a");
+new DbContext(...).nameSet("b");
+DbContext.use("a").table("user").limit(1).selectItem("*", User.class);
+
 
 /** 2.1.Mapper用法 */
 @Namespace("demo.dso.db")
@@ -217,16 +234,6 @@ db.call("@demo.dso.db.user_get").set("id",1001).getItem(User.class);
 /** 2.4.Sql用法 */
 //快速执行SQL语句
 db.sql("select * from user id=?",12).getItem(User.class);
-
-
-//3.配置事件，执行后打印sql
-public class DemoApp {
-    public static void main(String[] args) {
-        WoodConfig.onExecuteAft(cmd -> {
-            System.out.println("[Wood]" + cmd.text + "\r\n" + cmd.paramMap());
-        });
-    }
-}
 ```
 
 
