@@ -218,6 +218,15 @@ db.call("@demo.dso.db.user_get").set("id",1001).getItem(User.class);
 //快速执行SQL语句
 db.sql("select * from user id=?",12).getItem(User.class);
 
+
+//3.配置事件，执行后打印sql
+public class DemoApp {
+    public static void main(String[] args) {
+        WoodConfig.onExecuteAft(cmd -> {
+            System.out.println("[Wood]" + cmd.text + "\r\n" + cmd.paramMap());
+        });
+    }
+}
 ```
 
 
