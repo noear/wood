@@ -71,8 +71,8 @@ public class DbContext implements Closeable {
     /**
      * 初始化元信息
      */
-    public void initMetaData() {
-        getMetaData().init();
+    public boolean initMetaData() {
+        return getMetaData().init();
     }
 
     /**

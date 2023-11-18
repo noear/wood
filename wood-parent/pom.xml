@@ -36,13 +36,19 @@
     </scm>
 
     <properties>
-        <revision>1.2.2</revision>
+        <revision>1.2.3</revision>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
 
-        <redisx.version>1.5.0</redisx.version>
+        <redisx.version>1.6.2</redisx.version>
+
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven-compiler.version>3.11.0</maven-compiler.version>
+        <maven-assembly.version>3.6.0</maven-assembly.version>
+        <maven-resources.version>3.3.1</maven-resources.version>
     </properties>
 
     <dependencyManagement>
@@ -186,19 +192,23 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>${maven-compiler.version}</version>
                 <configuration>
                     <compilerArgument>-parameters</compilerArgument>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources.version}</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>${maven-assembly.version}</version>
                 <configuration>
                     <finalName>${project.artifactId}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>

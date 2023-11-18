@@ -150,17 +150,17 @@ public class DbContextMetaData implements Closeable {
     /**
      * 初始化
      */
-    public void init() {
+    public boolean init() {
         if (dialect != null) {
-            return;
+            return true;
         }
 
         synchronized (this) {
             if (dialect != null) {
-                return;
+                return true;
             }
 
-            initDo();
+           return initDo();
         }
     }
 
@@ -172,11 +172,11 @@ public class DbContextMetaData implements Closeable {
         }
     }
 
-    private void initDo() {
+    private boolean initDo() {
         //这段不能去掉
         initPrintln("Init metadata dialect");
 
-        openMetaConnection(conn -> {
+       return openMetaConnection(conn -> {
             DatabaseMetaData md = conn.getMetaData();
 
             url = md.getURL();
@@ -349,22 +349,24 @@ public class DbContextMetaData implements Closeable {
         }
     }
 
-    private void openMetaConnection(Act1Ex<Connection,Exception> callback) {
+    private boolean openMetaConnection(Act1Ex<Connection,Exception> callback) {
         Connection conn = null;
         try {
             initPrintln("The db metadata connectivity...");
             conn = getMetaConnection();
             callback.run(conn);
             initPrintln("The db metadata is loaded successfully");
+            return true;
         } catch (Throwable ex) {
             initPrintln("The db metadata is loaded failed");
             ex.printStackTrace();
+            return false;
         } finally {
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    //不用再打印了
                 }
             }
         }

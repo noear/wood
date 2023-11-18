@@ -1,3 +1,7 @@
+### 1.2.3
+
+* 初始化元信息返回为 bool （之前不空）
+
 ### 1.2.2
 
 * DbContextMetaData::getTableAll 改为懒加载
