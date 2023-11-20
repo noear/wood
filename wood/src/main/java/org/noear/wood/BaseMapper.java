@@ -41,7 +41,21 @@ public interface BaseMapper<T> {
      * @param excludeNull 排除null
      * */
     Integer updateById(T entity, boolean excludeNull);
+    /**
+     * @param entity 待更新的实体
+     * @param dataBuilder 组装data的方式，方便支持部分属性允许设置为null，部分不允许
+     * */
+    Integer updateById(T entity, Act2<T,DataItem> dataBuilder);
     Integer update(T entity, boolean excludeNull, Act1<MapperWhereQ> condition);
+
+    /**
+     *
+     * @param entity 待更新的实体
+     * @param dataBuilder 组装data的方式，方便支持部分属性允许设置为null，部分不允许
+     * @param condition 更新数据的条件
+     * @return
+     */
+    Integer update(T entity, Act2<T,DataItem> dataBuilder, Act1<MapperWhereQ> condition);
 
     int[] updateList(List<T> list, Act2<T,DataItem> dataBuilder, Property<T, ?>... conditionFields);
 
