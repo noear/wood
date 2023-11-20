@@ -145,6 +145,20 @@ DbContext db  = new DbContext("user",new HikariDataSource(...)); //使用DataSou
 /** 1.2.配置事件，执行后打印sql */
 public class DemoApp {
     public static void main(String[] args) {
+        //启用sql日志 具体是否打印由 onLog 决定
+        WoodConfig.onCommandBuilt(command->{
+            command.isLog = 1;
+        });
+
+        //使用onLog，配合上面的isLog=1，可以在执行前打印日志
+        WoodConfig.onLog((cmd) -> {
+            //设定sql日志级别为debug
+            if(logger.isDebugEnabled()){
+                logger.debug(cmd.text);
+                logger.debug(ONode.stringify(cmd.paramMap()));
+            }
+        });
+        
         //如果有需要，自己再加点条件
         WoodConfig.onExecuteAft(cmd -> {
             System.out.println("[Wood]" + cmd.text + "\r\n" + cmd.paramMap());
