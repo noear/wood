@@ -141,6 +141,22 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
                 -> getQr().whereEq(tablePk(), id).update(data));
     }
 
+    /**
+     * @param entity      待更新的实体
+     * @param dataBuilder 组装data的方式，方便支持部分属性允许设置为null，部分不允许
+     */
+    @Override
+    public Integer updateById(T entity, Act2<T, DataItem> dataBuilder) {
+        DataItem data = new DataItem();
+
+        dataBuilder.run(entity, data);
+
+        Object id = data.get(tablePk());
+
+        return RunUtils.call(()
+                -> getQr().whereEq(tablePk(), id).update(data));
+    }
+
     @Override
     public Integer update(T entity, boolean excludeNull, Act1<MapperWhereQ> c) {
         DataItem data = new DataItem();
@@ -150,6 +166,23 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         } else {
             data.setEntityIf(entity, (k, v) -> true);
         }
+
+        return RunUtils.call(() -> {
+            return getQr(c).update(data);
+        });
+    }
+
+    /**
+     * @param entity      待更新的实体
+     * @param dataBuilder 组装data的方式，方便支持部分属性允许设置为null，部分不允许
+     * @param c   更新数据的条件
+     * @return
+     */
+    @Override
+    public Integer update(T entity, Act2<T, DataItem> dataBuilder, Act1<MapperWhereQ> c) {
+        DataItem data = new DataItem();
+
+        dataBuilder.run(entity, data);
 
         return RunUtils.call(() -> {
             return getQr(c).update(data);
