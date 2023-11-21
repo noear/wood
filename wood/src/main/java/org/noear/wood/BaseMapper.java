@@ -32,9 +32,35 @@ public interface BaseMapper<T> {
     Class<?> entityClz();
 
 
+    /**
+     * 插入数据，根据excludeNull决定是否要拼接值为null的数据
+     * @param entity 写入的实体
+     * @param excludeNull 是否排除null属性
+     * @return
+     */
     Long insert(T entity, boolean excludeNull);
 
+    /**
+     * 插入数据，由外部组装数据
+     * @param entity 写入的实体
+     * @param dataBuilder 数据组装器
+     * @return
+     */
+    Long insert(T entity, Act2<T,DataItem> dataBuilder);
+
+    /**
+     * 批量插入数据
+     * @param list
+     */
     void insertList(List<T> list);
+
+
+    /**
+     * 批量插入数据
+     * @param list 待插入的数据
+     * @param dataBuilder 数据组装器
+     */
+    void insertList(List<T> list, Act2<T,DataItem> dataBuilder);
 
     Integer deleteById(Object id);
 
@@ -67,9 +93,41 @@ public interface BaseMapper<T> {
 
     int[] updateList(List<T> list, Act2<T, DataItem> dataBuilder, Property<T, ?>... conditionFields);
 
+    /**
+     * 新增或修改数据 更新时根据主键更新
+     * @param entity 要处理的实体
+     * @param excludeNull 是否排除null值
+     * @return
+     */
     Long upsert(T entity, boolean excludeNull);
 
+    /**
+     * 新增或修改数据 更新时根据主键更新
+     * @param entity 要处理的实体
+     * @param dataBuilder 数据组装器
+     * @return
+     */
+    Long upsert(T entity, Act2<T,DataItem> dataBuilder);
+
+
+    /**
+     * 新增或修改数据 更新时根据条件字段更新
+     * @param entity 要处理的实体
+     * @param excludeNull 是否排除null值
+     * @param conditionFields 更新的条件
+     * @return
+     */
     Long upsertBy(T entity, boolean excludeNull, String conditionFields);
+
+    /**
+     * 新增或修改数据 更新时根据条件字段更新
+     * @param entity 要处理的实体
+     * @param dataBuilder 数据组装器
+     * @param conditionFields 更新的条件
+     * @return
+     */
+    Long upsertBy(T entity, Act2<T,DataItem> dataBuilder, String conditionFields);
+
 
     boolean existsById(Object id);
 

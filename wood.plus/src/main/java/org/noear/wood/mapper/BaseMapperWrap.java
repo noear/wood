@@ -89,6 +89,21 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
                 -> getQr().insert(data));
     }
 
+    /**
+     * 插入数据，由外部组装数据
+     *
+     * @param entity      写入的实体
+     * @param dataBuilder 数据组装器
+     * @return
+     */
+    @Override
+    public Long insert(T entity, Act2<T, DataItem> dataBuilder) {
+        DataItem data = new DataItem();
+        dataBuilder.run(entity, data);
+
+        return RunUtils.call(() -> getQr().insert(data));
+    }
+
     @Override
     public void insertList(List<T> list) {
         List<DataItem> list2 = new ArrayList<>();
@@ -99,6 +114,26 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         RunUtils.call(()
                 -> getQr().insertList(list2));
     }
+
+    /**
+     * 批量插入数据
+     *
+     * @param list        待插入的数据
+     * @param dataBuilder 数据组装器
+     */
+    @Override
+    public void insertList(List<T> list, Act2<T, DataItem> dataBuilder) {
+        List<DataItem> list2 = new ArrayList<>();
+        for (T d : list) {
+            DataItem data = new DataItem();
+            dataBuilder.run(d, data);
+            list2.add(data);
+        }
+
+        RunUtils.call(()
+                -> getQr().insertList(list2));
+    }
+
 
     @Override
     public Integer deleteById(Object id) {
@@ -226,6 +261,28 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         }
     }
 
+    /**
+     * 新增或修改数据 更新时根据主键更新
+     *
+     * @param entity      要处理的实体
+     * @param dataBuilder 数据组装器
+     * @return
+     */
+    @Override
+    public Long upsert(T entity, Act2<T, DataItem> dataBuilder) {
+        DataItem data = new DataItem();
+
+        dataBuilder.run(entity, data);
+
+        Object id = data.get(tablePk());
+
+        if (id == null) {
+            return RunUtils.call(() -> getQr().insert(data));
+        } else {
+            return RunUtils.call(() -> getQr().upsertBy(data, tablePk()));
+        }
+    }
+
     @Override
     public Long upsertBy(T entity, boolean excludeNull, String conditionFields) {
         DataItem data = new DataItem();
@@ -235,6 +292,23 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         } else {
             data.setEntityIf(entity, (k, v) -> true);
         }
+
+        return RunUtils.call(() -> getQr().upsertBy(data, conditionFields));
+    }
+
+    /**
+     * 新增或修改数据 更新时根据条件字段更新
+     *
+     * @param entity          要处理的实体
+     * @param dataBuilder     数据组装器
+     * @param conditionFields 更新的条件
+     * @return
+     */
+    @Override
+    public Long upsertBy(T entity, Act2<T, DataItem> dataBuilder, String conditionFields) {
+        DataItem data = new DataItem();
+
+        dataBuilder.run(entity, data);
 
         return RunUtils.call(() -> getQr().upsertBy(data, conditionFields));
     }
