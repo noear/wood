@@ -16,7 +16,7 @@
         <java.version>1.8</java.version>
 
         <solon.version>2.4.0</solon.version>
-        <wood.version>1.2.5</wood.version>
+        <wood.version>1.2.6</wood.version>
     </properties>
 
     <dependencies>
