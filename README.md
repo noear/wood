@@ -141,6 +141,9 @@ db.table(logger)
 //DbContext db  = new DbContext("user","jdbc:mysql://x.x.x:3306/user","root","1234");
 DbContext db  = new DbContext("user",new HikariDataSource(...)); //使用DataSource配置的示例
 
+//如果是动态创建，临时用的。用完要关掉
+db.close();
+
 
 /** 1.2.配置事件，执行后打印sql */
 public class DemoApp {
