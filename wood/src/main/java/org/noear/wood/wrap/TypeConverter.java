@@ -129,4 +129,24 @@ public class TypeConverter {
 
         return val;
     }
+
+    /**
+     * 设置 jdbc 参数
+     */
+    public void setParameter(PreparedStatement ps, int index, Object parameter) throws SQLException {
+        if (parameter == null) {
+            ps.setNull(index, Types.VARCHAR);
+        } else if (parameter instanceof java.util.Date) {
+            if (parameter instanceof java.sql.Date) {
+                ps.setDate(index, (java.sql.Date) parameter);
+            } else if (parameter instanceof java.sql.Timestamp) {
+                ps.setTimestamp(index, (java.sql.Timestamp) parameter);
+            } else {
+                java.util.Date v1 = (java.util.Date) parameter;
+                ps.setTimestamp(index, new java.sql.Timestamp(v1.getTime()));
+            }
+        } else {
+            ps.setObject(index, parameter);
+        }
+    }
 }
