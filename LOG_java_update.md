@@ -1,3 +1,6 @@
+### 1.2.7
+* 添加 TypeConverter.filling 接管 PreparedStatement 的数据填充
+
 ### 1.2.6
 * 调整 ::initMetaData 恢复返回为空（不然有兼容问题）
 * 添加 ::initMetaData2 接口
