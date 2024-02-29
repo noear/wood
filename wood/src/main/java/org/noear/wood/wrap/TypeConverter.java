@@ -8,6 +8,9 @@ import java.sql.*;
 import java.time.*;
 
 public class TypeConverter {
+    /**
+     * 转换数据
+     */
     public Object convert(Object val, Class<?> target) throws SQLException, IOException {
         if (val instanceof Number) {
             Number number = (Number) val;
@@ -131,22 +134,22 @@ public class TypeConverter {
     }
 
     /**
-     * 设置 jdbc 参数
+     * 填充数据
      */
-    public void setParameter(PreparedStatement ps, int index, Object parameter) throws SQLException {
-        if (parameter == null) {
-            ps.setNull(index, Types.VARCHAR);
-        } else if (parameter instanceof java.util.Date) {
-            if (parameter instanceof java.sql.Date) {
-                ps.setDate(index, (java.sql.Date) parameter);
-            } else if (parameter instanceof java.sql.Timestamp) {
-                ps.setTimestamp(index, (java.sql.Timestamp) parameter);
+    public void filling(PreparedStatement ps, int idx, Object val) throws SQLException {
+        if (val == null) {
+            ps.setNull(idx, Types.VARCHAR);
+        } else if (val instanceof java.util.Date) {
+            if (val instanceof java.sql.Date) {
+                ps.setDate(idx, (java.sql.Date) val);
+            } else if (val instanceof java.sql.Timestamp) {
+                ps.setTimestamp(idx, (java.sql.Timestamp) val);
             } else {
-                java.util.Date v1 = (java.util.Date) parameter;
-                ps.setTimestamp(index, new java.sql.Timestamp(v1.getTime()));
+                java.util.Date v1 = (java.util.Date) val;
+                ps.setTimestamp(idx, new java.sql.Timestamp(v1.getTime()));
             }
         } else {
-            ps.setObject(index, parameter);
+            ps.setObject(idx, val);
         }
     }
 }

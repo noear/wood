@@ -258,7 +258,7 @@ class SQLer {
                 Object[] ary = (Object[]) data.value();
                 //2.设置参数值
                 for (Object v : ary) {
-                    WoodConfig.typeConverter.setParameter(stmt, idx, v);
+                    WoodConfig.typeConverter.filling(stmt, idx, v);
                     idx++;
                 }
                 stmt.addBatch();
@@ -343,7 +343,7 @@ class SQLer {
         //2.设置参数值
         for (Variate v0 : cmd.paramS) {
             Object v = v0.getValue();
-            WoodConfig.typeConverter.setParameter(stmt, idx, v);
+            WoodConfig.typeConverter.filling(stmt, idx, v);
             idx++;
         }
 
