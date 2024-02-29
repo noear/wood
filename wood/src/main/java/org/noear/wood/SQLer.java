@@ -258,20 +258,7 @@ class SQLer {
                 Object[] ary = (Object[]) data.value();
                 //2.设置参数值
                 for (Object v : ary) {
-                    if (v == null) {
-                        stmt.setNull(idx, Types.VARCHAR);
-                    } else if (v instanceof java.util.Date) {
-                        if (v instanceof java.sql.Date) {
-                            stmt.setDate(idx, (java.sql.Date) v);
-                        } else if (v instanceof java.sql.Timestamp) {
-                            stmt.setTimestamp(idx, (java.sql.Timestamp) v);
-                        } else {
-                            java.util.Date v1 = (java.util.Date) v;
-                            stmt.setTimestamp(idx, new java.sql.Timestamp(v1.getTime()));
-                        }
-                    } else {
-                        stmt.setObject(idx, v);
-                    }
+                    WoodConfig.typeConverter.setParameter(stmt, idx, v);
                     idx++;
                 }
                 stmt.addBatch();
@@ -356,20 +343,7 @@ class SQLer {
         //2.设置参数值
         for (Variate v0 : cmd.paramS) {
             Object v = v0.getValue();
-            if (v == null) {
-                stmt.setNull(idx, Types.VARCHAR);
-            } else if (v instanceof java.util.Date) {
-                if (v instanceof java.sql.Date) {
-                    stmt.setDate(idx, (java.sql.Date) v);
-                } else if (v instanceof java.sql.Timestamp) {
-                    stmt.setTimestamp(idx, (java.sql.Timestamp) v);
-                } else {
-                    java.util.Date v1 = (java.util.Date) v;
-                    stmt.setTimestamp(idx, new java.sql.Timestamp(v1.getTime()));
-                }
-            } else {
-                stmt.setObject(idx, v);
-            }
+            WoodConfig.typeConverter.setParameter(stmt, idx, v);
             idx++;
         }
 
