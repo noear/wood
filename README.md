@@ -238,7 +238,8 @@ db.call("@demo.dso.db.user_get").set("id",1001).getItem(User.class);
 
 /** 2.4.Sql用法 */
 //快速执行SQL语句
-db.sql("select * from user id=?",12).getItem(User.class);
+db.sql("select * from user id=?",12).getDataItem();
+db.sql("select name from user id=?",12).getValue();
 ```
 
 
