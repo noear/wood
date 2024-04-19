@@ -82,19 +82,17 @@ public class DbUtil {
     }
 
     public static DbContext getDb() {
-        //
-
-        WoodConfig.onException((cmd, ex)->{
-            System.out.println(cmd.text);
-        });
-
-        WoodConfig.onExecuteAft((cmd)->{
-            System.out.println(":::"+cmd.text);
-        });
-
         Map<String, String> map =  dbMysqlCfg(); // dbOracleCfg(); // dbPgsqlCfg(); //dbMssqlCfg();//
 
         DbContext db = new DbContext(map.get("schema"), dataSource(map)).nameSet("rock");
+        db.onException((cmd, ex)->{
+            System.out.println(cmd.text);
+        });
+
+        db.onExecuteAft((cmd)->{
+            System.out.println(":::"+cmd.text);
+        });
+
         WoodConfig.isUsingSchemaPrefix =true;
         return db;
     }

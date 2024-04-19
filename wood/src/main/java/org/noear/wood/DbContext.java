@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ import java.util.Properties;
  * Created by noear on 14-6-12.
  * 数据库上下文
  */
-public class DbContext implements Closeable {
+public class DbContext extends DbEventBus implements Closeable {
 
     /**
      * 最后次执行命令 (线程不安全，仅供调试用)
@@ -441,5 +442,31 @@ public class DbContext implements Closeable {
             metaData.close();
             _mapperMap.clear();
         }
+    }
+
+    /////////////////////
+    @Override
+    protected void runExceptionEvent(Command cmd, Throwable ex) {
+        super.runExceptionEvent(cmd, ex);
+    }
+
+    @Override
+    protected void runCommandBuiltEvent(Command cmd) {
+        super.runCommandBuiltEvent(cmd);
+    }
+
+    @Override
+    protected boolean runExecuteBefEvent(Command cmd) {
+        return super.runExecuteBefEvent(cmd);
+    }
+
+    @Override
+    protected void runExecuteStmEvent(Command cmd, Statement stm) {
+        super.runExecuteStmEvent(cmd, stm);
+    }
+
+    @Override
+    protected void runExecuteAftEvent(Command cmd) {
+        super.runExecuteAftEvent(cmd);
     }
 }

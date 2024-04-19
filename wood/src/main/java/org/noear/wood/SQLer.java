@@ -10,7 +10,7 @@ import java.util.List;
  * 数据库执行器
  */
 class SQLer {
-
+    private final Command cmd;
     private ResultSet rset;
     private PreparedStatement stmt;
     private Connection conn;
@@ -22,7 +22,7 @@ class SQLer {
                 rset = null;
             }
         } catch (Exception ex) {
-            WoodConfig.runExceptionEvent(null, ex);
+            cmd.context.runExceptionEvent(null, ex);
         }
 
         try {
@@ -31,7 +31,7 @@ class SQLer {
                 stmt = null;
             }
         } catch (Exception ex) {
-            WoodConfig.runExceptionEvent(null, ex);
+            cmd.context.runExceptionEvent(null, ex);
         }
 
         try {
@@ -42,28 +42,32 @@ class SQLer {
                 conn = null;
             }
         } catch (Exception ex) {
-            WoodConfig.runExceptionEvent(null, ex);
+            cmd.context.runExceptionEvent(null, ex);
         }
     }
 
-    private Object getObject(Command cmd, String key) throws SQLException {
+    public SQLer(Command cmd){
+        this.cmd = cmd;
+    }
+
+    private Object getObject(String key) throws SQLException {
         return cmd.context.getDialect().preChange(rset.getObject(key));
     }
 
-    private Object getObject(Command cmd, int idx) throws SQLException {
+    private Object getObject(int idx) throws SQLException {
         return cmd.context.getDialect().preChange(rset.getObject(idx));
     }
 
-    public Variate getVariate(Command cmd) throws SQLException {
+    public Variate getVariate() throws SQLException {
         if (cmd.context.isCompilationMode()) {
             return null;
         }
 
         try {
-            rset = query(cmd);
+            rset = query();
 
             if (rset != null && rset.next())
-                return new Variate(null, getObject(cmd, 1));
+                return new Variate(null, getObject(1));
             else
                 return null;//new Variate(null,null);
         } catch (SQLException ex) {
@@ -74,18 +78,18 @@ class SQLer {
         }
     }
 
-    public <T extends IBinder> T getItem(Command cmd, T model) throws SQLException {
+    public <T extends IBinder> T getItem(T model) throws SQLException {
         if (cmd.context.isCompilationMode()) {
             return null;
         }
 
         try {
-            rset = query(cmd);
+            rset = query();
 
             if (rset != null && rset.next()) {
                 model.bind((key) -> {
                     try {
-                        return new Variate(key, getObject(cmd, key));
+                        return new Variate(key, getObject(key));
                     } catch (SQLException ex) {
                         WoodConfig.runExceptionEvent(cmd, ex);
                         return new Variate(key, null);
@@ -104,7 +108,7 @@ class SQLer {
         }
     }
 
-    public <T extends IBinder> List<T> getList(Command cmd, T model) throws SQLException {
+    public <T extends IBinder> List<T> getList(T model) throws SQLException {
         if (cmd.context.isCompilationMode()) {
             return null;
         }
@@ -112,7 +116,7 @@ class SQLer {
         try {
             List<T> list = new ArrayList<T>();
 
-            rset = query(cmd);
+            rset = query();
 
             while (rset != null && rset.next()) {
                 T item = (T) model.clone();
@@ -125,7 +129,7 @@ class SQLer {
 
                 item.bind((key) -> {
                     try {
-                        return new Variate(key, getObject(cmd, key));
+                        return new Variate(key, getObject(key));
                     } catch (SQLException ex) {
                         WoodConfig.runExceptionEvent(cmd, ex);
                         return new Variate(key, null);
@@ -148,7 +152,7 @@ class SQLer {
         }
     }
 
-    public DataItem getRow(Command cmd) throws SQLException {
+    public DataItem getRow() throws SQLException {
         if (cmd.context.isCompilationMode()) {
             return null;
         }
@@ -156,7 +160,7 @@ class SQLer {
         try {
             DataItem row = new DataItem();
 
-            rset = query(cmd);
+            rset = query();
             ResultSetMetaData meta = rset.getMetaData();
 
             if (rset != null && rset.next()) {
@@ -164,7 +168,7 @@ class SQLer {
                 int len = meta.getColumnCount();
 
                 for (int i = 1; i <= len; i++) {
-                    row.set(meta.getColumnLabel(i), getObject(cmd, i));
+                    row.set(meta.getColumnLabel(i), getObject(i));
                 }
             }
 
@@ -181,7 +185,7 @@ class SQLer {
         }
     }
 
-    public DataList getTable(Command cmd) throws SQLException {
+    public DataList getTable() throws SQLException {
         if (cmd.context.isCompilationMode()) {
             return null;
         }
@@ -189,7 +193,7 @@ class SQLer {
         try {
             DataList table = new DataList();
 
-            rset = query(cmd);
+            rset = query();
             ResultSetMetaData meta = rset.getMetaData();
 
             while (rset != null && rset.next()) {
@@ -197,7 +201,7 @@ class SQLer {
                 int len = meta.getColumnCount();
 
                 for (int i = 1; i <= len; i++) {
-                    row.set(meta.getColumnLabel(i), getObject(cmd, i));
+                    row.set(meta.getColumnLabel(i), getObject(i));
                 }
 
                 table.addRow(row);
@@ -217,13 +221,13 @@ class SQLer {
     }
 
     //执行
-    public int execute(Command cmd) throws SQLException {
+    public int execute() throws SQLException {
         if (cmd.context.isCompilationMode()) {
             return 0;
         }
 
         try {
-            if (false == buildCMD(cmd, false)) {
+            if (false == buildCMD(false)) {
                 return -1;
             }
 
@@ -236,20 +240,20 @@ class SQLer {
             throw ex;
         } finally {
             //*.监听
-            WoodConfig.runExecuteAftEvent(cmd);
+            cmd.context.runExecuteAftEvent(cmd);
 
             tryClose();
         }
     }
 
     //批量执行
-    public int[] executeBatch(Command cmd) throws SQLException {
+    public int[] executeBatch() throws SQLException {
         if (cmd.context.isCompilationMode()) {
             return null;
         }
 
         try {
-            if (false == buildCMD0(cmd, false)) {
+            if (false == buildCMD0(false)) {
                 return null;
             }
 
@@ -274,19 +278,19 @@ class SQLer {
             throw ex;
         } finally {
             //*.监听
-            WoodConfig.runExecuteAftEvent(cmd);
+            cmd.context.runExecuteAftEvent(cmd);
             tryClose();
         }
     }
 
     //插入
-    public long insert(Command cmd) throws SQLException {
+    public long insert() throws SQLException {
         if (cmd.context.isCompilationMode()) {
             return 0;
         }
 
         try {
-            if (false == buildCMD(cmd, true)) {
+            if (false == buildCMD(true)) {
                 return -1;
             }
 
@@ -302,7 +306,7 @@ class SQLer {
 
             //这里，是与.execute()区别的地方
             if (rset != null && rset.next()) {
-                Object tmp = getObject(cmd, 1);
+                Object tmp = getObject(1);
                 if (tmp instanceof Number) {
                     return ((Number) tmp).longValue();
                 }
@@ -314,14 +318,14 @@ class SQLer {
             throw ex;
         } finally {
             //*.监听
-            WoodConfig.runExecuteAftEvent(cmd);
+            cmd.context.runExecuteAftEvent(cmd);
             tryClose();
         }
     }
 
     //查询
-    private ResultSet query(Command cmd) throws SQLException {
-        if (false == buildCMD(cmd, false)) {
+    private ResultSet query() throws SQLException {
+        if (false == buildCMD( false)) {
             return null;
         }
 
@@ -330,12 +334,12 @@ class SQLer {
             return stmt.executeQuery();
         } finally {
             //*.监听
-            WoodConfig.runExecuteAftEvent(cmd);
+            cmd.context.runExecuteAftEvent(cmd);
         }
     }
 
-    private boolean buildCMD(Command cmd, boolean isInsert) throws SQLException {
-        if (buildCMD0(cmd, isInsert) == false) {
+    private boolean buildCMD(boolean isInsert) throws SQLException {
+        if (buildCMD0(isInsert) == false) {
             return false;
         }
 
@@ -350,9 +354,9 @@ class SQLer {
         return true;
     }
 
-    private boolean buildCMD0(Command cmd, boolean isInsert) throws SQLException {
+    private boolean buildCMD0(boolean isInsert) throws SQLException {
         //*.监听
-        if (WoodConfig.runExecuteBefEvent(cmd) == false) {
+        if (cmd.context.runExecuteBefEvent(cmd) == false) {
             return false;
         }
 
@@ -373,7 +377,7 @@ class SQLer {
                 stmt = c.prepareStatement(cmd.fullText());
         }
 
-        WoodConfig.runExecuteStmEvent(cmd, stmt);
+        cmd.context.runExecuteStmEvent(cmd, stmt);
 
         return true;
     }

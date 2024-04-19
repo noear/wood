@@ -32,12 +32,16 @@ public class DbUtil {
 
     public static DbContext getDb() {
         //
+        DataSource source = dbClickHouseCfg();
 
-        WoodConfig.onException((cmd, ex) -> {
+        DbContext db = new DbContext(source).nameSet("rock");
+        //WoodConfig.isUsingSchemaPrefix =true;
+        //WoodConfig.isUsingUnderlineColumnName=true;
+        db.onException((cmd, ex) -> {
             System.out.println(cmd.text);
         });
 
-        WoodConfig.onExecuteAft((cmd) -> {
+        db.onExecuteAft((cmd) -> {
             if (cmd.isBatch) {
                 System.out.println(":::" + cmd.text + " --:batch");
             } else {
@@ -45,11 +49,6 @@ public class DbUtil {
             }
         });
 
-        DataSource source = dbClickHouseCfg();
-
-        DbContext db = new DbContext(source).nameSet("rock");
-        //WoodConfig.isUsingSchemaPrefix =true;
-        //WoodConfig.isUsingUnderlineColumnName=true;
         db.initMetaData();
         return db;
     }

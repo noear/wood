@@ -124,12 +124,17 @@ public class DbUtil {
 
     public static DbContext getDb() {
         //
+        HikariDataSource source = dbMysqlCfg(); // dbH2Cfg(); // dbSqliteCfg(); // dbH2Cfg(); // dbOracleCfg(); //  dbPgsqlCfg(); // dbMssqlCfg(); //
 
-        WoodConfig.onException((cmd, ex)->{
+        DbContext db = new DbContext(source).nameSet("rock");
+        //WoodConfig.isUsingSchemaPrefix =true;
+        //WoodConfig.isUsingUnderlineColumnName=true;
+
+        db.onException((cmd, ex)->{
             System.out.println(cmd.text);
         });
 
-        WoodConfig.onExecuteAft((cmd)->{
+        db.onExecuteAft((cmd)->{
             if(cmd.isBatch){
                 System.out.println(":::" + cmd.text +" --:batch");
             }else {
@@ -137,11 +142,6 @@ public class DbUtil {
             }
         });
 
-        HikariDataSource source = dbMysqlCfg(); // dbH2Cfg(); // dbSqliteCfg(); // dbH2Cfg(); // dbOracleCfg(); //  dbPgsqlCfg(); // dbMssqlCfg(); //
-
-        DbContext db = new DbContext(source).nameSet("rock");
-        //WoodConfig.isUsingSchemaPrefix =true;
-        //WoodConfig.isUsingUnderlineColumnName=true;
         db.initMetaData();
         return db;
     }
