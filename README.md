@@ -240,6 +240,19 @@ db.call("@demo.dso.db.user_get").set("id",1001).getItem(User.class);
 //快速执行SQL语句
 db.sql("select * from user id=?",12).getDataItem();
 db.sql("select name from user id=?",12).getValue();
+
+
+/** 3.1.事件用法 */
+//出异常时
+db.onException((cmd,err)->{});
+//命令构建时
+db.onCommandBuilt((cmd)->{});
+//命令执行前
+db.onExecuteBef((cmd)->{});
+//命令执行中
+db.onExecuteStm((cmd,stm)->{});
+//命令执行后
+db.onExecuteAft((cmd)->{});
 ```
 
 
