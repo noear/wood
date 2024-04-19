@@ -71,7 +71,7 @@ class SQLer {
             else
                 return null;//new Variate(null,null);
         } catch (SQLException ex) {
-            WoodConfig.runExceptionEvent(cmd, ex);
+            cmd.context.runExceptionEvent(cmd, ex);
             throw ex;
         } finally {
             tryClose();
@@ -91,7 +91,7 @@ class SQLer {
                     try {
                         return new Variate(key, getObject(key));
                     } catch (SQLException ex) {
-                        WoodConfig.runExceptionEvent(cmd, ex);
+                        cmd.context.runExceptionEvent(cmd, ex);
                         return new Variate(key, null);
                     }
                 });
@@ -101,7 +101,7 @@ class SQLer {
                 return null;
 
         } catch (SQLException ex) {
-            WoodConfig.runExceptionEvent(cmd, ex);
+            cmd.context.runExceptionEvent(cmd, ex);
             throw ex;
         } finally {
             tryClose();
@@ -131,7 +131,7 @@ class SQLer {
                     try {
                         return new Variate(key, getObject(key));
                     } catch (SQLException ex) {
-                        WoodConfig.runExceptionEvent(cmd, ex);
+                        cmd.context.runExceptionEvent(cmd, ex);
                         return new Variate(key, null);
                     }
                 });
@@ -145,7 +145,7 @@ class SQLer {
                 return null;
 
         } catch (SQLException ex) {
-            WoodConfig.runExceptionEvent(cmd, ex);
+            cmd.context.runExceptionEvent(cmd, ex);
             throw ex;
         } finally {
             tryClose();
@@ -178,7 +178,7 @@ class SQLer {
                 return null;
 
         } catch (SQLException ex) {
-            WoodConfig.runExceptionEvent(cmd, ex);
+            cmd.context.runExceptionEvent(cmd, ex);
             throw ex;
         } finally {
             tryClose();
@@ -213,7 +213,7 @@ class SQLer {
                 return null;
 
         } catch (SQLException ex) {
-            WoodConfig.runExceptionEvent(cmd, ex);
+            cmd.context.runExceptionEvent(cmd, ex);
             throw ex;
         } finally {
             tryClose();
@@ -236,7 +236,7 @@ class SQLer {
             return rst;
 
         } catch (SQLException ex) {
-            WoodConfig.runExceptionEvent(cmd, ex);
+            cmd.context.runExceptionEvent(cmd, ex);
             throw ex;
         } finally {
             //*.监听
@@ -274,7 +274,7 @@ class SQLer {
             return rst;
 
         } catch (SQLException ex) {
-            WoodConfig.runExceptionEvent(cmd, ex);
+            cmd.context.runExceptionEvent(cmd, ex);
             throw ex;
         } finally {
             //*.监听
@@ -314,7 +314,7 @@ class SQLer {
 
             return 0l;
         } catch (SQLException ex) {
-            WoodConfig.runExceptionEvent(cmd, ex);
+            cmd.context.runExceptionEvent(cmd, ex);
             throw ex;
         } finally {
             //*.监听

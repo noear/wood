@@ -1,3 +1,7 @@
+### 1.2.8
+* 添加 DbEventBus
+* 添加 DbContext 实例事件支持
+
 ### 1.2.7
 * 添加 TypeConverter.filling 接管 PreparedStatement 的数据填充
 

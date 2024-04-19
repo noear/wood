@@ -448,25 +448,30 @@ public class DbContext extends DbEventBus implements Closeable {
     @Override
     protected void runExceptionEvent(Command cmd, Throwable ex) {
         super.runExceptionEvent(cmd, ex);
+        WoodConfig.runExceptionEvent(cmd, ex);
     }
 
     @Override
     protected void runCommandBuiltEvent(Command cmd) {
         super.runCommandBuiltEvent(cmd);
+        WoodConfig.runCommandBuiltEvent(cmd);
     }
 
     @Override
     protected boolean runExecuteBefEvent(Command cmd) {
-        return super.runExecuteBefEvent(cmd);
+        boolean isOk = super.runExecuteBefEvent(cmd);
+        return isOk && WoodConfig.runExecuteBefEvent(cmd);
     }
 
     @Override
     protected void runExecuteStmEvent(Command cmd, Statement stm) {
         super.runExecuteStmEvent(cmd, stm);
+        WoodConfig.runExecuteStmEvent(cmd, stm);
     }
 
     @Override
     protected void runExecuteAftEvent(Command cmd) {
         super.runExecuteAftEvent(cmd);
+        WoodConfig.runExecuteAftEvent(cmd);
     }
 }
