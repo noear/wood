@@ -242,7 +242,7 @@ db.sql("select * from user id=?",12).getDataItem();
 db.sql("select name from user id=?",12).getValue();
 
 
-/** 3.1.事件用法 */
+/** 3.1.事件用法（全局配置事件可用 WoodConfig） */
 //出异常时
 db.onException((cmd,err)->{});
 //命令构建时
