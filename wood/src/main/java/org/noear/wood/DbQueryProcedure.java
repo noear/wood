@@ -165,7 +165,7 @@ public class DbQueryProcedure extends DbProcedure {
 
 
         //3.替换schema
-        if (tml.indexOf("$") >= 0) {
+        if (WoodConfig.isUsingSchemaExpression && tml.indexOf("$") >= 0) {
             if (context.schema() == null) {
                 tml = tml.replace("$.", "");
             }else{

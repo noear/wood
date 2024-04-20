@@ -41,26 +41,26 @@ public class DbQuery extends DbAccess<DbQuery> {
 
         StringBuilder sb = new StringBuilder(commandText);
 
-        //1.替换schema
-        int idx=0;
-        while (true) {
-            idx = sb.indexOf("$",idx);
-            if(idx>0) {
-                if(context.schema() == null){
-                    sb.replace(idx, idx + 2, ""); //去掉$.
-                }else {
-                    sb.replace(idx, idx + 1, context.schema());
+        //1.如果全局设置的替换schema为true，则替换schema
+        if(WoodConfig.isUsingSchemaExpression){
+            int idx=0;
+            while (true) {
+                idx = sb.indexOf("$",idx);
+                if(idx>0) {
+                    if(context.schema() == null){
+                        sb.replace(idx, idx + 2, ""); //去掉$.
+                    }else {
+                        sb.replace(idx, idx + 1, context.schema());
+                    }
+                    idx++;
                 }
-                idx++;
-            }
-            else {
-                break;
+                else {
+                    break;
+                }
             }
         }
 
-
         cmd.text = sb.toString();
-
 
         runCommandBuiltEvent(cmd);
 
