@@ -386,7 +386,7 @@ public @interface Sql {
 * 语法
 ```
 mapper 开始标签
-  namespace （属性：命名空间，{namespace}.{id} = sqlid；不包括文件名）
+  namespace （属性：命名空间，{namespace}.{id} = sqlid）
   import（属性：导入包或类，多个以;号隔开。可以简化后面的模型写法，或引入工具类）
   baseMapper（属性：扩展BaseMapper 的模型，效果：BaseMapper<Xxx>）
   db（属性：关联 dataSource bean；效果：@Db("xxx")）
@@ -556,10 +556,12 @@ Trans.tran(() -> {
 
 ### (六) 监听与记录
 
+WoodConfig（全局）、DbContext（实例）都支持监听与记录
+
 * 监听异常
 
 ```java
-WoodConfig.onException((cmd,ex)->{
+db.onException((cmd,ex)->{
   //可以做个记录
 	ex.printStackTrace();
 });
@@ -568,7 +570,7 @@ WoodConfig.onException((cmd,ex)->{
 * 观察性能
 
 ```java
-WoodConfig.onExecuteAft((cmd)->{
+db.onExecuteAft((cmd)->{
   //cmd.timespan()  //获取执行时长（毫秒）
 });
 ```
@@ -576,7 +578,7 @@ WoodConfig.onExecuteAft((cmd)->{
 * 记录行为
 
 ```java
-WoodConfig.onLog((cmd) -> {
+db.onLog((cmd) -> {
     if (cmd.isLog >= 0) { //isLog: -1,不需要记录；0,默认；1,需要记录
         //cmd.text;         //执行代码
         //cmd.paramS;   	  //执行参数
@@ -589,7 +591,7 @@ WoodConfig.onLog((cmd) -> {
 
 ```java
 //例：禁止DELETE操作
-WoodConfig.onExecuteBef((cmd)->{
+db.onExecuteBef((cmd)->{
     if(cmd.text.indexOf("DELETE ") >=0){
         return false;
     }
