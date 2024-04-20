@@ -1,3 +1,6 @@
+### 1.2.9
+* 添加 WoodConfig.isUsingSchemaExpression
+
 ### 1.2.8
 * 添加 DbEventBus
 * 添加 DbContext 实例事件支持
