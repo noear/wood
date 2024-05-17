@@ -14,6 +14,8 @@ public abstract class WhereBase<T extends WhereBase> {
     protected SQLBuilder _builder;
     protected StringBuilder _orderBy;
 
+    protected boolean _hasGroup = false;
+
     protected WhereBase() {
 
     }
@@ -675,6 +677,7 @@ public abstract class WhereBase<T extends WhereBase> {
 
     public T groupBy(String code) {
         _builder.append(" GROUP BY ").append(fmtMutColumns(code));
+        _hasGroup = true;
         return (T)this;
     }
 
