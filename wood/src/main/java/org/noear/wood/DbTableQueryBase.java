@@ -692,7 +692,17 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
     }
 
     protected DbQuery selectCompile(String columns) {
-        select_do(columns, true);
+        return selectCompile(columns, true);
+    }
+
+    /**
+     * 查询编译
+     * @param columns 查询的列
+     * @param doFormat 是否对查询的列做格式化
+     * @return
+     */
+    protected DbQuery selectCompile(String columns, boolean doFormat) {
+        select_do(columns, doFormat);
 
         DbQuery rst = compile();
 
