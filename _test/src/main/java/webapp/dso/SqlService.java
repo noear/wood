@@ -3,12 +3,12 @@ package webapp.dso;
 import java.sql.SQLException;
 import java.util.*;
 
+import org.noear.solon.annotation.Component;
 import org.noear.solon.annotation.Inject;
-import org.noear.solon.aspect.annotation.Service;
 
 import webapp.model.AppxModel;
 
-@Service
+@Component
 public class SqlService{
     @Inject
     webapp.dso.SqlMapper mapper;
