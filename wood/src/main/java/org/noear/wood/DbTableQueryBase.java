@@ -1,5 +1,6 @@
 package org.noear.wood;
 
+import org.noear.wood.annotation.Db;
 import org.noear.wood.cache.CacheUsing;
 import org.noear.wood.cache.ICacheController;
 import org.noear.wood.cache.ICacheService;
@@ -749,6 +750,18 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
         _orderBy = null;
 
         try {
+            if(_hasGroup){
+                //有分组时，需要用子表的形式查询
+                DbQuery groupQuery = selectCompile("1 as _flag", false);
+
+                _builder.backup();
+
+                DbTableQuery countQuery = new DbTableQuery(_context);
+                DbTableQuery table = countQuery.table(" (" + groupQuery.commandText + ") a");
+                table._builder.paramS = _builder.paramS;
+                return table.selectCount("1");
+            }
+
             return selectDo(column).getVariate().longValue(0L);
         } finally {
             //恢复
@@ -756,6 +769,9 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
             limit_size = limit_size_bak;
             limit_top = limit_top_bak;
             _orderBy = _orderBy_bak;
+            if(_hasGroup){
+                _builder.restore();
+            }
         }
     }
 

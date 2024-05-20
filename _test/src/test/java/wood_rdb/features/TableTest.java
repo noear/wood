@@ -137,6 +137,7 @@ public class TableTest {
 
 
 
+
     @Test
     public void test2() throws Exception {
         //删
@@ -180,5 +181,30 @@ public class TableTest {
                 .set("v2", null)
                 .usingNull(true)
                 .insert();
+    }
+
+    /**
+     * 测试带group的分页查询
+     * @throws Exception
+     */
+    @Test
+    public void test5() throws Exception{
+
+        long count = db.table("test").selectCount();
+        if(count == 0){
+            db.table("test").set("v1", 1).set("id", 1).insert();
+            db.table("test").set("v1", 1).set("id", 2).set("v2","a").insert();
+            db.table("test").set("v1", 2).set("id", 3).insert();
+            db.table("test").set("v1", 3).set("id", 4).insert();
+        }
+
+        long count1 = db.table("test")
+          .whereNeq("v1", 100)
+          .groupBy("v1")
+          .limit(100)
+          .orderByAsc("id")
+          .selectCount();
+        assert count1 > 0;
+
     }
 }

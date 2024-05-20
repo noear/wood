@@ -19,6 +19,7 @@ public class MapperWhereQ extends WhereBase<MapperWhereQ> {
 
         _context = _query._context;
         _builder = _query._builder;
+        _hasGroup = _query._hasGroup;
     }
 
     @Override
