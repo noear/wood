@@ -1,3 +1,9 @@
+### 1.2.11
+* 修复 selectCount支持带group by的汇总查询
+
+### 1.2.10
+* selectCompile 增加一个重载，支持不对column参数做格式化处理
+
 ### 1.2.9
 * 添加 WoodConfig.isUsingSchemaExpression
 
