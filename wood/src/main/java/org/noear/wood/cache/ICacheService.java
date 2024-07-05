@@ -1,5 +1,7 @@
 package org.noear.wood.cache;
 
+import java.lang.reflect.Type;
+
 /**
  * 缓存服务接口
  *
@@ -15,10 +17,18 @@ public interface ICacheService {
     /**
      * 获取
      */
-    <T> T get(String key, Class<T> clz);
+    <T> T get(String key, Type type);
 
     /**
      * 获取
+     */
+    default <T> T get(String key, Class<T> clz) {
+        return get(key, (Type) clz);
+    }
+
+    /**
+     * 获取
+     *
      * @deprecated 2.5
      */
     @Deprecated

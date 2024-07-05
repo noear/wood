@@ -1,5 +1,6 @@
 package org.noear.wood.cache;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.concurrent.*;
 
@@ -63,7 +64,7 @@ public class LocalCache implements ICacheServiceEx {
     }
 
     @Override
-    public <T> T get(String key,Class<T> clz) {
+    public <T> T get(String key, Type type) {
         Entity ent = _data.get(key);
 
         return ent == null ? null : (T) ent.value;

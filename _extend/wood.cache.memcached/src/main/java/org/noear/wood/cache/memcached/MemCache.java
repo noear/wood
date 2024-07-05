@@ -8,6 +8,7 @@ import net.spy.memcached.auth.PlainCallbackHandler;
 import org.noear.wood.cache.ICacheServiceEx;
 import org.noear.wood.utils.EncryptUtils;
 
+import java.lang.reflect.Type;
 import java.util.Properties;
 
 public class MemCache implements ICacheServiceEx {
@@ -93,7 +94,7 @@ public class MemCache implements ICacheServiceEx {
     }
 
     @Override
-    public <T> T get(String key, Class<T> clz) {
+    public <T> T get(String key, Type type) {
         if (_cache != null) {
             String newKey = newKey(key);
             try {

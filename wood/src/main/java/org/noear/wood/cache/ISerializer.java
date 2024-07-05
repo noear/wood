@@ -1,5 +1,7 @@
 package org.noear.wood.cache;
 
+import java.lang.reflect.Type;
+
 /**
  * 对象序列化接口
  *
@@ -9,14 +11,23 @@ package org.noear.wood.cache;
 public interface ISerializer<T> {
     /**
      * 名称
-     * */
+     */
     String name();
+
     /**
      * 序列化
-     * */
-    T serialize(Object fromObj) throws Exception ;
+     */
+    T serialize(Object fromObj) throws Exception;
+
     /**
      * 反序列化
-     * */
-    Object deserialize(T fromDta, Class<?> toClz) throws Exception ;
+     */
+    Object deserialize(T fromDta, Type toType) throws Exception;
+
+    /**
+     * 反序列化
+     */
+    default Object deserialize(T fromDta, Class<?> toClz) throws Exception {
+        return deserialize(fromDta, (Type) toClz);
+    }
 }

@@ -15,6 +15,7 @@ import org.ehcache.config.units.MemoryUnit;
 import org.ehcache.expiry.Duration;
 import org.ehcache.expiry.Expirations;
 
+import java.lang.reflect.Type;
 import java.util.concurrent.TimeUnit;
 
 
@@ -76,7 +77,7 @@ public class EhCache implements ICacheServiceEx {
     }
 
     @Override
-    public <T> T get(String key, Class<T> clz) {
+    public <T> T get(String key, Type type) {
         if (_cache != null) {
             String newKey = newKey(key);
             try {

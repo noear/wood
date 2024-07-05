@@ -6,6 +6,7 @@ import org.noear.wood.cache.ISerializer;
 import org.noear.wood.utils.EncryptUtils;
 import org.noear.wood.utils.StringUtils;
 
+import java.lang.reflect.Type;
 import java.util.Properties;
 
 public class RedisCache implements ICacheServiceEx {
@@ -88,12 +89,12 @@ public class RedisCache implements ICacheServiceEx {
     }
 
     @Override
-    public <T> T get(String key, Class<T> clz) {
+    public <T> T get(String key, Type type) {
         if (_cache != null) {
             String newKey = newKey(key);
             String val = _cache.openAndGet((ru) -> ru.key(newKey).get());
             try {
-                return (T)_serializer.deserialize(val, clz);
+                return (T)_serializer.deserialize(val, type);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 throw new RuntimeException(ex);

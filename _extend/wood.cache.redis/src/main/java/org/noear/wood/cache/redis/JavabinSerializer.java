@@ -3,6 +3,7 @@ package org.noear.wood.cache.redis;
 import org.noear.redisx.utils.SerializationUtil;
 import org.noear.wood.cache.ISerializer;
 
+import java.lang.reflect.Type;
 import java.util.Base64;
 
 /**
@@ -27,7 +28,7 @@ public class JavabinSerializer implements ISerializer<String> {
     }
 
     @Override
-    public Object deserialize(String dta, Class<?> clz) throws Exception {
+    public Object deserialize(String dta, Type toType) throws Exception {
         if(dta == null){
             return null;
         }

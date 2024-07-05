@@ -1,5 +1,7 @@
 package org.noear.wood.cache;
 
+import java.lang.reflect.Type;
+
 /**
  * 空缓存服务
  *
@@ -13,7 +15,7 @@ public class EmptyCache implements ICacheServiceEx {
     }
 
     @Override
-    public <T> T get(String s, Class<T> clz) {
+    public <T> T get(String s, Type type) {
         return null;
     }
 
