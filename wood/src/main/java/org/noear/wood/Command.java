@@ -59,6 +59,11 @@ public class Command {
     public long timestart = 0;
     public long timestop = 0;
 
+    /**
+     * 受影响的行数，一次可能执行多条 SQL，所以是一个数组
+     */
+    public long[] affectRow;
+
     public Command(DbContext context) {
         this.context = context;
         this.context.lastCommand = this;
