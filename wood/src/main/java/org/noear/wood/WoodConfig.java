@@ -6,6 +6,7 @@ import org.noear.wood.ext.Act2;
 import org.noear.wood.ext.Fun1;
 import org.noear.wood.impl.IMapperAdaptorImpl;
 import org.noear.wood.mapper.IMapperAdaptor;
+import org.noear.wood.wrap.PrimaryKeyStrategy;
 import org.noear.wood.wrap.NamingStrategy;
 import org.noear.wood.wrap.TypeConverter;
 
@@ -35,6 +36,11 @@ public final class WoodConfig {
      * 非注解的命名策略
      */
     public static NamingStrategy namingStrategy = new NamingStrategy();
+
+    /**
+     * 非注解的字段主键策略
+     */
+    public static PrimaryKeyStrategy primaryKeyStrategy = new PrimaryKeyStrategy();
 
     /**
      * 字段类型转换器

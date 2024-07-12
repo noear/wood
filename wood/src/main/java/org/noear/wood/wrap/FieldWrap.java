@@ -14,6 +14,7 @@ import java.lang.reflect.Modifier;
 public class FieldWrap {
     public final Field field;
     public final String name;
+    public final boolean pk;
     public final boolean exclude;
     public final boolean readonly;
 
@@ -31,6 +32,8 @@ public class FieldWrap {
         } else {
             name = WoodConfig.namingStrategy.fieldToColumnName(clz, f1);
         }
+
+        pk = WoodConfig.primaryKeyStrategy.fieldIsPrimaryKey(clz, f1);
 
         field.setAccessible(true);
 

@@ -48,18 +48,17 @@ public class BaseEntityWrap {
             throw new RuntimeException("请为BaseMapper申明实体类型");
         }
 
-        Table ann = entityClz.getAnnotation(Table.class);
-        if (ann != null) {
-            tableName = ann.value();
-        }
+        ClassWrap classWrap = ClassWrap.get(entityClz);
+
+        tableName = classWrap.tableName;
 
         if (tableName == null) {
             tableName = entityClz.getSimpleName();
         }
 
 
-        for (FieldWrap f1 : ClassWrap.get(entityClz).fieldWraps) {
-            if (f1.field.getAnnotation(PrimaryKey.class) != null) {
+        for (FieldWrap f1 : classWrap.fieldWraps) {
+            if (f1.pk) {
                 pkName = f1.name;
                 break;
             }
