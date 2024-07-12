@@ -233,6 +233,8 @@ class SQLer {
 
             int rst = stmt.executeUpdate();
 
+            cmd.affectRow = new long[]{rst};
+
             return rst;
 
         } catch (SQLException ex) {
@@ -271,6 +273,11 @@ class SQLer {
 
             int[] rst = stmt.executeBatch();
 
+            cmd.affectRow = new long[rst.length];
+            for (int i = 0; i < rst.length; i++) {
+                cmd.affectRow[i] = rst[i];
+            }
+
             return rst;
 
         } catch (SQLException ex) {
@@ -308,7 +315,9 @@ class SQLer {
             if (rset != null && rset.next()) {
                 Object tmp = getObject(1);
                 if (tmp instanceof Number) {
-                    return ((Number) tmp).longValue();
+                    long l = ((Number) tmp).longValue();
+                    cmd.affectRow = new long[]{l};
+                    return l;
                 }
             }
 
