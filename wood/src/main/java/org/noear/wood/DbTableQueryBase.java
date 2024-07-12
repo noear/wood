@@ -795,6 +795,13 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
         return selectDo(columns).getList(clz);
     }
 
+    /**
+     * @since 2024/06/12
+     * */
+    public <T> IDataReader<T> selectReader(String columns, Class<T> clz) throws SQLException {
+        return selectDo(columns).getDataReader().toEntityReader(clz);
+    }
+
     public <T> IPage<T> selectPage(String columns, Class<T> clz) throws SQLException {
         long total = selectCount();
         List<T> list = selectDo(columns).getList(clz);
@@ -810,6 +817,9 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
         return selectDo(columns).getDataList();
     }
 
+    /**
+     * @since 2024/06/12
+     * */
     public DataReader selectDataReader(String columns) throws SQLException {
         return selectDo(columns).getDataReader();
     }
