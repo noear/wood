@@ -810,6 +810,10 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
         return selectDo(columns).getDataList();
     }
 
+    public DataReader selectDataReader(String columns) throws SQLException {
+        return selectDo(columns).getDataReader();
+    }
+
     public IPage<DataItem> selectDataPage(String columns) throws SQLException {
         long total = selectCount();
         List<DataItem> list = selectDo(columns).getDataList().getRows();

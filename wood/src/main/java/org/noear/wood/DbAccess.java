@@ -302,6 +302,12 @@ public abstract class DbAccess<T extends DbAccess> implements IWoodKey,IQuery,Se
     }
 
     @Override
+    public DataReader getDataReader() throws SQLException {
+        Command cmd = getCommand();
+        return new SQLer(cmd).getReader();
+    }
+
+    @Override
     public List<Map<String, Object>> getMapList() throws SQLException {
         return getDataList().getMapList();
     }

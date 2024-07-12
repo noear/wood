@@ -35,7 +35,7 @@ public class Variate implements Serializable {
     }
 
 
-    DbVarType _type = DbVarType.Object;
+    private DbVarType _type = DbVarType.Object;
 
     public DbVarType getType() {
         return _type;

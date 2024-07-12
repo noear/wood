@@ -162,6 +162,9 @@ public interface BaseMapper<T> {
 
     List<Object> selectArray(String column, int start, int size, Act1<MapperWhereQ> condition);
 
+    IDataReader<T> selectReader(Act1<MapperWhereQ> condition);
+    IDataReader<T> selectReader(int start, int size, Act1<MapperWhereQ> condition);
+
     /**
      * @param start 从0开始
      */

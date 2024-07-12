@@ -15,7 +15,7 @@ class SQLer {
     private PreparedStatement stmt;
     private Connection conn;
 
-    private void tryClose() {
+    protected void tryClose() {
         try {
             if (rset != null) {
                 rset.close();
@@ -217,6 +217,21 @@ class SQLer {
             throw ex;
         } finally {
             tryClose();
+        }
+    }
+
+    public DataReader getReader() throws SQLException {
+        if (cmd.context.isCompilationMode()) {
+            return null;
+        }
+
+        try {
+            rset = query();
+            return new DataReader(this, cmd, rset);
+        } catch (SQLException ex) {
+            cmd.context.runExceptionEvent(cmd, ex);
+            tryClose();
+            throw ex;
         }
     }
 

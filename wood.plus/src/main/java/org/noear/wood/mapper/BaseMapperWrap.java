@@ -22,9 +22,10 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
     private String _tabelName;
 
     private Class<?> _entityType;
+
     /**
      * 实体类型
-     * */
+     */
     protected Class<?> entityType() {
         return _entityType;
     }
@@ -52,15 +53,17 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
     public DbContext db() {
         return _db;
     }
+
     /**
      * 表名
-     * */
+     */
     public String tableName() {
         return _tabelName;
     }
+
     /**
      * 主键
-     * */
+     */
     @Override
     public String tablePk() {
         return _table.pkName;
@@ -68,7 +71,7 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
 
     /**
      * 实体类
-     * */
+     */
     @Override
     public Class<?> entityClz() {
         return _table.entityClz;
@@ -210,7 +213,7 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
     /**
      * @param entity      待更新的实体
      * @param dataBuilder 组装data的方式，方便支持部分属性允许设置为null，部分不允许
-     * @param c   更新数据的条件
+     * @param c           更新数据的条件
      * @return
      */
     @Override
@@ -416,6 +419,22 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
 
 
     @Override
+    public IDataReader<T> selectReader(Act1<MapperWhereQ> c) {
+        Class<T> clz = (Class<T>) entityClz();
+
+        DataReader reader = RunUtils.call(() -> getQr(c).selectDataReader("*"));
+        return reader.toEntityReader(clz);
+    }
+
+    @Override
+    public IDataReader<T> selectReader(int start, int size, Act1<MapperWhereQ> c) {
+        Class<T> clz = (Class<T>) entityClz();
+
+        DataReader reader = RunUtils.call(() -> getQr(c).limit(start, size).selectDataReader("*"));
+        return reader.toEntityReader(clz);
+    }
+
+    @Override
     public IPage<T> selectPage(int start, int size, Act1<MapperWhereQ> c) {
         Class<T> clz = (Class<T>) entityClz();
 
@@ -451,14 +470,14 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
 
     /**
      * 获取查询器
-     * */
+     */
     protected DbTableQuery getQr() {
         return db().table(tableName());
     }
 
     /**
      * 获取带条件的查询器
-     * */
+     */
     protected DbTableQuery getQr(Act1<MapperWhereQ> c) {
         DbTableQuery qr = db().table(tableName());
 
