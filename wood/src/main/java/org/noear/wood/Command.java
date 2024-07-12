@@ -67,11 +67,7 @@ public class Command {
     public Command(DbContext context) {
         this.context = context;
         this.context.lastCommand = this;
-        this.tran = tran;
-
-        if (tran == null) {
-            this.tran = DbTranUtil.current();
-        }
+        this.tran = DbTranUtil.current();
     }
 
     private Map<String, Object> _paramMap;
