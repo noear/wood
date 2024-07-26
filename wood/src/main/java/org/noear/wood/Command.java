@@ -55,6 +55,11 @@ public class Command {
      */
     public boolean isBatch = false;
 
+    /**
+     * 获取行数
+     */
+    public int fetchSize;
+
     //计时变量
     public long timestart = 0;
     public long timestop = 0;
@@ -105,7 +110,7 @@ public class Command {
             sb.append(" --:batch");
         } else {
             String[] ss = text.split("\\?");
-            for (int i = 0, len = ss.length, len2= paramS.size(); i < len; i++) {
+            for (int i = 0, len = ss.length, len2 = paramS.size(); i < len; i++) {
                 sb.append(ss[i]);
 
                 if (i < len2) {
