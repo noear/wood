@@ -55,11 +55,6 @@ public class Command {
      */
     public boolean isBatch = false;
 
-    /**
-     * 获取行数
-     */
-    public int fetchSize;
-
     //计时变量
     public long timestart = 0;
     public long timestop = 0;
