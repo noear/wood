@@ -420,17 +420,14 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
 
     @Override
     public IDataReader<T> selectReader(Act1<MapperWhereQ> c) {
-        Class<T> clz = (Class<T>) entityClz();
-
-        DataReader reader = RunUtils.call(() -> getQr(c).selectDataReader("*"));
-        return reader.toEntityReader(clz);
+        return selectReader(0, c);
     }
 
     @Override
-    public IDataReader<T> selectReader(int start, int size, Act1<MapperWhereQ> c) {
+    public IDataReader<T> selectReader(int fetchSize, Act1<MapperWhereQ> c) {
         Class<T> clz = (Class<T>) entityClz();
 
-        DataReader reader = RunUtils.call(() -> getQr(c).limit(start, size).selectDataReader("*"));
+        DataReader reader = RunUtils.call(() -> getQr(c).selectDataReader("*", fetchSize));
         return reader.toEntityReader(clz);
     }
 

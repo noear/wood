@@ -331,6 +331,15 @@ public class DbContext extends DbEventBus implements Closeable {
     }
 
 
+    public <T> BaseMapper<T> table(Class<T> clz) {
+        return WoodConfig.mapperAdaptor.createMapperBase(this, clz, null);
+    }
+
+    public <T> BaseMapper<T> table(Class<T> clz, String tableName) {
+        return WoodConfig.mapperAdaptor.createMapperBase(this, clz, tableName);
+    }
+
+
     /**
      * 获取一个表对象［用于操作插入也更新］
      */

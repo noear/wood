@@ -204,7 +204,18 @@ public class MapperWhereQ extends WhereBase<MapperWhereQ> {
         return groupBy(getColumnName(property));
     }
 
+    public MapperWhereQ limit(int size) {
+        _query.limit(size);
+        return this;
+    }
+
+    public MapperWhereQ limit(int start, int size) {
+        _query.limit(start, size);
+        return this;
+    }
+
     protected <C> String getColumnName(Property<C, ?> p) {
         return PropertyWrap.get(p).name;
     }
+
 }

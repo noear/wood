@@ -25,7 +25,7 @@ public interface IQuery extends ICacheController<IQuery> {
      <T> List<T> getList(Class<T> cls) throws SQLException;
      <T> List<T> getList(Class<T> cls,Act2<CacheUsing, List<T>> cacheCondition) throws SQLException;
 
-     DataReader getDataReader() throws SQLException;
+     DataReader getDataReader(int fetchSize) throws SQLException;
 
      DataList getDataList() throws SQLException;
      DataList getDataList(Act2<CacheUsing, DataList> cacheCondition) throws SQLException;

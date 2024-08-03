@@ -64,7 +64,7 @@ class SQLer {
         }
 
         try {
-            rset = query(false);
+            rset = query(false, 0);
 
             if (rset != null && rset.next())
                 return new Variate(null, getObject(1));
@@ -84,7 +84,7 @@ class SQLer {
         }
 
         try {
-            rset = query(false);
+            rset = query(false, 0);
 
             if (rset != null && rset.next()) {
                 model.bind((key) -> {
@@ -116,7 +116,7 @@ class SQLer {
         try {
             List<T> list = new ArrayList<T>();
 
-            rset = query(false);
+            rset = query(false, 0);
 
             while (rset != null && rset.next()) {
                 T item = (T) model.clone();
@@ -160,7 +160,7 @@ class SQLer {
         try {
             DataItem row = new DataItem();
 
-            rset = query(false);
+            rset = query(false, 0);
             ResultSetMetaData meta = rset.getMetaData();
 
             if (rset != null && rset.next()) {
@@ -193,7 +193,7 @@ class SQLer {
         try {
             DataList table = new DataList();
 
-            rset = query(false);
+            rset = query(false, 0);
             ResultSetMetaData meta = rset.getMetaData();
 
             while (rset != null && rset.next()) {
@@ -220,13 +220,13 @@ class SQLer {
         }
     }
 
-    public DataReader getReader() throws SQLException {
+    public DataReader getReader(int fetchSize) throws SQLException {
         if (cmd.context.isCompilationMode()) {
             return null;
         }
 
         try {
-            rset = query(true);
+            rset = query(true, fetchSize);
             return new DataReader(this, cmd, rset);
         } catch (SQLException ex) {
             cmd.context.runExceptionEvent(cmd, ex);
@@ -242,7 +242,7 @@ class SQLer {
         }
 
         try {
-            if (false == buildCMD(false, false)) {
+            if (false == buildCMD(false, false, 0)) {
                 return -1;
             }
 
@@ -270,7 +270,7 @@ class SQLer {
         }
 
         try {
-            if (false == buildCMD0(false, false)) {
+            if (false == buildCMD0(false, false, 0)) {
                 return null;
             }
 
@@ -312,7 +312,7 @@ class SQLer {
         }
 
         try {
-            if (false == buildCMD(true, false)) {
+            if (false == buildCMD(true, false, 0)) {
                 return -1;
             }
 
@@ -348,8 +348,8 @@ class SQLer {
     }
 
     //查询
-    private ResultSet query(boolean isStream) throws SQLException {
-        if (false == buildCMD(false, isStream)) {
+    private ResultSet query(boolean isStream, int fetchSize) throws SQLException {
+        if (false == buildCMD(false, isStream, fetchSize)) {
             return null;
         }
 
@@ -362,8 +362,8 @@ class SQLer {
         }
     }
 
-    private boolean buildCMD(boolean isInsert, boolean isStream) throws SQLException {
-        if (buildCMD0(isInsert, isStream) == false) {
+    private boolean buildCMD(boolean isInsert, boolean isStream, int fetchSize) throws SQLException {
+        if (buildCMD0(isInsert, isStream, fetchSize) == false) {
             return false;
         }
 
@@ -378,7 +378,7 @@ class SQLer {
         return true;
     }
 
-    private boolean buildCMD0(boolean isInsert, boolean isStream) throws SQLException {
+    private boolean buildCMD0(boolean isInsert, boolean isStream, int fetchSize) throws SQLException {
         //*.监听
         if (cmd.context.runExecuteBefEvent(cmd) == false) {
             return false;
@@ -397,7 +397,12 @@ class SQLer {
         else {
             if (isStream) {
                 stmt = c.prepareStatement(cmd.fullText(), ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-                stmt.setFetchSize(Integer.MIN_VALUE);
+
+                if (fetchSize > 0) {
+                    stmt.setFetchSize(fetchSize);
+                } else {
+                    stmt.setFetchSize(Integer.MIN_VALUE);
+                }
             } else {
                 if (isInsert && cmd.context.getDialect().supportsInsertGeneratedKey())
                     stmt = c.prepareStatement(cmd.fullText(), Statement.RETURN_GENERATED_KEYS);
@@ -405,10 +410,6 @@ class SQLer {
                     stmt = c.prepareStatement(cmd.fullText());
             }
         }
-
-//        if(cmd.fetchSize > 0) {
-//            stmt.setFetchSize(cmd.fetchSize);
-//        }
 
         cmd.context.runExecuteStmEvent(cmd, stmt);
 

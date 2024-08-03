@@ -798,8 +798,12 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
     /**
      * @since 2024/06/12
      * */
+    public <T> IDataReader<T> selectReader(String columns, int fetchSize, Class<T> clz) throws SQLException {
+        return selectDo(columns).getDataReader(fetchSize).toEntityReader(clz);
+    }
+
     public <T> IDataReader<T> selectReader(String columns, Class<T> clz) throws SQLException {
-        return selectDo(columns).getDataReader().toEntityReader(clz);
+        return selectReader(columns, 0, clz);
     }
 
     public <T> IPage<T> selectPage(String columns, Class<T> clz) throws SQLException {
@@ -820,8 +824,12 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
     /**
      * @since 2024/06/12
      * */
+    public DataReader selectDataReader(String columns, int fetchSize) throws SQLException {
+        return selectDo(columns).getDataReader(fetchSize);
+    }
+
     public DataReader selectDataReader(String columns) throws SQLException {
-        return selectDo(columns).getDataReader();
+        return selectDataReader(columns, 0);
     }
 
     public IPage<DataItem> selectDataPage(String columns) throws SQLException {

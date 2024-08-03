@@ -25,7 +25,7 @@ public class _ReaderTest {
     public void test_page() throws Exception {
         List<AppxModel> list = new ArrayList<>();
 
-        try (IDataReader<AppxModel> reader = mapper.selectReader(0, 10, q -> q.orderByAsc(AppxModel::getApp_id))) {
+        try (IDataReader<AppxModel> reader = mapper.selectReader(q -> q.orderByAsc(AppxModel::getApp_id).limit(0,10))) {
             AppxModel m;
             do {
                 m = reader.next();
@@ -45,7 +45,7 @@ public class _ReaderTest {
     public void test_page2() throws Exception {
         List<AppxModel> list = new ArrayList<>();
 
-        try (IDataReader<AppxModel> reader = mapper.selectReader(1, 10, q -> q.orderByAsc(AppxModel::getApp_id))) {
+        try (IDataReader<AppxModel> reader = mapper.selectReader(q -> q.orderByAsc(AppxModel::getApp_id).limit(1, 10))) {
             AppxModel m;
             do {
                 m = reader.next();
