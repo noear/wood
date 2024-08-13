@@ -52,10 +52,10 @@ H2, Db2, MySql, Oracle, PostrgeSQL, SqlLite, SqlServer, Phoenix, Presto
 
 ```java
 //BaseMapper 接口
-db.mapperBase(User.class).selectById(1);
+db.table(User.class).selectById(1);
 
 //BaseMapper 接口，lambda 条件查询
-db.mapperBase(User.class).selectList(mq->mq
+db.table(User.class).selectList(mq->mq
         .whereLt(User::getGroup,1)
         .andEq(User::getLabel,"T"));
 
