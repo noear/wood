@@ -1,15 +1,14 @@
 package wood_cache;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.noear.solon.annotation.Inject;
-import org.noear.solon.test.SolonJUnit4ClassRunner;
+import org.noear.solon.test.SolonTest;
 import org.noear.wood.cache.redis.RedisCache;
 
 /**
  * @author noear 2021/4/1 created
  */
-@RunWith(SolonJUnit4ClassRunner.class)
+@SolonTest
 public class RedisCacheTest {
 
     @Inject("${cache2}")

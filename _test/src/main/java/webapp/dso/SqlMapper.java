@@ -24,6 +24,9 @@ public interface SqlMapper{
     //取一批ID
     Map<String,Object> appx_get3(String tb, int app_id) throws SQLException;
 
+    //取一批ID
+    Map<String,Object> appx_get4(Map<String,Object> map) throws SQLException;
+
     List<AppxModel> appx_getlist(int app_id) throws SQLException;
 
     List<AppxModel> appx_getlist_byid(int app_id) throws SQLException;

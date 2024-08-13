@@ -1,6 +1,6 @@
 package wood_rdb.xml;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.noear.solon.Utils;
 import org.noear.wood.xml.XmlSqlCompiler;
 

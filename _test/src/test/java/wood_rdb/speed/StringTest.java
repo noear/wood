@@ -1,6 +1,6 @@
 package wood_rdb.speed;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class StringTest {
     //3个字符串，性能区别不大；4个或以上 StringBuilder 好

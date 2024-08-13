@@ -1,11 +1,9 @@
 package lock;
 
 import lock.web.App;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 import org.noear.solon.test.HttpTestBase;
-import org.noear.solon.test.SolonJUnit4ClassRunner;
 import org.noear.solon.test.SolonTest;
 
 import java.util.*;
@@ -13,7 +11,6 @@ import java.util.*;
 /**
  * @author noear 2022/4/4 created
  */
-@RunWith(SolonJUnit4ClassRunner.class)
 @SolonTest(App.class)
 public class NoLockTest extends HttpTestBase {
 

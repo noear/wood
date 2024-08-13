@@ -1,6 +1,6 @@
 package wood_rdb.features;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.noear.wood.DbContext;
 import org.noear.wood.IPage;
 import wood_rdb.DbUtil;
@@ -67,6 +67,26 @@ public class MapperTest2 {
         assert mapper.appx_get2(1).app_id == 1;
 
         assert mapper.appx_get2(Integer.MAX_VALUE).app_id == null;
+    }
+
+    @Test
+    public void test_get3() throws SQLException {
+        Map data = mapper.appx_get3("appx",1);
+        System.out.println(data);
+
+        assert data.size() > 0;
+    }
+
+    @Test
+    public void test_get4() throws SQLException {
+        Map<String, Object> map = new HashMap<>();
+        map.put("app_id", 1);
+        map.put("tb", "appx");
+
+        Map data = mapper.appx_get4(map);
+        System.out.println(data);
+
+        assert data.size() > 0;
     }
 
     @Test

@@ -28,6 +28,15 @@ public class SqlService{
         return mapper.appx_get3(tb,app_id);
     }
 
+    //取一批ID
+    public Map<String,Object> appx_get4(String tb, int app_id) throws SQLException {
+        Map<String, Object> map = new HashMap<>();
+        map.put("tb", tb);
+        map.put("app_id", app_id);
+
+        return mapper.appx_get4(map);
+    }
+
     public List<AppxModel> appx_getlist(int app_id) throws SQLException{
         return mapper.appx_getlist(app_id);
     }

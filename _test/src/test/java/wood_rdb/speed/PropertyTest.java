@@ -1,6 +1,6 @@
 package wood_rdb.speed;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.noear.wood.wrap.Property;
 import webapp.model.AppxModel;
 

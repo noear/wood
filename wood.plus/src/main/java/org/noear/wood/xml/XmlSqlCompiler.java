@@ -168,7 +168,7 @@ public class XmlSqlCompiler {
         _parseSqlDeclare(dblock);
         _parseSqlCachaTag(dblock);
 
-        newLine(sb, depth).append("public SQLBuilder ").append(dblock._id).append("(Map map) throws Exception{");
+        newLine(sb, depth).append("public SQLBuilder ").append(dblock._id).append("(Map __map) throws Exception{");
 
         //构建代码体和变量
         StringBuilder sb2 = new StringBuilder();
@@ -186,13 +186,13 @@ public class XmlSqlCompiler {
                 //有强类型
                 newLine(sb, depth + 1)
                         .append(dv.type).append(" ").append(dv.name).append(" = ")
-                        .append("(").append(dv.type).append(")map.get(\"").append(dv.name).append("\");");
+                        .append("(").append(dv.type).append(")__map.get(\"").append(dv.name).append("\");");
             } else {
                 //没类型（排除带点的变量，属于模型属性）
                 if(dv.name.indexOf(".") < 0) {
                     newLine(sb, depth + 1)
                             .append("Object ").append(dv.name).append(" = ")
-                            .append("map.get(\"").append(dv.name).append("\");");
+                            .append("__map.get(\"").append(dv.name).append("\");");
                 }
             }
         }
@@ -211,7 +211,7 @@ public class XmlSqlCompiler {
         for (XmlSqlVar dv : dblock.tagMap.values()) {
             if (dv.name.indexOf(".") > 0) {
                 newLine(sb, depth + 1)
-                        .append("map.put(\"").append(dv.name).append("\", ")
+                        .append("__map.put(\"").append(dv.name).append("\", ")
                         .append(dv.name).append(");");
             }
         }
@@ -553,9 +553,9 @@ public class XmlSqlCompiler {
             }
 
             for (XmlSqlVar dv : tmpList) {
-                //如果没有type 申明，采用 map.get()
+                //如果没有type 申明，采用 __map.get()
 //                if(StringUtils.isEmpty(dv.type)){
-//                    txt2 = txt2.replace(dv.mark, "\"+ map.get(\"" + dv.name + "\") +\"");
+//                    txt2 = txt2.replace(dv.mark, "\"+ __map.get(\"" + dv.name + "\") +\"");
 //                }else{
                     txt2 = txt2.replace(dv.mark, "\"+ " + dv.name + " +\"");
 //                }
@@ -585,9 +585,9 @@ public class XmlSqlCompiler {
 
             sb.append("\"").append(txt2).append(" \"");
             tmpList.forEach(v -> {
-                //如果没有type 申明，采用 map.get()
+                //如果没有type 申明，采用 __map.get()
 //                if(StringUtils.isEmpty(v.type)){
-//                    sb.append(",map.get(\"").append(v.name).append("\")");
+//                    sb.append(",__map.get(\"").append(v.name).append("\")");
 //                }else{
                     sb.append(",").append(v.name);
 //                }

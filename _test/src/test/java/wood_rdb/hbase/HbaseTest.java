@@ -1,7 +1,7 @@
 package wood_rdb.hbase;
 
 import com.zaxxer.hikari.HikariDataSource;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 import org.noear.wood.DbContext;
 

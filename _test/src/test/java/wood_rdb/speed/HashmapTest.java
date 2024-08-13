@@ -1,6 +1,6 @@
 package wood_rdb.speed;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;

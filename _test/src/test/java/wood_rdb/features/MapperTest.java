@@ -1,7 +1,7 @@
 package wood_rdb.features;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.noear.wood.BaseMapper;
 import org.noear.wood.DbContext;
 import wood_rdb.DbUtil;
@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Map;
 
 public class MapperTest {
-    DbContext db2 = DbUtil.db;
-    BaseMapper<AppxModel> mapper;
+    static DbContext db2 = DbUtil.db;
+    static BaseMapper<AppxModel> mapper;
 
-    @Before
-    public void test_bef() {
+    @BeforeAll
+    public static void test_bef() {
         mapper = db2.mapperBase(AppxModel.class);
     }
 

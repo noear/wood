@@ -1,12 +1,12 @@
 package wood_adb.features;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.noear.wood.BaseMapper;
 import org.noear.wood.DbContext;
 import org.noear.wood.IPage;
 import webapp.model.AppxModel;
-import wood_adb.DbUtil;
+import wood_rdb.DbUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Map;
 
 public class MapperTest {
-    DbContext db2 = DbUtil.db;
-    BaseMapper<AppxModel> mapper;
+    static DbContext db2 = DbUtil.db;
+    static BaseMapper<AppxModel> mapper;
 
-    @Before
-    public void test_bef() {
+    @BeforeAll
+    public static void test_bef() {
         mapper = db2.mapperBase(AppxModel.class);
     }
 

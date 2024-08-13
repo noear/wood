@@ -1,6 +1,6 @@
 package wood_demo.mapper;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.noear.wood.SQLBuilder;
 import org.noear.wood.xml.*;
 

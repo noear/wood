@@ -113,6 +113,10 @@ return="String" => String （任何单职类型）
         SELECT * FROM user WHERE user_id=@{user_id:long}
     </sql>
 
+    <sql id="user_get2" remarks="获取用户" param="map:Map" return="UserModel">
+        SELECT * FROM user WHERE user_id=@{map.get("user_id")}
+    </sql>
+
     <sql id="user_get_list"
          remarks="获取一批符合条件的用户"
          declare="foList:int,user_id:long"

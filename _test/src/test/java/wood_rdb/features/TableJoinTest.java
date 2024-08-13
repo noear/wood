@@ -1,6 +1,6 @@
 package wood_rdb.features;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.noear.wood.DbContext;
 import wood_rdb.DbUtil;
 import webapp.model.AppxModel;
