@@ -1,4 +1,9 @@
 
+### 1.3.0
+
+* 添加 Command.attachment 字段，用于存放 mapper 执行原始参数
+* 调整 DbAccess 去掉 Variate 使用，从而简化内核层
+
 ### 1.2.15
 * xml_mapper 内部变量 map 改为 __map
 

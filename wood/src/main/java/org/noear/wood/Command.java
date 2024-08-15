@@ -35,6 +35,7 @@ public class Command {
      * 命令参数
      */
     public List<Object> paramS;
+
     /**
      * 数据库上下文（肯定且必须有）
      */
