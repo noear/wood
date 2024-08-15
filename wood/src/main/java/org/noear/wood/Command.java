@@ -46,6 +46,11 @@ public class Command {
     public ICacheServiceEx cache;
 
     /**
+     * 附件（可能为null；目前在 mapper 处理时会产生）
+     * */
+    public Map<String,Object> attachment;
+
+    /**
      * 数据处理事务
      */
     public DbTran tran;

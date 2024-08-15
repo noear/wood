@@ -55,11 +55,6 @@ public class DbXmlsqlProcedure extends DbProcedure {
         return this;
     }
 
-    private void _onSet(String name, Object val){
-        if("_tran".equals(name)){
-        }
-    }
-
     @Override
     protected String getCommandID() {
         return this.commandText;
@@ -114,6 +109,7 @@ public class DbXmlsqlProcedure extends DbProcedure {
 
         cmd.text = sqlBuilder.toString();
         cmd.paramS  = this.paramS;
+        cmd.attachment = _map;
 
         tryCacheController(cmd, block);
 

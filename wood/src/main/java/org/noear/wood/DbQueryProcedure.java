@@ -103,15 +103,20 @@ public class DbQueryProcedure extends DbProcedure {
     }
 
     protected void build(Command cmd, String tml) {
+        Map<String,Object> _map = new LinkedHashMap<>();
         Map<String, String> tmpList = new HashMap<>();
         TmlBlock block = TmlAnalyzer.get(tml, _paramS2);
 
         tml = block.sql2;
 
+        for(Map.Entry<String,Variate> kv: _paramS2.entrySet()){
+            _map.put(kv.getKey(), kv.getValue());
+        }
+
         //1.构建参数
         for (TmlMark tm : block.marks) {
 
-            Variate val = _paramS2.get(tm.name);
+            Object val = _map.get(tm.name);
 
             if (WoodConfig.isDebug) {
                 if (val == null) {
@@ -119,10 +124,11 @@ public class DbQueryProcedure extends DbProcedure {
                 }
             }
 
-            Object tmp = val.getValue();
-            if (tmp instanceof Iterable) { //支持数组型参数
+            _map.put(tm.name, val);
+
+            if (val instanceof Iterable) { //支持数组型参数
                 StringBuilder sb = new StringBuilder();
-                for (Object p2 : (Iterable) tmp) {
+                for (Object p2 : (Iterable) val) {
                     doSet(new Variate(tm.name, p2));//对this.paramS进行设值
 
                     sb.append("?").append(",");
@@ -136,7 +142,7 @@ public class DbQueryProcedure extends DbProcedure {
                 tmpList.put(tm.mark, sb.toString());
             } else {
                 if (tm.mark.startsWith("@")) {
-                    doSet(val);
+                    doSet(_paramS2.get(tm.name)); //Variate
                 }
             }
         }
@@ -178,6 +184,7 @@ public class DbQueryProcedure extends DbProcedure {
         //4.为命令赋值
         cmd.paramS = this.paramS;
         cmd.text = tml;
+        cmd.attachment = _map;
     }
 
     @Override
