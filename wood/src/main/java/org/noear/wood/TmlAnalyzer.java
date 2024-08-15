@@ -10,7 +10,7 @@ public class TmlAnalyzer {
 
     private static Map<String, TmlBlock> libs = new HashMap<>();
 
-    public static TmlBlock get(String tml, Map<String, Variate> args) {
+    public static TmlBlock get(String tml, Map<String, Object> args) {
         TmlBlock block = libs.get(tml);
 
         if (block == null) {
@@ -27,7 +27,7 @@ public class TmlAnalyzer {
         return block;
     }
 
-    private static TmlBlock build(String tml, Map<String, Variate> args) {
+    private static TmlBlock build(String tml, Map<String, Object> args) {
         TmlBlock cache = new TmlBlock();
         cache.sql = tml;
         cache.sql2 = tml;
@@ -36,15 +36,15 @@ public class TmlAnalyzer {
         Map<String, String> tmpList = new HashMap<>();
 
         for (TmlMark tm : cache.marks) {
-            Variate val = args.get(tm.name);
-            Object tmp = val.getValue();
-            if (tmp instanceof Iterable) { //支持数组型参数
+            Object val = args.get(tm.name);
+            if (val instanceof Iterable) { //支持数组型参数
                 tmpList.put(tm.mark, tm.mark);
             } else {
                 if (tm.mark.startsWith("@")) {
                     tmpList.put(tm.mark, "?");
                 } else {
-                    tmpList.put(tm.mark, val.stringValue(""));
+                    String valStr = (val == null ? "" : val.toString());
+                    tmpList.put(tm.mark, valStr);
                 }
             }
         }

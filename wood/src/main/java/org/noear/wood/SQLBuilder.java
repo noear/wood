@@ -208,8 +208,8 @@ public class SQLBuilder {
 
                         DbQuery s1 = (DbQuery) p1;
 
-                        for (Variate p2 : s1.paramS) {
-                            paramS.add(p2.getValue());
+                        for (Object p2 : s1.paramS) {
+                            paramS.add(p2);
                         }
 
                         int idx = builder.indexOf("?...");

@@ -2,7 +2,6 @@ package org.noear.wood;
 
 import org.noear.wood.cache.ICacheServiceEx;
 import org.noear.wood.ext.Act1;
-import org.noear.wood.utils.StringUtils;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -35,7 +34,7 @@ public class Command {
     /**
      * 命令参数
      */
-    public List<Variate> paramS;
+    public List<Object> paramS;
     /**
      * 数据库上下文（肯定且必须有）
      */
@@ -85,12 +84,8 @@ public class Command {
             _paramMap = new LinkedHashMap<>();
 
             int idx = 0;
-            for (Variate v : paramS) {
-                if (StringUtils.isEmpty(v._name)) {
-                    _paramMap.put("v" + idx, v.getValue());
-                } else {
-                    _paramMap.put("v" + idx + "-" + v._name, v.getValue());
-                }
+            for (Object v : paramS) {
+                _paramMap.put("v" + idx, v);
                 idx++;
             }
         }
@@ -114,18 +109,18 @@ public class Command {
                 sb.append(ss[i]);
 
                 if (i < len2) {
-                    Variate val = paramS.get(i);
+                    Object val = paramS.get(i);
 
-                    if (val.isNull()) {
+                    if (val == null) {
                         sb.append("NULL");
-                    } else if (val.getValue() instanceof String) {
-                        sb.append("'").append(val.getString()).append("'");
-                    } else if (val.getValue() instanceof Boolean) {
-                        sb.append(val.getBoolean());
-                    } else if (val.getValue() instanceof Date) {
-                        sb.append("'").append(val.getDate()).append("'");
+                    } else if (val instanceof String) {
+                        sb.append("'").append(val).append("'");
+                    } else if (val instanceof Boolean) {
+                        sb.append(val);
+                    } else if (val instanceof Date) {
+                        sb.append("'").append(val).append("'");
                     } else {
-                        sb.append(val.getValue());
+                        sb.append(val);
                     }
                 }
             }

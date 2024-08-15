@@ -274,9 +274,9 @@ class SQLer {
                 return null;
             }
 
-            for (Variate data : cmd.paramS) {
+            for (Object data : cmd.paramS) {
                 int idx = 1;
-                Object[] ary = (Object[]) data.value();
+                Object[] ary = (Object[]) data;
                 //2.设置参数值
                 for (Object v : ary) {
                     WoodConfig.typeConverter.filling(stmt, idx, v);
@@ -369,8 +369,7 @@ class SQLer {
 
         int idx = 1;
         //2.设置参数值
-        for (Variate v0 : cmd.paramS) {
-            Object v = v0.getValue();
+        for (Object v : cmd.paramS) {
             WoodConfig.typeConverter.filling(stmt, idx, v);
             idx++;
         }

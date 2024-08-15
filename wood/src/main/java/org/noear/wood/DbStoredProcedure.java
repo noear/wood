@@ -64,7 +64,7 @@ public class DbStoredProcedure extends DbProcedure {
 
         if(paramS.size()>0) {
             sb.append('(');
-            for (Variate p : paramS) {
+            for (Object p : paramS) {
                 sb.append("?,");
             }
             sb.deleteCharAt(sb.length()-1);

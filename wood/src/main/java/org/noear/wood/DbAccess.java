@@ -23,7 +23,7 @@ public abstract class DbAccess<T extends DbAccess> implements IWoodKey,IQuery,Se
     /*数据库上下文*/
     public DbContext context;
     /*访问参数*/
-    public List<Variate> paramS = new ArrayList<Variate>();
+    public List<Object> paramS = new ArrayList<>();
 
     /*获取执行命令（由子类实现）*/
     protected abstract Command getCommand() throws SQLException;
@@ -63,14 +63,14 @@ public abstract class DbAccess<T extends DbAccess> implements IWoodKey,IQuery,Se
         return buildWoodKey(paramS);
     }
 
-    protected String buildWoodKey(Collection<Variate> args) {
+    protected String buildWoodKey(Collection<Object> args) {
         if (_woodKey == null) {
             StringBuilder sb = new StringBuilder();
 
             sb.append(getCommandID()).append(":");
 
-            for (Variate p : args) {
-                sb.append("_").append(p.getValue());
+            for (Object p : args) {
+                sb.append("_").append(p);
             }
 
             _woodKey = sb.toString();
@@ -79,29 +79,11 @@ public abstract class DbAccess<T extends DbAccess> implements IWoodKey,IQuery,Se
     }
     /*IWoodKey end*/
 
-    /*获取参数*/
-    protected Variate doGet(String paramName) {
-        for (Variate p1 : paramS) {
-            if (paramName.equals(p1._name)) {
-                return p1;
-            }
-        }
-
-        return null;
-    }
-
-    protected Variate doGet(int index) {
-        return paramS.get(index);
-    }
-
     /*设置参数值*/
-    protected void doSet(String param, Object value) {
-        paramS.add(new Variate(param, value));
-    }
-
-    protected void doSet(Variate value) {
+    protected void doSet(String name, Object value) {
         paramS.add(value);
     }
+
 
     private int _isLog;
 

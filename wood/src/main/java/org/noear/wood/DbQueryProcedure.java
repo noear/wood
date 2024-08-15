@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class DbQueryProcedure extends DbProcedure {
 
-    private Map<String,Variate> _paramS2 = new HashMap<>(); //中间变量，不要清掉
+    private Map<String, Object> _paramS2 = new HashMap<>(); //中间变量，不要清掉
 
     public DbQueryProcedure(DbContext context){
         super(context);
@@ -39,7 +39,7 @@ public class DbQueryProcedure extends DbProcedure {
 
 
     private void set_do(String param, Object value){
-        _paramS2.put(param,new Variate(param,value));
+        _paramS2.put(param, value);
     }
     @Override
     public DbProcedure set(String param, Object value) {
@@ -103,20 +103,14 @@ public class DbQueryProcedure extends DbProcedure {
     }
 
     protected void build(Command cmd, String tml) {
-        Map<String,Object> _map = new LinkedHashMap<>();
         Map<String, String> tmpList = new HashMap<>();
         TmlBlock block = TmlAnalyzer.get(tml, _paramS2);
 
         tml = block.sql2;
 
-        for(Map.Entry<String,Variate> kv: _paramS2.entrySet()){
-            _map.put(kv.getKey(), kv.getValue());
-        }
-
         //1.构建参数
         for (TmlMark tm : block.marks) {
-
-            Object val = _map.get(tm.name);
+            Object val = _paramS2.get(tm.name);
 
             if (WoodConfig.isDebug) {
                 if (val == null) {
@@ -124,12 +118,10 @@ public class DbQueryProcedure extends DbProcedure {
                 }
             }
 
-            _map.put(tm.name, val);
-
             if (val instanceof Iterable) { //支持数组型参数
                 StringBuilder sb = new StringBuilder();
                 for (Object p2 : (Iterable) val) {
-                    doSet(new Variate(tm.name, p2));//对this.paramS进行设值
+                    doSet(tm.name, p2);//对this.paramS进行设值
 
                     sb.append("?").append(",");
                 }
@@ -142,7 +134,7 @@ public class DbQueryProcedure extends DbProcedure {
                 tmpList.put(tm.mark, sb.toString());
             } else {
                 if (tm.mark.startsWith("@")) {
-                    doSet(_paramS2.get(tm.name)); //Variate
+                    doSet(tm.name, val);
                 }
             }
         }
@@ -184,7 +176,7 @@ public class DbQueryProcedure extends DbProcedure {
         //4.为命令赋值
         cmd.paramS = this.paramS;
         cmd.text = tml;
-        cmd.attachment = _map;
+        cmd.attachment = this._paramS2;
     }
 
     @Override
