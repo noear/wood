@@ -40,9 +40,9 @@ public class PropertyWrap implements Serializable {
      */
     public final String name;
     /**
-     * 原始字段名
+     * 原始字段
      */
-    public final String fieldName;
+    public final Field field;
 
     /**
      * 别名
@@ -58,7 +58,7 @@ public class PropertyWrap implements Serializable {
         property = pw.property;
         clzWrap = pw.clzWrap;
         name = pw.name;
-        fieldName = pw.fieldName;
+        field = pw.field;
     }
 
     public PropertyWrap(Property p, String implClz, String name) {
@@ -66,7 +66,7 @@ public class PropertyWrap implements Serializable {
         this.clzWrap = ClassWrap.get(getClz(implClz));
 
         this.name = clzWrap.getFieldWrap(name).name;
-        this.fieldName = clzWrap.getFieldWrap(name).field.getName();
+        this.field = clzWrap.getFieldWrap(name).field;
     }
 
     public String getColumnName(List<ClassWrap> cl) {
