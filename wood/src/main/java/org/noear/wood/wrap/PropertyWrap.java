@@ -2,6 +2,7 @@ package org.noear.wood.wrap;
 
 import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PropertyWrap implements Serializable {
     private static Map<String, Class<?>> _clzCache = new ConcurrentHashMap<>();
+
     private static Class<?> getClz(String implClz) {
         Class<?> clz = _clzCache.get(implClz);
         if (clz == null) {
@@ -25,24 +27,38 @@ public class PropertyWrap implements Serializable {
         return clz;
     }
 
-    /** 属性 */
+    /**
+     * 属性
+     */
     public final Property property;
-    /** Class wrap */
+    /**
+     * Class wrap
+     */
     public final ClassWrap clzWrap;
-    /** 原始字段名 */
+    /**
+     * 列名
+     */
     public final String name;
+    /**
+     * 原始字段
+     */
+    public final Field field;
 
-    /** 别名 */
+    /**
+     * 别名
+     */
     private String _alias;
-    public PropertyWrap alias(String alias){
+
+    public PropertyWrap alias(String alias) {
         _alias = alias;
         return this;
     }
 
-    public PropertyWrap(PropertyWrap pw){
+    public PropertyWrap(PropertyWrap pw) {
         property = pw.property;
         clzWrap = pw.clzWrap;
         name = pw.name;
+        field = pw.field;
     }
 
     public PropertyWrap(Property p, String implClz, String name) {
@@ -50,6 +66,7 @@ public class PropertyWrap implements Serializable {
         this.clzWrap = ClassWrap.get(getClz(implClz));
 
         this.name = clzWrap.getFieldWrap(name).name;
+        this.field = clzWrap.getFieldWrap(name).field;
     }
 
     public String getColumnName(List<ClassWrap> cl) {
@@ -74,7 +91,6 @@ public class PropertyWrap implements Serializable {
     }
 
 
-
     private static Map<Property, PropertyWrap> _popCache = new ConcurrentHashMap<>();
 
     public static <C> PropertyWrap get(Property<C, ?> p) {
@@ -89,7 +105,9 @@ public class PropertyWrap implements Serializable {
         return tmp;
     }
 
-    /** 将 Property 转为 PropertyWrap  */
+    /**
+     * 将 Property 转为 PropertyWrap
+     */
     private static <C> PropertyWrap wrap(Property<C, ?> p) {
         try {
             Method fun = p.getClass().getDeclaredMethod("writeReplace");
