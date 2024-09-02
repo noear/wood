@@ -19,6 +19,14 @@ public class SQLBuilder {
         return builder.indexOf(str);
     }
 
+    public String substring(int start) {
+        return builder.substring(start);
+    }
+
+    public String substring(int start, int end) {
+        return builder.substring(start, end);
+    }
+
     public void clear() {
         builder.delete(0, builder.length());
         paramS.clear();
@@ -37,6 +45,37 @@ public class SQLBuilder {
         paramS.addAll(b_paramS);
     }
 
+    /**
+     * 根据符号插到前面
+     * */
+    public SQLBuilder insertBySymbol(String symbol, String code, Object... args) {
+        SQLPartBuilder pb = new SQLPartBuilder(code, args);
+        int symbolIdx = builder.indexOf(symbol);
+
+        if (symbolIdx < 0) {
+            //如果找不到符号；加到后面
+            builder.append(pb.code);
+            paramS.addAll(pb.paramS);
+        } else {
+            String symbolBef = builder.substring(0, symbolIdx);
+            int symbolBefQm = 0;
+            for (int i = 0; i < symbolBef.length(); i++) {
+                if (symbolBef.charAt(i) == '?') {
+                    symbolBefQm++;
+                }
+            }
+
+            builder.insert(symbolIdx, pb.code);
+            paramS.addAll(symbolBefQm, pb.paramS);
+        }
+
+
+        return this;
+    }
+
+    /**
+     * 插到前面
+     * */
     public SQLBuilder insert(String code, Object... args) {
         SQLPartBuilder pb = new SQLPartBuilder(code, args);
 

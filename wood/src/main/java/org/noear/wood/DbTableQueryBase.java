@@ -1,6 +1,5 @@
 package org.noear.wood;
 
-import org.noear.wood.annotation.Db;
 import org.noear.wood.cache.CacheUsing;
 import org.noear.wood.cache.ICacheController;
 import org.noear.wood.cache.ICacheService;
@@ -413,19 +412,23 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
      * 更新编译
      * */
     protected DbQuery updateCompile(IDataItem data)  {
-        List<Object> args = new ArrayList<Object>();
-        StringBuilder sb = new StringBuilder();
-
-        _context.getDialect().updateCmd(sb, _table);
-
-        updateItemsBuild0(data, sb, args);
-
-        _builder.backup();
-        _builder.insert(sb.toString(), args.toArray());
-
         if (WoodConfig.isUpdateMustConditional && _builder.indexOf(" WHERE ") < 0) {
             throw new RuntimeException("Lack of update condition!!!");
         }
+
+        StringBuilder updateSb = new StringBuilder();
+        _context.getDialect().updateCmdBegin(updateSb, _table);
+
+        List<Object> setArgs = new ArrayList<Object>();
+        StringBuilder setSb = new StringBuilder();
+
+        _context.getDialect().updateCmdSet(setSb, _table);
+        updateItemsBuild0(data, setSb, setArgs);
+
+        _builder.backup();
+        _builder.insert(updateSb.toString());
+        _builder.insertBySymbol(" WHERE ",setSb.toString(), setArgs.toArray());
+
 
         if (limit_top > 0) {
             if (dbType() == DbType.MySQL || dbType() == DbType.MariaDB) {
@@ -537,7 +540,8 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
         List<Object[]> argList = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
 
-        _context.getDialect().updateCmd(sb, _table);
+        _context.getDialect().updateCmdBegin(sb, _table);
+        _context.getDialect().updateCmdSet(sb, _table);
 
         updateItemsBuildByFields0(cols, sb);
 

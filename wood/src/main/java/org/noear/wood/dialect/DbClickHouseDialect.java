@@ -15,8 +15,13 @@ public class DbClickHouseDialect extends DbDialectBase{
     }
 
     @Override
-    public void updateCmd(StringBuilder sb, String table1) {
-        sb.append("ALTER TABLE ").append(table1).append(" UPDATE ");
+    public void updateCmdBegin(StringBuilder sb, String table1) {
+        sb.append("ALTER TABLE ").append(table1);
+    }
+
+    @Override
+    public void updateCmdSet(StringBuilder sb, String table1) {
+        sb.append(" UPDATE ");
     }
 
     @Override

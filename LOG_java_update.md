@@ -1,4 +1,12 @@
 
+### 1.3.2
+
+* 增加 db.update 关联更新支持：`db.table("a").leftJoin("b").on("a.a","b.b").set(...).where(...).update()`
+
+### 1.3.1
+
+* lambda 表达式获取 PropertyWrap，增加字段名
+
 ### 1.3.0
 
 * 添加 Command.attachment 字段，用于存放 mapper 执行原始参数

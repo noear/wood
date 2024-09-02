@@ -32,4 +32,15 @@ public class TableJoinTest {
 
         System.out.print(db.lastCommand.text);
     }
+
+    @Test
+    public void join_update2() throws SQLException {
+        db.table("appx a")
+                .innerJoin("appx_agroup g").onEq("a.agroup_id", "g.agroup_id")
+                .set("a.note", "测试2")
+                .whereEq("a.app_id", 1)
+                .update();
+
+        System.out.print(db.lastCommand.text);
+    }
 }

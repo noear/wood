@@ -160,8 +160,13 @@ public abstract class DbDialectBase implements DbDialect {
     }
 
     @Override
-    public void updateCmd(StringBuilder sb, String table1) {
-        sb.append("UPDATE ").append(table1).append(" SET ");
+    public void updateCmdBegin(StringBuilder sb, String table1) {
+        sb.append("UPDATE ").append(table1);
+    }
+
+    @Override
+    public void updateCmdSet(StringBuilder sb, String table1) {
+        sb.append(" SET ");
     }
 
     @Override
