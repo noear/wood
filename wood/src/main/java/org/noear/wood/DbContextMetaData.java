@@ -12,6 +12,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class DbContextMetaData implements Closeable {
     private String schema;
@@ -26,16 +27,18 @@ public class DbContextMetaData implements Closeable {
     private transient DbType type = DbType.Unknown;
     private transient DbDialect dialect;
 
-    public DbContextMetaData(){
+    private transient ReentrantLock LOCKER = new ReentrantLock();
+
+    public DbContextMetaData() {
 
     }
 
-    public DbContextMetaData(DataSource dataSource){
+    public DbContextMetaData(DataSource dataSource) {
         this(dataSource, null);
     }
 
-    public DbContextMetaData(DataSource dataSource, String schema){
-        if(dataSource == null){
+    public DbContextMetaData(DataSource dataSource, String schema) {
+        if (dataSource == null) {
             throw new IllegalArgumentException("Parameter dataSource cannot be null");
         }
 
@@ -52,7 +55,7 @@ public class DbContextMetaData implements Closeable {
 
     /**
      * 设置数据源
-     * */
+     */
     protected void setDataSource(DataSource ds) {
         dataSource = ds;
     }
@@ -163,16 +166,28 @@ public class DbContextMetaData implements Closeable {
     /**
      * 刷新
      */
-    public synchronized void refresh() {
-        initDo();
+    public void refresh() {
+        LOCKER.tryLock();
+        try {
+            initDo();
+        } finally {
+            LOCKER.unlock();
+        }
     }
 
     /**
      * 刷新表（即清空）
      */
-    public synchronized void refreshTables() {
-        synchronized (this) {
-            tableAll = null;
+    public void refreshTables() {
+        LOCKER.tryLock();
+        try {
+            if (tableAll != null) {
+                Map<String, TableWrap> tmp = tableAll;
+                tableAll = null;
+                tmp.clear();
+            }
+        } finally {
+            LOCKER.unlock();
         }
     }
 
@@ -184,12 +199,15 @@ public class DbContextMetaData implements Closeable {
             return true;
         }
 
-        synchronized (this) {
+        LOCKER.tryLock();
+        try {
             if (dialect != null) {
                 return true;
             }
 
-           return initDo();
+            return initDo();
+        } finally {
+            LOCKER.unlock();
         }
     }
 
@@ -205,7 +223,7 @@ public class DbContextMetaData implements Closeable {
         //这段不能去掉
         initPrintln("Init metadata dialect");
 
-       return openMetaConnection(conn -> {
+        return openMetaConnection(conn -> {
             DatabaseMetaData md = conn.getMetaData();
 
             url = md.getURL();
@@ -311,7 +329,8 @@ public class DbContextMetaData implements Closeable {
             return;
         }
 
-        synchronized (this){
+        LOCKER.tryLock();
+        try {
             if (tableAll != null) {
                 return;
             }
@@ -321,9 +340,11 @@ public class DbContextMetaData implements Closeable {
             //这段不能去掉
             initPrintln("Init metadata tables");
 
-            openMetaConnection(conn->{
+            openMetaConnection(conn -> {
                 initTablesLoadDo(conn.getMetaData());
             });
+        } finally {
+            LOCKER.unlock();
         }
     }
 
@@ -378,7 +399,7 @@ public class DbContextMetaData implements Closeable {
         }
     }
 
-    private boolean openMetaConnection(Act1Ex<Connection,Exception> callback) {
+    private boolean openMetaConnection(Act1Ex<Connection, Exception> callback) {
         Connection conn = null;
         try {
             initPrintln("The db metadata connectivity...");
