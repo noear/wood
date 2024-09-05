@@ -3,10 +3,12 @@ package org.noear.wood;
 import org.noear.wood.utils.StringUtils;
 
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TmlAnalyzer {
+    private static final ReentrantLock SYNC_LOCK = new ReentrantLock();
 
     private static Map<String, TmlBlock> libs = new HashMap<>();
 
@@ -14,13 +16,16 @@ public class TmlAnalyzer {
         TmlBlock block = libs.get(tml);
 
         if (block == null) {
-            synchronized (tml.intern()) {
+            SYNC_LOCK.tryLock();
+            try {
                 block = libs.get(tml);
 
                 if (block == null) {
                     block = build(tml, args);
                     libs.put(tml, block);
                 }
+            } finally {
+                SYNC_LOCK.unlock();
             }
         }
 

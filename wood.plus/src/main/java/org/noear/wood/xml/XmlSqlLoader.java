@@ -7,11 +7,12 @@ import org.noear.wood.utils.ThrowableUtils;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class XmlSqlLoader {
     public static XmlSqlLoader _g = new XmlSqlLoader();
 
-    private static String _lock = "";
+    private static final ReentrantLock SYNC_LOCK = new ReentrantLock();
 
     private boolean is_loaed = false;
     private List<URL> xmlFiles = new ArrayList<>();
@@ -21,12 +22,16 @@ public class XmlSqlLoader {
      */
     public static void load() throws Exception {
         if (_g.is_loaed == false) {
-            synchronized (_lock) {
+            SYNC_LOCK.tryLock();
+
+            try {
                 if (_g.is_loaed == false) {
                     _g.is_loaed = true;
 
                     _g.load0();
                 }
+            }finally {
+                SYNC_LOCK.unlock();
             }
         }
     }

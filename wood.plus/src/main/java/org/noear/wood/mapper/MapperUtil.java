@@ -13,8 +13,11 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 
 public  class MapperUtil {
+    private static final ReentrantLock SYNC_LOCK = new ReentrantLock();
+
     ///////////////////////////////
     // 代理
     ///////////////////////////////
@@ -186,12 +189,15 @@ public  class MapperUtil {
     private static Class<?> getClass(String fullname) throws Exception {
         Class<?> tmp = _clzMap.get(fullname);
         if (tmp == null) {
-            synchronized (fullname.intern()) {
+            SYNC_LOCK.lock();
+            try {
                 tmp = _clzMap.get(fullname);
                 if (tmp == null) {
                     tmp = Class.forName(fullname);
                     _clzMap.put(fullname, tmp);
                 }
+            } finally {
+                SYNC_LOCK.unlock();
             }
         }
 

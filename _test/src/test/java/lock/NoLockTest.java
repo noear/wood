@@ -42,11 +42,9 @@ public class NoLockTest extends HttpTestBase {
     private void exe0(String str) {
         try {
             String tmp = path("/contains").data("key", str).post();
-            //synchronized (str.intern()) {
             if ("0".equals(tmp)) {
                 path("/add").data("key", str).post();
             }
-            //}
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

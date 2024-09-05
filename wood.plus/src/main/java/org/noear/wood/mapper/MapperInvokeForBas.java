@@ -9,8 +9,10 @@ import org.noear.wood.wrap.MethodWrap;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class MapperInvokeForBas implements IMapperInvoke {
+    private static final ReentrantLock SYNC_LOCK = new ReentrantLock();
 
     static Map<Object, BaseMapper> _lib = new HashMap<>();
 
@@ -18,7 +20,9 @@ public class MapperInvokeForBas implements IMapperInvoke {
         BaseMapper tmp = _lib.get(proxy.getClass());
 
         if (tmp == null) {
-            synchronized (proxy.getClass()) {
+            SYNC_LOCK.tryLock();
+
+            try {
                 tmp = _lib.get(proxy.getClass());
 
                 if (tmp == null) {
@@ -26,6 +30,8 @@ public class MapperInvokeForBas implements IMapperInvoke {
                     tmp = WoodConfig.mapperAdaptor.createMapperBase(db, _table.entityClz, _table.tableName);
                     _lib.put(proxy.getClass(), tmp);
                 }
+            }finally {
+                SYNC_LOCK.unlock();
             }
         }
 

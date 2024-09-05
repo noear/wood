@@ -5,9 +5,11 @@ import org.noear.wood.utils.IOUtils;
 import org.w3c.dom.Node;
 
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class XmlSqlBlock {
-    private static final String _lock ="";
+    private static final ReentrantLock SYNC_LOCK = new ReentrantLock();
+
     public String _namespace;
     public String _classname;
     public StringBuilder _classcode;
@@ -32,21 +34,24 @@ public class XmlSqlBlock {
     protected Map<String, Node> __nodeMap;
     protected StringBuilder _texts = new StringBuilder();
 
-    public StringBuilder getClasscode(boolean lineNo){
-        if(lineNo){
-            if(_classcode2==null){
-                synchronized (_lock){
-                    if(_classcode2 == null){
+    public StringBuilder getClasscode(boolean lineNo) {
+        if (lineNo) {
+            if (_classcode2 == null) {
+                SYNC_LOCK.tryLock();
+                try {
+                    if (_classcode2 == null) {
                         _classcode2 = new StringBuilder();
                         String[] ss = _classcode.toString().split("\n");
-                        for(int i=0,len=ss.length; i<len; i++){
-                            _classcode2.append(i+1).append(". ").append(ss[i]).append("\n");
+                        for (int i = 0, len = ss.length; i < len; i++) {
+                            _classcode2.append(i + 1).append(". ").append(ss[i]).append("\n");
                         }
                     }
+                } finally {
+                    SYNC_LOCK.unlock();
                 }
             }
             return _classcode2;
-        }else{
+        } else {
             return _classcode;
         }
     }

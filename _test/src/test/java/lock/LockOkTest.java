@@ -9,6 +9,7 @@ import org.noear.solon.test.SolonTest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author noear 2022/4/4 created
@@ -40,18 +41,20 @@ public class LockOkTest extends HttpTestBase {
         assert rstList.size() == tmpList.size();
     }
 
+    private final ReentrantLock SYNC_LOCK = new ReentrantLock();
 
     private void exe0(String str) {
+        SYNC_LOCK.tryLock();
         try {
-            synchronized (str.intern()) {
-                String tmp = path("/contains").data("key", str).post();
+            String tmp = path("/contains").data("key", str).post();
 
-                if ("0".equals(tmp)) {
-                    path("/add").data("key", str).post();
-                }
+            if ("0".equals(tmp)) {
+                path("/add").data("key", str).post();
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            SYNC_LOCK.unlock();
         }
     }
 }

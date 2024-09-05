@@ -27,7 +27,7 @@ public class DbContextMetaData implements Closeable {
     private transient DbType type = DbType.Unknown;
     private transient DbDialect dialect;
 
-    private transient ReentrantLock LOCKER = new ReentrantLock();
+    protected transient ReentrantLock SYNC_LOCK = new ReentrantLock();
 
     public DbContextMetaData() {
 
@@ -167,11 +167,11 @@ public class DbContextMetaData implements Closeable {
      * 刷新
      */
     public void refresh() {
-        LOCKER.tryLock();
+        SYNC_LOCK.tryLock();
         try {
             initDo();
         } finally {
-            LOCKER.unlock();
+            SYNC_LOCK.unlock();
         }
     }
 
@@ -179,7 +179,7 @@ public class DbContextMetaData implements Closeable {
      * 刷新表（即清空）
      */
     public void refreshTables() {
-        LOCKER.tryLock();
+        SYNC_LOCK.tryLock();
         try {
             if (tableAll != null) {
                 Map<String, TableWrap> tmp = tableAll;
@@ -187,7 +187,7 @@ public class DbContextMetaData implements Closeable {
                 tmp.clear();
             }
         } finally {
-            LOCKER.unlock();
+            SYNC_LOCK.unlock();
         }
     }
 
@@ -199,7 +199,7 @@ public class DbContextMetaData implements Closeable {
             return true;
         }
 
-        LOCKER.tryLock();
+        SYNC_LOCK.tryLock();
         try {
             if (dialect != null) {
                 return true;
@@ -207,7 +207,7 @@ public class DbContextMetaData implements Closeable {
 
             return initDo();
         } finally {
-            LOCKER.unlock();
+            SYNC_LOCK.unlock();
         }
     }
 
@@ -329,7 +329,7 @@ public class DbContextMetaData implements Closeable {
             return;
         }
 
-        LOCKER.tryLock();
+        SYNC_LOCK.tryLock();
         try {
             if (tableAll != null) {
                 return;
@@ -344,7 +344,7 @@ public class DbContextMetaData implements Closeable {
                 initTablesLoadDo(conn.getMetaData());
             });
         } finally {
-            LOCKER.unlock();
+            SYNC_LOCK.unlock();
         }
     }
 

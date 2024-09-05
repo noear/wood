@@ -24,7 +24,6 @@ import java.util.Properties;
  * 数据库上下文
  */
 public class DbContext extends DbEventBus implements Closeable {
-
     /**
      * 最后次执行命令 (线程不安全，仅供调试用)
      */
@@ -60,7 +59,7 @@ public class DbContext extends DbEventBus implements Closeable {
         this.compilationMode = compilationMode;
     }
 
-    private DbContextMetaData metaData = new DbContextMetaData();
+    private final DbContextMetaData metaData = new DbContextMetaData();
 
     /**
      * 获取元信息
@@ -309,12 +308,15 @@ public class DbContext extends DbEventBus implements Closeable {
     public <T> T mapper(Class<T> clz) {
         Object tmp = _mapperMap.get(clz);
         if (tmp == null) {
-            synchronized (_mapperMap) {
+            metaData.SYNC_LOCK.tryLock();
+            try {
                 tmp = _mapperMap.get(clz);
                 if (tmp == null) {
                     tmp = WoodConfig.mapperAdaptor.createMapper(this, clz);
                     _mapperMap.put(clz, tmp);
                 }
+            } finally {
+                metaData.SYNC_LOCK.unlock();
             }
         }
 
