@@ -20,9 +20,43 @@ public class DbContextMetaData implements Closeable {
     private String productVersion;
     private String url;
 
+    private transient DataSource dataSource;
+
     private transient Map<String, TableWrap> tableAll;
     private transient DbType type = DbType.Unknown;
     private transient DbDialect dialect;
+
+    public DbContextMetaData(){
+
+    }
+
+    public DbContextMetaData(DataSource dataSource){
+        this(dataSource, null);
+    }
+
+    public DbContextMetaData(DataSource dataSource, String schema){
+        if(dataSource == null){
+            throw new IllegalArgumentException("Parameter dataSource cannot be null");
+        }
+
+        this.dataSource = dataSource;
+        this.schema = schema;
+    }
+
+    /**
+     * 获取数据源
+     */
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
+    /**
+     * 设置数据源
+     * */
+    protected void setDataSource(DataSource ds) {
+        dataSource = ds;
+    }
+
 
     /**
      * 获取链接字符串
@@ -45,20 +79,6 @@ public class DbContextMetaData implements Closeable {
         return productVersion;
     }
 
-    //数据源
-    private transient DataSource dataSource; //通过dataSourceSet写入
-
-
-    /**
-     * 获取数据源
-     */
-    public DataSource getDataSource() {
-        return dataSource;
-    }
-
-    protected void setDataSource(DataSource ds) {
-        dataSource = ds;
-    }
 
     /**
      * 获取连接
