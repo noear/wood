@@ -77,7 +77,7 @@ public class DbContext extends DbEventBus implements Closeable {
     }
 
     /**
-     * 初始化元信息
+     * 初始化元信息（带状态返回）
      */
     public boolean initMetaData2() {
         return getMetaData().init();

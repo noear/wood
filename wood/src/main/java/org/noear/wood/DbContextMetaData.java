@@ -168,6 +168,15 @@ public class DbContextMetaData implements Closeable {
     }
 
     /**
+     * 刷新表（即清空）
+     */
+    public synchronized void refreshTables() {
+        synchronized (this) {
+            tableAll = null;
+        }
+    }
+
+    /**
      * 初始化
      */
     public boolean init() {
