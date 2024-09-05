@@ -3,6 +3,7 @@ package org.noear.wood.cache;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 本地缓存
@@ -18,6 +19,7 @@ public class LocalCache implements ICacheServiceEx {
     private Map<String, Entity> _data = new ConcurrentHashMap<>();
     //计划线程池（用于超时处理）
     private static ScheduledExecutorService _exec = Executors.newSingleThreadScheduledExecutor();
+    private final ReentrantLock SYNC_LOCK = new ReentrantLock();
 
     public LocalCache() {
         this(300);
@@ -42,7 +44,8 @@ public class LocalCache implements ICacheServiceEx {
             seconds = getDefalutSeconds();
         }
 
-        synchronized (key.intern()) {
+        SYNC_LOCK.tryLock();
+        try {
             Entity ent = _data.get(key);
             if (ent == null) {
                 //如果末存在，则新建实体
@@ -60,6 +63,8 @@ public class LocalCache implements ICacheServiceEx {
                     _data.remove(key);
                 }, seconds, TimeUnit.SECONDS);
             }
+        } finally {
+            SYNC_LOCK.unlock();
         }
     }
 
@@ -72,12 +77,15 @@ public class LocalCache implements ICacheServiceEx {
 
     @Override
     public void remove(String key) {
-        synchronized (key.intern()) {
+        SYNC_LOCK.tryLock();
+        try {
             Entity ent = _data.remove(key);
 
             if (ent != null) {
                 ent.futureDel();
             }
+        } finally {
+            SYNC_LOCK.unlock();
         }
     }
 
