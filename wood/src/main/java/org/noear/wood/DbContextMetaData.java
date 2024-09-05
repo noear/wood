@@ -186,6 +186,8 @@ public class DbContextMetaData implements Closeable {
                 tableAll = null;
                 tmp.clear();
             }
+
+            initTablesDo();
         } finally {
             SYNC_LOCK.unlock();
         }
@@ -335,17 +337,21 @@ public class DbContextMetaData implements Closeable {
                 return;
             }
 
-            tableAll = new HashMap<>();
-
-            //这段不能去掉
-            initPrintln("Init metadata tables");
-
-            openMetaConnection(conn -> {
-                initTablesLoadDo(conn.getMetaData());
-            });
+            initTablesDo();
         } finally {
             SYNC_LOCK.unlock();
         }
+    }
+
+    private void initTablesDo(){
+        tableAll = new HashMap<>();
+
+        //这段不能去掉
+        initPrintln("Init metadata tables");
+
+        openMetaConnection(conn -> {
+            initTablesLoadDo(conn.getMetaData());
+        });
     }
 
     private void initTablesLoadDo(DatabaseMetaData md) throws SQLException {
