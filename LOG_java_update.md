@@ -1,4 +1,4 @@
-### 1.3.3
+### 1.3.4
 
 * 添加 DbContextMetaData:refreshTables
 * 优化 内部锁处理，synchronized 改为 ReentrantLock
