@@ -2,11 +2,11 @@ package org.noear.wood.xml;
 
 import org.noear.liquor.DynamicCompiler;
 import org.noear.liquor.DynamicCompilerException;
+import org.noear.liquor.MemoryByteCode;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,11 +21,10 @@ class CompilerUtil {
         return _instance;
     }
 
-    DynamicCompiler dynamicCompiler;
-    Map<String, Class<?>> dynamicClassMap;
+    private final DynamicCompiler compiler;
 
     private CompilerUtil() {
-        dynamicCompiler = new DynamicCompiler();
+        compiler = new DynamicCompiler();
     }
 
     /**
@@ -36,12 +35,12 @@ class CompilerUtil {
 
         //构造源代码对象
         for (String code : codes) {
-            dynamicCompiler.addSource(getFullClassName(code), code);
+            compiler.addSource(getFullClassName(code), code);
         }
 
         //生成编译任务并执行
         try {
-            dynamicClassMap = dynamicCompiler.build();
+            compiler.build();
 
             //编译耗时(单位ms)
             System.out.println("[Wood] compiler time::" + (System.currentTimeMillis() - startTime) + "ms");
@@ -58,7 +57,7 @@ class CompilerUtil {
      */
     public String getCompilerMessage() {
         StringBuilder sb = new StringBuilder();
-        for (Diagnostic<? extends JavaFileObject> diagnostic : dynamicCompiler.getOriginalErrors()) {
+        for (Diagnostic<? extends JavaFileObject> diagnostic : compiler.getOriginalErrors()) {
             sb.append(diagnostic.toString()).append("\r\n");
         }
         return sb.toString();
@@ -87,19 +86,18 @@ class CompilerUtil {
      * 将编译好的类加载到 SystemClassLoader
      */
     public void loadClassAll(boolean instantiation) {
-        dynamicClassMap.forEach((k, v) -> {
+        for(MemoryByteCode byteCode : compiler.getClassLoader().getByteCodes().values()){
             try {
-                Class<?> cls = dynamicClassMap.get(k);
+                Class<?> cls = compiler.getClassLoader().loadClass(byteCode.getClassName());
 
-                if (instantiation && cls != null) {
+                if (instantiation && cls != null && cls.isInterface() == false) {
                     cls.getDeclaredConstructor().newInstance();
+                    System.out.println("[Wood] String class loaded::" + byteCode.getClassName());
                 }
-
-                System.out.println("[Wood] String class loaded::" + k);
             } catch (Throwable ex) {
                 ex.printStackTrace();
             }
-        });
+        }
     }
 
     public static String varTypeParse(String str) {
