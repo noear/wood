@@ -1,3 +1,7 @@
+### 1.3.5
+
+* liquor 升为 1.1.1
+
 ### 1.3.4
 
 * 添加 DbContextMetaData:refreshTables
