@@ -86,13 +86,13 @@ class CompilerUtil {
      * 将编译好的类加载到 SystemClassLoader
      */
     public void loadClassAll(boolean instantiation) {
-        for(MemoryByteCode byteCode : compiler.getClassLoader().getByteCodes().values()){
+        for (String className : compiler.getClassLoader().getClassNames()) {
             try {
-                Class<?> cls = compiler.getClassLoader().loadClass(byteCode.getClassName());
+                Class<?> cls = compiler.getClassLoader().loadClass(className);
 
                 if (instantiation && cls != null && cls.isInterface() == false) {
                     cls.getDeclaredConstructor().newInstance();
-                    System.out.println("[Wood] String class loaded::" + byteCode.getClassName());
+                    System.out.println("[Wood] String class loaded::" + className);
                 }
             } catch (Throwable ex) {
                 ex.printStackTrace();
