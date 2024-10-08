@@ -60,7 +60,7 @@ public class TableTest {
     public void test0_2() throws Exception {
         Map<String, Object> map = db.table("appx").whereEq("app_id", 1).selectMap("*");
 
-        map.put("app_id",11);
+        map.put("app_id", 11);
 
         assert db.table("appx_copy")
                 .setMap(map)
@@ -96,15 +96,15 @@ public class TableTest {
     public void test1_2() throws Exception {
         AppxD appxD = db.table("appx")
                 .whereEq("app_id", 22)
-                .selectItem("*",AppxD.class);
+                .selectItem("*", AppxD.class);
 
         assert appxD.app_id() == 22;
 
         System.out.println(db.lastCommand.text);
 
-         appxD = DbContext.use("rock").table("appx")
+        appxD = DbContext.use("rock").table("appx")
                 .whereEq("app_id", 22)
-                .selectItem("*",AppxD.class);
+                .selectItem("*", AppxD.class);
 
         assert appxD.app_id() == 22;
     }
@@ -134,8 +134,6 @@ public class TableTest {
                 .whereEq("app_id", null)
                 .selectMapList("*").size() == 0;
     }
-
-
 
 
     @Test
@@ -185,26 +183,47 @@ public class TableTest {
 
     /**
      * 测试带group的分页查询
+     *
      * @throws Exception
      */
     @Test
-    public void test5() throws Exception{
+    public void test5() throws Exception {
 
         long count = db.table("test").selectCount();
-        if(count == 0){
+        if (count == 0) {
             db.table("test").set("v1", 1).set("id", 1).insert();
-            db.table("test").set("v1", 1).set("id", 2).set("v2","a").insert();
+            db.table("test").set("v1", 1).set("id", 2).set("v2", "a").insert();
             db.table("test").set("v1", 2).set("id", 3).insert();
             db.table("test").set("v1", 3).set("id", 4).insert();
         }
 
         long count1 = db.table("test")
-          .whereNeq("v1", 100)
-          .groupBy("v1")
-          .limit(100)
-          .orderByAsc("id")
-          .selectCount();
+                .whereNeq("v1", 100)
+                .groupBy("v1")
+                .limit(100)
+                .orderByAsc("id")
+                .selectCount();
         assert count1 > 0;
 
+    }
+
+    @Test
+    public void test6() throws Exception {
+        String tb = "test";
+        String col = "v1";
+
+        db.getMetaData().refresh();
+
+        assert db.getMetaData().getTable(tb).hasColumn(col);
+
+        boolean isOk = db.table("information_schema.columns")
+                .where("TABLE_SCHEMA=?", db.schema())
+                .and("table_name=?", tb)
+                .and("column_name=?", col)
+                .exists();
+
+        System.out.println(db.lastCommand.text);
+
+        assert isOk;
     }
 }

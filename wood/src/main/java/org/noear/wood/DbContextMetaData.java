@@ -27,7 +27,8 @@ public class DbContextMetaData implements Closeable {
     private transient DbType type = DbType.Unknown;
     private transient DbDialect dialect;
 
-    protected transient ReentrantLock SYNC_LOCK = new ReentrantLock();
+    protected transient DatabaseMetaData real;
+    public final transient ReentrantLock SYNC_LOCK = new ReentrantLock();
 
     public DbContextMetaData() {
 
@@ -60,6 +61,12 @@ public class DbContextMetaData implements Closeable {
         dataSource = ds;
     }
 
+    /**
+     * 获取真实元信息
+     * */
+    public DatabaseMetaData getReal() {
+        return real;
+    }
 
     /**
      * 获取链接字符串
@@ -164,7 +171,7 @@ public class DbContextMetaData implements Closeable {
     }
 
     /**
-     * 刷新
+     * 刷新元信息
      */
     public void refresh() {
         SYNC_LOCK.tryLock();
@@ -176,7 +183,7 @@ public class DbContextMetaData implements Closeable {
     }
 
     /**
-     * 刷新表（即清空）
+     * 刷新表元信息（即清空）
      */
     public void refreshTables() {
         SYNC_LOCK.tryLock();
@@ -226,11 +233,11 @@ public class DbContextMetaData implements Closeable {
         initPrintln("Init metadata dialect");
 
         return openMetaConnection(conn -> {
-            DatabaseMetaData md = conn.getMetaData();
+            real = conn.getMetaData();
 
-            url = md.getURL();
-            productName = md.getDatabaseProductName();
-            productVersion = md.getDatabaseProductVersion();
+            url = real.getURL();
+            productName = real.getDatabaseProductName();
+            productVersion = real.getDatabaseProductVersion();
 
             if (dialect == null) {
                 //1.
@@ -320,7 +327,7 @@ public class DbContextMetaData implements Closeable {
                 case SQLServer:
                     schema = "dbo";
                 case Oracle:
-                    schema = conn.getMetaData().getUserName();
+                    schema = real.getUserName();
                     break;
             }
         }
@@ -343,65 +350,28 @@ public class DbContextMetaData implements Closeable {
         }
     }
 
-    private void initTablesDo(){
-        tableAll = new HashMap<>();
-
+    private void initTablesDo() {
         //这段不能去掉
         initPrintln("Init metadata tables");
 
-        openMetaConnection(conn -> {
-            initTablesLoadDo(conn.getMetaData());
-        });
+        try {
+            initTablesLoadDo(real);
+        } catch (Throwable e) {
+            initPrintln("The db metadata-tables is loaded failed");
+            e.printStackTrace();
+        }
     }
 
     private void initTablesLoadDo(DatabaseMetaData md) throws SQLException {
-        ResultSet rs = null;
+        tableAll = new HashMap<>();
 
-        rs = getDialect().getTables(md, catalog, schema);
-        while (rs.next()) {
-            String name = rs.getString("TABLE_NAME");
-            String remarks = rs.getString("REMARKS");
-            TableWrap tWrap = new TableWrap(name, remarks);
-            tableAll.put(name.toLowerCase(), tWrap);
-        }
-        rs.close();
-
-        List<ColumnWrap> columnAll = new ArrayList<>();
-        rs = md.getColumns(catalog, schema, "%", "%");
-        while (rs.next()) {
-            int digit = 0;
-            Object o = rs.getObject("DECIMAL_DIGITS");
-            if (o != null) {
-                digit = ((Number) o).intValue();
-            }
-
-            ColumnWrap cw = new ColumnWrap(
-                    rs.getString("TABLE_NAME"),
-                    rs.getString("COLUMN_NAME"),
-                    rs.getInt("DATA_TYPE"),
-                    rs.getInt("COLUMN_SIZE"),
-                    digit,
-                    rs.getString("IS_NULLABLE"),
-                    rs.getString("REMARKS")
-            );
-
-            columnAll.add(cw);
-        }
-        rs.close();
-
-
-        for (String key : tableAll.keySet()) { //key 为小写
-            TableWrap tWrap = tableAll.get(key);
-            columnAll.stream().filter(c1 -> key.equals(c1.getTable())).forEach(c1 -> {
-                tWrap.addColumn(c1);
-            });
-
-            rs = md.getPrimaryKeys(catalog, schema, tWrap.getName());
+        try (ResultSet rs = getDialect().getTables(md, catalog, schema)) {
             while (rs.next()) {
-                String idName = rs.getString("COLUMN_NAME");
-                tWrap.addPk(idName);
+                String name = rs.getString("TABLE_NAME");
+                String remarks = rs.getString("REMARKS");
+                TableWrap tWrap = new TableWrap(this, name, remarks);
+                tableAll.put(name.toLowerCase(), tWrap);
             }
-            rs.close();
         }
     }
 
