@@ -176,7 +176,7 @@ public class DbContextMetaData implements Closeable {
     public void refresh() {
         SYNC_LOCK.tryLock();
         try {
-            initDo();
+            initTablesDo(); //initDo(); 这个没必要刷新
         } finally {
             SYNC_LOCK.unlock();
         }
@@ -184,20 +184,12 @@ public class DbContextMetaData implements Closeable {
 
     /**
      * 刷新表元信息（即清空）
+     *
+     * @deprecated 1.3
      */
+    @Deprecated
     public void refreshTables() {
-        SYNC_LOCK.tryLock();
-        try {
-            if (tableAll != null) {
-                Map<String, TableWrap> tmp = tableAll;
-                tableAll = null;
-                tmp.clear();
-            }
-
-            initTablesDo();
-        } finally {
-            SYNC_LOCK.unlock();
-        }
+        refresh();
     }
 
     /**
@@ -343,7 +335,6 @@ public class DbContextMetaData implements Closeable {
             if (tableAll != null) {
                 return;
             }
-
             initTablesDo();
         } finally {
             SYNC_LOCK.unlock();
