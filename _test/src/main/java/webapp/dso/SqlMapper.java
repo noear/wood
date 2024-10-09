@@ -15,6 +15,9 @@ public interface SqlMapper{
     //根据id取条数据
     AppxModel appx_get2(int app_id) throws SQLException;
 
+    //根据id取条数据(err test)
+    AppxModel appx_get2_2(String app_id) throws SQLException;
+
     //取一批ID
     Map<String,Object> appx_get3(String tb, int app_id) throws SQLException;
 

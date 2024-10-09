@@ -3,6 +3,7 @@ package wood_rdb.features;
 import org.junit.jupiter.api.Test;
 import org.noear.wood.DbContext;
 import org.noear.wood.IPage;
+import org.noear.wood.xml.XmlSqlException;
 import wood_rdb.DbUtil;
 import wood_rdb.dso.SqlMapper;
 import webapp.model.AppxModel;
@@ -17,6 +18,16 @@ public class MapperTest2 {
     DbContext db2 = DbUtil.db;
     SqlMapper mapper = db2.mapper(SqlMapper.class);
 
+
+    @Test
+    public void testX0() throws SQLException {
+        try {
+            mapper.appx_get2_2("a");
+        } catch (XmlSqlException ex) {
+            ex.printStackTrace();
+            assert true;
+        }
+    }
 
     @Test
     public void testX1() {
@@ -259,4 +270,5 @@ public class MapperTest2 {
         System.out.println("m15: " + m15);
         assert m15.size() == 5;
     }
+
 }

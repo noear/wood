@@ -1,6 +1,5 @@
 package wood_rdb.dso;
 
-import org.noear.wood.BaseMapper;
 import org.noear.wood.annotation.Sql;
 import org.noear.wood.xml.Namespace;
 import webapp.model.AppxModel;
@@ -17,6 +16,9 @@ public interface SqlMapper extends MyBaseMapper<AppxModel> {
 
     //根据id取条数据
     AppxModel appx_get2(int app_id) throws SQLException;
+
+    //根据id取条数据(err test)
+    AppxModel appx_get2_2(String app_id) throws SQLException;
 
     //取一批ID
     Map<String,Object> appx_get3(String tb, int app_id) throws SQLException;
