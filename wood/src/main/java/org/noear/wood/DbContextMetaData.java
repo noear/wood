@@ -67,7 +67,7 @@ public class DbContextMetaData implements Closeable {
 
     /**
      * 获取真实元信息
-     * */
+     */
     public DatabaseMetaData getReal() {
         return real;
     }
@@ -160,6 +160,25 @@ public class DbContextMetaData implements Closeable {
         initTables();
 
         return tableAll.values();
+    }
+
+    /**
+     * 是否有表列
+     *
+     * @param tableName  表名
+     * @param columnName 列表
+     * @param refresh    是否刷新
+     */
+    public boolean hasTableColumn(String tableName, String columnName, boolean refresh) {
+        TableWrap tmp = getTable(tableName);
+        if (tmp != null) {
+            if (refresh) {
+                tmp.refresh();
+            }
+            return tmp.hasColumn(columnName);
+        } else {
+            return false;
+        }
     }
 
     public TableWrap getTable(String tableName) {
