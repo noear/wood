@@ -22,7 +22,7 @@ class SQLer {
                 rset = null;
             }
         } catch (Exception ex) {
-            cmd.context.runExceptionEvent(null, ex);
+            cmd.context.runExceptionEvent(cmd, ex);
         }
 
         try {
@@ -31,7 +31,7 @@ class SQLer {
                 stmt = null;
             }
         } catch (Exception ex) {
-            cmd.context.runExceptionEvent(null, ex);
+            cmd.context.runExceptionEvent(cmd, ex);
         }
 
         try {
@@ -42,7 +42,7 @@ class SQLer {
                 conn = null;
             }
         } catch (Exception ex) {
-            cmd.context.runExceptionEvent(null, ex);
+            cmd.context.runExceptionEvent(cmd, ex);
         }
     }
 

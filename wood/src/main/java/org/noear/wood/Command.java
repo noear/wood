@@ -61,8 +61,8 @@ public class Command {
     public boolean isBatch = false;
 
     //计时变量
-    public long timestart = 0;
-    public long timestop = 0;
+    public long timestart = 0L;
+    public long timestop = 0L;
 
     /**
      * 受影响的行数，一次可能执行多条 SQL，所以是一个数组
