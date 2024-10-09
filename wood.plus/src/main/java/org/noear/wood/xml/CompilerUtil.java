@@ -2,7 +2,8 @@ package org.noear.wood.xml;
 
 import org.noear.liquor.DynamicCompiler;
 import org.noear.liquor.DynamicCompilerException;
-import org.noear.liquor.MemoryByteCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
@@ -11,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class CompilerUtil {
+    static final Logger log = LoggerFactory.getLogger(CompilerUtil.class);
     static CompilerUtil _instance;
 
     public static CompilerUtil instance() {
@@ -43,7 +45,7 @@ class CompilerUtil {
             compiler.build();
 
             //编译耗时(单位ms)
-            System.out.println("[Wood] compiler time::" + (System.currentTimeMillis() - startTime) + "ms");
+            log.debug("[Wood] compiler time::" + (System.currentTimeMillis() - startTime) + "ms");
 
             return true;
         } catch (DynamicCompilerException e) {
@@ -92,7 +94,7 @@ class CompilerUtil {
 
                 if (instantiation && cls != null && cls.isInterface() == false) {
                     cls.getDeclaredConstructor().newInstance();
-                    System.out.println("[Wood] String class loaded::" + className);
+                    log.debug("[Wood] String class loaded::" + className);
                 }
             } catch (Throwable ex) {
                 ex.printStackTrace();

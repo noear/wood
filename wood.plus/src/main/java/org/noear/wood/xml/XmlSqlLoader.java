@@ -3,6 +3,8 @@ package org.noear.wood.xml;
 import org.noear.wood.WoodException;
 import org.noear.wood.utils.IOUtils;
 import org.noear.wood.utils.ThrowableUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class XmlSqlLoader {
+    static final Logger log = LoggerFactory.getLogger(XmlSqlLoader.class);
     public static XmlSqlLoader _g = new XmlSqlLoader();
 
     private static final ReentrantLock SYNC_LOCK = new ReentrantLock();
@@ -30,7 +33,7 @@ public class XmlSqlLoader {
 
                     _g.load0();
                 }
-            }finally {
+            } finally {
                 SYNC_LOCK.unlock();
             }
         }
@@ -63,7 +66,7 @@ public class XmlSqlLoader {
         //构建代码
         List<String> codes = new ArrayList<>();
         for (URL file : _g.xmlFiles) {
-            System.out.println("[Wood] Xml Compiler: " + file);
+            log.debug("[Wood] Xml Compiler: " + file);
 
             String code = XmlSqlCompiler.parse(file);
 

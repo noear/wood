@@ -3,6 +3,8 @@ package org.noear.wood;
 import org.noear.wood.dialect.*;
 import org.noear.wood.ext.Act1Ex;
 import org.noear.wood.wrap.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.io.Closeable;
@@ -15,6 +17,8 @@ import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class DbContextMetaData implements Closeable {
+    static final Logger log = LoggerFactory.getLogger(DbContextMetaData.class);
+
     private String schema;
     private String catalog;
     private String productName;
@@ -212,17 +216,25 @@ public class DbContextMetaData implements Closeable {
         }
     }
 
-    private void initPrintln(String x) {
-        if (schema == null) {
-            System.out.println("[Wood] Init: " + x);
+    private void initPrintln(String x, boolean warn) {
+        if (warn) {
+            if (schema == null) {
+                log.warn("[Wood] Init: " + x);
+            } else {
+                log.warn("[Wood] Init: " + x + " - " + schema);
+            }
         } else {
-            System.out.println("[Wood] Init: " + x + " - " + schema);
+            if (schema == null) {
+                log.debug("[Wood] Init: " + x);
+            } else {
+                log.debug("[Wood] Init: " + x + " - " + schema);
+            }
         }
     }
 
     private boolean initDo() {
         //这段不能去掉
-        initPrintln("Init metadata dialect");
+        initPrintln("Init metadata dialect", false);
 
         return openMetaConnection(conn -> {
             real = conn.getMetaData();
@@ -343,12 +355,12 @@ public class DbContextMetaData implements Closeable {
 
     private void initTablesDo() {
         //这段不能去掉
-        initPrintln("Init metadata tables");
+        initPrintln("Init metadata tables", false);
 
         try {
             initTablesLoadDo(real);
         } catch (Throwable e) {
-            initPrintln("The db metadata-tables is loaded failed");
+            initPrintln("The db metadata-tables is loaded failed", true);
             e.printStackTrace();
         }
     }
@@ -369,13 +381,13 @@ public class DbContextMetaData implements Closeable {
     private boolean openMetaConnection(Act1Ex<Connection, Exception> callback) {
         Connection conn = null;
         try {
-            initPrintln("The db metadata connectivity...");
+            initPrintln("The db metadata connectivity...", false);
             conn = getMetaConnection();
             callback.run(conn);
-            initPrintln("The db metadata is loaded successfully");
+            initPrintln("The db metadata is loaded successfully", false);
             return true;
         } catch (Throwable ex) {
-            initPrintln("The db metadata is loaded failed");
+            initPrintln("The db metadata is loaded failed", true);
             ex.printStackTrace();
             return false;
         } finally {

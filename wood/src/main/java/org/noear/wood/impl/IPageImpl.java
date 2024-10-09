@@ -47,4 +47,13 @@ public class IPageImpl<T> implements IPage<T> {
             return pages;
         }
     }
+
+    @Override
+    public String toString() {
+        return "IPage{" +
+                "total=" + total +
+                ", size=" + size +
+                ", list=" + list +
+                '}';
+    }
 }

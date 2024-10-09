@@ -19,8 +19,7 @@ public class DbDataSource implements DataSource {
     protected String password;
 
     public DbDataSource(String url) {
-        this.logWriter = new PrintWriter(System.out);
-        this.url = url;
+        this(url, null, null);
     }
 
     public DbDataSource(String url, String username,String password) {
