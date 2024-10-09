@@ -4,6 +4,8 @@ import org.noear.wood.*;
 import org.noear.wood.utils.EntityUtils;
 import org.noear.wood.utils.StringUtils;
 import org.noear.wood.utils.ThrowableUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,6 +16,8 @@ import java.util.Map;
  * Xmlsql过程访问类
  */
 public class DbXmlsqlProcedure extends DbProcedure {
+    static final Logger log = LoggerFactory.getLogger(DbXmlsqlProcedure.class);
+
     private String _sqlid;
     private Map<String,Object> _map = new HashMap<>(); //不能用:Variate, IXmlSqlBuilder 不支持
 
@@ -93,7 +97,7 @@ public class DbXmlsqlProcedure extends DbProcedure {
         try {
             sqlBuilder = block.builder.build(_map);
         }catch (Throwable ex){
-            System.out.println("[Wood] "+block.getClasscode(true));
+            log.warn("[Wood] sqlid=" +_sqlid +", " + block.getClasscode(true));
 
             ex = ThrowableUtils.throwableUnwrap(ex);
             if (ex instanceof RuntimeException) {
