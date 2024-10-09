@@ -14,6 +14,7 @@ public class XmlSqlBlock {
     public String _classname;
     public StringBuilder _classcode;
     public StringBuilder _classcode2;
+    public StringBuilder _methodcode;
     public List<String> _import = new ArrayList<>();
 
     public String _id;
@@ -26,6 +27,7 @@ public class XmlSqlBlock {
     public String _cacheClear;
     public String _cacheTag;
     public String _usingCache;
+
 
     //缓存标签集合
     public Map<String, XmlSqlVar> tagMap = new LinkedHashMap<>();

@@ -86,7 +86,7 @@ public class XmlSqlCompiler {
 
         newLine(sb, 1).append("}");
 
-        //代码码函数
+        //代码函数
         for (int i = 0, len = sql_list.getLength(); i < len; i++) {
             Node n = sql_list.item(i);
             parseSqlNode(node_map, sb, n, _import, namespace, classname);
@@ -128,7 +128,7 @@ public class XmlSqlCompiler {
     }
 
     //xml:解析 sql 指令节点
-    private static void parseSqlNode(Map<String,Node> nodeMap, StringBuilder sb,Node n, String _import, String namespace,  String classname) {
+    private static void parseSqlNode(Map<String,Node> nodeMap, StringBuilder sb0,Node n, String _import, String namespace,  String classname) {
         int depth = 1;
         XmlSqlBlock dblock = new XmlSqlBlock();
 
@@ -142,7 +142,8 @@ public class XmlSqlCompiler {
 
         dblock._namespace = namespace;
         dblock._classname = classname;
-        dblock._classcode = sb;
+        dblock._classcode = sb0;
+        dblock._methodcode = new StringBuilder();
 
         dblock._id = attr(n, "id");
 
@@ -168,7 +169,7 @@ public class XmlSqlCompiler {
         _parseSqlDeclare(dblock);
         _parseSqlCachaTag(dblock);
 
-        newLine(sb, depth).append("public SQLBuilder ").append(dblock._id).append("(Map __map) throws Exception{");
+        newLine(dblock._methodcode, depth).append("public SQLBuilder ").append(dblock._id).append("(Map __map) throws Exception{");
 
         //构建代码体和变量
         StringBuilder sb2 = new StringBuilder();
@@ -184,13 +185,13 @@ public class XmlSqlCompiler {
             var_num++;
             if (dv.type != null && dv.type.length() > 0) {
                 //有强类型
-                newLine(sb, depth + 1)
+                newLine(dblock._methodcode, depth + 1)
                         .append(dv.type).append(" ").append(dv.name).append(" = ")
                         .append("(").append(dv.type).append(")__map.get(\"").append(dv.name).append("\");");
             } else {
                 //没类型（排除带点的变量，属于模型属性）
                 if(dv.name.indexOf(".") < 0) {
-                    newLine(sb, depth + 1)
+                    newLine(dblock._methodcode, depth + 1)
                             .append("Object ").append(dv.name).append(" = ")
                             .append("__map.get(\"").append(dv.name).append("\");");
                 }
@@ -198,29 +199,30 @@ public class XmlSqlCompiler {
         }
 
         if (var_num > 0) {
-            sb.append("\n");
+            dblock._methodcode.append("\n");
         }
 
         //2.打印代码体
-        sb.append(sb2);
+        dblock._methodcode.append(sb2);
 
         //3.打印预处理变量（cache tag 用到的，带.的变量）
         if (dblock.tagMap.size() > 0) {
-            sb.append("\n");
+            dblock._methodcode.append("\n");
         }
         for (XmlSqlVar dv : dblock.tagMap.values()) {
             if (dv.name.indexOf(".") > 0) {
-                newLine(sb, depth + 1)
+                newLine(dblock._methodcode, depth + 1)
                         .append("__map.put(\"").append(dv.name).append("\", ")
                         .append(dv.name).append(");");
             }
         }
 
         //4.结束并返回
-        sb.append("\n");
-        newLine(sb, depth + 1).append("return sb;");
-        newLine(sb, depth).append("}\n");
+        dblock._methodcode.append("\n");
+        newLine(dblock._methodcode, depth + 1).append("return sb;");
+        newLine(dblock._methodcode, depth).append("}\n");
 
+        sb0.append(dblock._methodcode);
         dblock.__nodeMap = null;
 
         //0.确定动作
