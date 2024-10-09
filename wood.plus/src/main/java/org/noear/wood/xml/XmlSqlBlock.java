@@ -15,6 +15,7 @@ public class XmlSqlBlock {
     public StringBuilder _classcode;
     public StringBuilder _classcode2;
     public StringBuilder _methodcode;
+    public StringBuilder _methodcode2;
     public List<String> _import = new ArrayList<>();
 
     public String _id;
@@ -55,6 +56,28 @@ public class XmlSqlBlock {
             return _classcode2;
         } else {
             return _classcode;
+        }
+    }
+
+    public StringBuilder getMethodcode(boolean lineNo) {
+        if (lineNo) {
+            if (_methodcode2 == null) {
+                SYNC_LOCK.tryLock();
+                try {
+                    if (_methodcode2 == null) {
+                        _methodcode2 = new StringBuilder();
+                        String[] ss = _methodcode.toString().split("\n");
+                        for (int i = 0, len = ss.length; i < len; i++) {
+                            _methodcode2.append(i + 1).append(". ").append(ss[i]).append("\n");
+                        }
+                    }
+                } finally {
+                    SYNC_LOCK.unlock();
+                }
+            }
+            return _methodcode2;
+        } else {
+            return _methodcode;
         }
     }
 

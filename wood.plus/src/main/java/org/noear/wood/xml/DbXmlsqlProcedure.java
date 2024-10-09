@@ -94,7 +94,7 @@ public class DbXmlsqlProcedure extends DbProcedure {
             sqlBuilder = block.builder.build(_map);
         } catch (Throwable ex) {
             ex = ThrowableUtils.throwableUnwrap(ex);
-            throw new XmlSqlException(ex, _sqlid, block._methodcode);
+            throw new XmlSqlException(ex, _sqlid, block.getMethodcode(true));
         }
 
         for (Object p1 : sqlBuilder.paramS) {
