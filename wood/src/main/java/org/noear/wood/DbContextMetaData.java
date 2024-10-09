@@ -177,13 +177,15 @@ public class DbContextMetaData implements Closeable {
     /**
      * 刷新元信息
      */
-    public void refresh() {
+    public DbContextMetaData refresh() {
         SYNC_LOCK.tryLock();
         try {
             initTablesDo(); //initDo(); 这个没必要刷新
         } finally {
             SYNC_LOCK.unlock();
         }
+
+        return this;
     }
 
     /**
@@ -234,7 +236,7 @@ public class DbContextMetaData implements Closeable {
 
     private boolean initDo() {
         //这段不能去掉
-        initPrintln("Init metadata dialect", false);
+        initPrintln("The db metadata dialect", false);
 
         return openMetaConnection(conn -> {
             real = conn.getMetaData();
@@ -355,7 +357,7 @@ public class DbContextMetaData implements Closeable {
 
     private void initTablesDo() {
         //这段不能去掉
-        initPrintln("Init metadata tables", false);
+        initPrintln("The db metadata tables", false);
 
         try {
             initTablesLoadDo(real);
