@@ -25,8 +25,9 @@ public class TableWrap {
     /**
      * 刷新
      * */
-    public void refresh() {
+    public TableWrap refresh() {
         tryInit(true);
+        return this;
     }
 
     private void tryInit(boolean refresh) {

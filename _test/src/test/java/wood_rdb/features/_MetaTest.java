@@ -54,4 +54,23 @@ public class _MetaTest {
 
         assert db.getMetaData().getTableAll().size() > 0;
     }
+
+    @Test
+    public void test3() {
+        assert db.getMetaData().getTable("test")
+                .refresh()
+                .hasColumn("v1");
+
+        assert db.getMetaData().getTable("test")
+                .refresh()
+                .hasColumn("v1");
+
+        assert db.getMetaData().getTable("test")
+                .refresh()
+                .hasColumn("v1");
+
+        assert db.getMetaData().getTable("test")
+                .refresh()
+                .hasColumn("v1");
+    }
 }

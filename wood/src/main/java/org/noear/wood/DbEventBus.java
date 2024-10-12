@@ -36,7 +36,9 @@ public class DbEventBus {
     protected void runExceptionEvent(Command cmd, Throwable ex) {
         if (onException_listener.size() > 0) {
             if (cmd != null) {
-                cmd.timestop = System.currentTimeMillis();
+                if (cmd.timestop == 0L) {
+                    cmd.timestop = System.currentTimeMillis();
+                }
             }
 
             onException_listener.forEach(fun -> {
