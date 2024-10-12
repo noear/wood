@@ -311,6 +311,9 @@ public class DbContextMetaData implements Closeable {
             } else if (pn.startsWith("jdbc:presto:")) {
                 type = DbType.Presto;
                 dialect = new DbPrestoDialect();
+            } else if (pn.startsWith("jdbc:duckdb:")) {
+                type = DbType.DuckDb;
+                dialect = new DbDuckDbDialect();
             } else {
                 //做为默认
                 dialect = new DbMySQLDialect();
