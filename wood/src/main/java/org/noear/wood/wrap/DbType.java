@@ -19,6 +19,7 @@ public enum DbType {
     ClickHouse,
     Presto,
 
+    DuckDb,
     /*
     Unknown(DatabaseType.Unknown, "Unknown", "Unknown", 0),
     OracleThinServiceName(DatabaseType.Oracle, "oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:@//${host}:${port}/${name}", 1521),
