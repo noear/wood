@@ -8,15 +8,7 @@ package org.noear.wood.dialect;
  * */
 public class DbDuckDbDialect extends DbDialectBase{
 
-    @Override
-    public String tableFormat(String tb) {
-        return tb.replace("`","");
-    }
 
-    @Override
-    public String columnFormat(String col) {
-        return col.replace("`","");
-    }
     @Override
     public boolean supportsVariablePaging() {
         return true;
