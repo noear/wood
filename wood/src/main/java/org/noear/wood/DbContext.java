@@ -308,7 +308,7 @@ public class DbContext extends DbEventBus implements Closeable {
     public <T> T mapper(Class<T> clz) {
         Object tmp = _mapperMap.get(clz);
         if (tmp == null) {
-            metaData.SYNC_LOCK.tryLock();
+            metaData.SYNC_LOCK.lock();
             try {
                 tmp = _mapperMap.get(clz);
                 if (tmp == null) {

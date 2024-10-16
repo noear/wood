@@ -16,7 +16,7 @@ public class TmlAnalyzer {
         TmlBlock block = libs.get(tml);
 
         if (block == null) {
-            SYNC_LOCK.tryLock();
+            SYNC_LOCK.lock();
             try {
                 block = libs.get(tml);
 

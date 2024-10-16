@@ -197,7 +197,7 @@ public class DbContextMetaData implements Closeable {
      * 刷新元信息
      */
     public DbContextMetaData refresh() {
-        SYNC_LOCK.tryLock();
+        SYNC_LOCK.lock();
         try {
             initTablesDo(); //initDo(); 这个没必要刷新
         } finally {
@@ -225,7 +225,7 @@ public class DbContextMetaData implements Closeable {
             return true;
         }
 
-        SYNC_LOCK.tryLock();
+        SYNC_LOCK.lock();
         try {
             if (dialect != null) {
                 return true;
@@ -366,7 +366,7 @@ public class DbContextMetaData implements Closeable {
             return;
         }
 
-        SYNC_LOCK.tryLock();
+        SYNC_LOCK.lock();
         try {
             if (tableAll != null) {
                 return;

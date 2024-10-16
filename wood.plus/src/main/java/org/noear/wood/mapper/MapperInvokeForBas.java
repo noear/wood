@@ -20,7 +20,7 @@ public class MapperInvokeForBas implements IMapperInvoke {
         BaseMapper tmp = _lib.get(proxy.getClass());
 
         if (tmp == null) {
-            SYNC_LOCK.tryLock();
+            SYNC_LOCK.lock();
 
             try {
                 tmp = _lib.get(proxy.getClass());

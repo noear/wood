@@ -44,7 +44,7 @@ public class LocalCache implements ICacheServiceEx {
             seconds = getDefalutSeconds();
         }
 
-        SYNC_LOCK.tryLock();
+        SYNC_LOCK.lock();
         try {
             Entity ent = _data.get(key);
             if (ent == null) {
@@ -77,7 +77,7 @@ public class LocalCache implements ICacheServiceEx {
 
     @Override
     public void remove(String key) {
-        SYNC_LOCK.tryLock();
+        SYNC_LOCK.lock();
         try {
             Entity ent = _data.remove(key);
 

@@ -25,7 +25,7 @@ public class XmlSqlLoader {
      */
     public static void load() throws Exception {
         if (_g.is_loaed == false) {
-            SYNC_LOCK.tryLock();
+            SYNC_LOCK.lock();
 
             try {
                 if (_g.is_loaed == false) {

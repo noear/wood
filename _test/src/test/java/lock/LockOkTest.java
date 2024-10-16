@@ -44,7 +44,7 @@ public class LockOkTest extends HttpTestBase {
     private final ReentrantLock SYNC_LOCK = new ReentrantLock();
 
     private void exe0(String str) {
-        SYNC_LOCK.tryLock();
+        SYNC_LOCK.lock();
         try {
             String tmp = path("/contains").data("key", str).post();
 

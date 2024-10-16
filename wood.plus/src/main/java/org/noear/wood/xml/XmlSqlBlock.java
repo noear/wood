@@ -40,7 +40,7 @@ public class XmlSqlBlock {
     public StringBuilder getClasscode(boolean lineNo) {
         if (lineNo) {
             if (_classcode2 == null) {
-                SYNC_LOCK.tryLock();
+                SYNC_LOCK.lock();
                 try {
                     if (_classcode2 == null) {
                         _classcode2 = new StringBuilder();
@@ -62,7 +62,7 @@ public class XmlSqlBlock {
     public StringBuilder getMethodcode(boolean lineNo) {
         if (lineNo) {
             if (_methodcode2 == null) {
-                SYNC_LOCK.tryLock();
+                SYNC_LOCK.lock();
                 try {
                     if (_methodcode2 == null) {
                         _methodcode2 = new StringBuilder();

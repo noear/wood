@@ -24,7 +24,7 @@ public class BaseEntityWrap {
     public static BaseEntityWrap get(BaseMapper bm) {
         BaseEntityWrap tmp = _lib.get(bm);
         if (tmp == null) {
-            SYNC_LOCK.tryLock();
+            SYNC_LOCK.lock();
             try {
                 tmp = _lib.get(bm);
                 if (tmp == null) {
