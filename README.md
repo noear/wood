@@ -28,7 +28,7 @@
 		<img src='https://gitee.com/noear/wood/badge/star.svg' alt='gitee star'/>
 	</a>
     <a target="_blank" href='https://github.com/noear/wood/stargazers'>
-		<img src="https://img.shields.io/github/stars/noear/wood.svg?logo=github" alt="github star"/>
+		<img src="https://img.shields.io/github/stars/noear/wood.svg?style=flat&logo=github" alt="github star"/>
 	</a>
 </p>
 <br/>
