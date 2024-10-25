@@ -319,27 +319,28 @@ class SQLer {
 
         try {
             if (false == buildCMD(true, false, 0)) {
-                return -1;
+                return 0;
             }
 
             int affectedRows = stmt.executeUpdate();
-            cmd.affectRow = new long[]{affectedRows};  // 正确记录受影响行数
+            //正确记录受影响行数
+            cmd.affectRow = new long[]{affectedRows};
 
             if (cmd.context.getDialect().supportsInsertGeneratedKey()) {
                 try {
-                    rset = stmt.getGeneratedKeys();
+                    rset = stmt.getGeneratedKeys(); //乎略错误
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
-
+            //这里，是与.execute()区别的地方
             if (rset != null && rset.next()) {
                 Object tmp = getObject(1);
                 if (tmp instanceof Number) {
-                    return ((Number) tmp).longValue();  // 返回生成的主键，不影响cmd.affectRow
+                    //返回生成的主键
+                    return ((Number) tmp).longValue();
                 }
             }
-
             return 0l;
         } catch (SQLException ex) {
             cmd.context.runExceptionEvent(cmd, ex);
