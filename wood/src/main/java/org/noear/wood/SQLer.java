@@ -306,6 +306,12 @@ class SQLer {
     }
 
     //插入
+
+    /**
+     * 插入并返回生成的主键
+     * @return 生成的主键
+     * @throws SQLException
+     */
     public long insert() throws SQLException {
         if (cmd.context.isCompilationMode()) {
             return 0;
@@ -316,23 +322,21 @@ class SQLer {
                 return -1;
             }
 
-            stmt.executeUpdate();
+            int affectedRows = stmt.executeUpdate();
+            cmd.affectRow = new long[]{affectedRows};  // 正确记录受影响行数
 
             if (cmd.context.getDialect().supportsInsertGeneratedKey()) {
                 try {
-                    rset = stmt.getGeneratedKeys(); //乎略错误
+                    rset = stmt.getGeneratedKeys();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
 
-            //这里，是与.execute()区别的地方
             if (rset != null && rset.next()) {
                 Object tmp = getObject(1);
                 if (tmp instanceof Number) {
-                    long l = ((Number) tmp).longValue();
-                    cmd.affectRow = new long[]{l};
-                    return l;
+                    return ((Number) tmp).longValue();  // 返回生成的主键，不影响cmd.affectRow
                 }
             }
 
