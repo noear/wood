@@ -319,7 +319,7 @@ class SQLer {
 
         try {
             if (false == buildCMD(true, false, 0)) {
-                return 0;
+                return -1;
             }
 
             int affectedRows = stmt.executeUpdate();
