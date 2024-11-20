@@ -37,10 +37,11 @@ public class _MetaTest {
         System.out.println(db.getMetaData().getTableAll().size());
 
         assert db.getMetaData().getTableAll().size() > 0;
+        int old_size = db.getMetaData().getTableAll().size();
 
 
         //刷新表
-        db.getMetaData().refreshTables();
+        db.getMetaData().refresh();
 
         db.getMetaData().getTableAll().forEach(tw -> {
             System.out.println("Table2: " + tw.getName());
@@ -53,6 +54,7 @@ public class _MetaTest {
         System.out.println(db.getMetaData().getTableAll().size());
 
         assert db.getMetaData().getTableAll().size() > 0;
+        assert old_size == db.getMetaData().getTableAll().size();
     }
 
     @Test
