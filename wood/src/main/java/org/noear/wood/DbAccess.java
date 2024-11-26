@@ -105,6 +105,15 @@ public abstract class DbAccess<T extends DbAccess> implements IWoodKey,IQuery,Se
     }
 
     /**
+     * 执行插入（返回命令结果）
+     */
+    public Object insertAndResult() throws SQLException {
+        Command cmd = getCommand();
+        new SQLer(cmd).insert();
+        return cmd.result;
+    }
+
+    /**
      * 执行更新（返回受影响数）
      */
     public int update() throws SQLException {

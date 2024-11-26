@@ -111,6 +111,17 @@ public class DbTableQuery extends DbTableQueryBase<DbTableQuery> {
         }
     }
 
+    /**
+     * 执行插入并返回命令结果
+     * */
+    public Object insertAndResult() throws SQLException {
+        if (_item == null) {
+            return 0;
+        } else {
+            return insertAndResult(_item);
+        }
+    }
+
     public Command insertAsCmd() {
         if (_item == null) {
             return null;

@@ -51,6 +51,11 @@ public class Command {
     public Map<String,Object> attachment;
 
     /**
+     * 结果
+     * */
+    public Object result;
+
+    /**
      * 数据处理事务
      */
     public DbTran tran;

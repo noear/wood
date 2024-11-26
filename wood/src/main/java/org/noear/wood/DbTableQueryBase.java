@@ -197,6 +197,17 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
     }
 
     /**
+     * 执行插入并返回命令结果
+     */
+    public Object insertAndResult(IDataItem data) throws SQLException {
+        if (data == null || data.count() == 0) {
+            return null;
+        }
+
+        return insertCompile(data).insertAndResult();
+    }
+
+    /**
      * 插入编译并获取命令
      * */
     public Command insertAsCmd(IDataItem data) {
