@@ -1,3 +1,8 @@
+### 1.3.15
+
+* 添加 cmd.result
+* 优化 dataMeta 加载与刷新处理
+
 ### 1.3.14
 
 * liquor 升为 1.3.7（更好的兼容 jar in jar）
