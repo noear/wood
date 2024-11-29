@@ -374,18 +374,21 @@ public class DbContextMetaData implements Closeable {
         //这段不能去掉
         initPrintln("The db metadata tables", false);
 
-        try (Connection conn = getMetaConnection()) {
-            initTablesLoadDo(conn.getMetaData());
+        try {
+            initTablesLoadDo();
         } catch (Throwable e) {
             initPrintln("The db metadata-tables is loaded failed", true);
             e.printStackTrace();
         }
     }
 
-    private void initTablesLoadDo(DatabaseMetaData md) throws SQLException {
+    private void initTablesLoadDo() throws SQLException {
         tableAll = new HashMap<>();
 
-        try (ResultSet rs = getDialect().getTables(md, catalog, schema)) {
+        DbDialect dbDialect = getDialect();
+
+        try (Connection conn = getMetaConnection();
+             ResultSet rs = dbDialect.getTables(conn.getMetaData(), catalog, schema)) {
             while (rs.next()) {
                 String name = rs.getString("TABLE_NAME");
                 String remarks = rs.getString("REMARKS");
