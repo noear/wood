@@ -138,7 +138,7 @@ public class TypeConverter {
      */
     public void filling(PreparedStatement ps, int idx, Object val) throws SQLException {
         if (val == null) {
-            ps.setNull(idx, Types.VARCHAR);
+            ps.setNull(idx, Types.NULL);
         } else if (val instanceof java.util.Date) {
             if (val instanceof java.sql.Date) {
                 ps.setDate(idx, (java.sql.Date) val);

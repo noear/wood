@@ -2,6 +2,7 @@ package org.noear.wood.wrap;
 
 import org.noear.wood.DbContextMetaData;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -24,7 +25,7 @@ public class TableWrap {
 
     /**
      * 刷新
-     * */
+     */
     public TableWrap refresh() {
         tryInit(true);
         return this;
@@ -44,32 +45,34 @@ public class TableWrap {
             columns = new LinkedHashMap<>();
             pks = new ArrayList<>();
 
-            try (ResultSet rs = meta.getReal().getColumns(meta.getCatalog(), meta.getSchema(), getName(), "%")) {
-                while (rs.next()) {
-                    int digit = 0;
-                    Object o = rs.getObject("DECIMAL_DIGITS");
-                    if (o != null) {
-                        digit = ((Number) o).intValue();
+            try (Connection conn = meta.getMetaConnection()) {
+                try (ResultSet rs = conn.getMetaData().getColumns(meta.getCatalog(), meta.getSchema(), getName(), "%")) {
+                    while (rs.next()) {
+                        int digit = 0;
+                        Object o = rs.getObject("DECIMAL_DIGITS");
+                        if (o != null) {
+                            digit = ((Number) o).intValue();
+                        }
+
+                        ColumnWrap cw = new ColumnWrap(
+                                rs.getString("TABLE_NAME"),
+                                rs.getString("COLUMN_NAME"),
+                                rs.getInt("DATA_TYPE"),
+                                rs.getInt("COLUMN_SIZE"),
+                                digit,
+                                rs.getString("IS_NULLABLE"),
+                                rs.getString("REMARKS")
+                        );
+
+                        addColumn(cw);
                     }
-
-                    ColumnWrap cw = new ColumnWrap(
-                            rs.getString("TABLE_NAME"),
-                            rs.getString("COLUMN_NAME"),
-                            rs.getInt("DATA_TYPE"),
-                            rs.getInt("COLUMN_SIZE"),
-                            digit,
-                            rs.getString("IS_NULLABLE"),
-                            rs.getString("REMARKS")
-                    );
-
-                    addColumn(cw);
                 }
-            }
 
-            try (ResultSet rs = meta.getReal().getPrimaryKeys(meta.getCatalog(), meta.getSchema(), getName())) {
-                while (rs.next()) {
-                    String idName = rs.getString("COLUMN_NAME");
-                    addPk(idName);
+                try (ResultSet rs = conn.getMetaData().getPrimaryKeys(meta.getCatalog(), meta.getSchema(), getName())) {
+                    while (rs.next()) {
+                        String idName = rs.getString("COLUMN_NAME");
+                        addPk(idName);
+                    }
                 }
             }
         } catch (SQLException ex) {

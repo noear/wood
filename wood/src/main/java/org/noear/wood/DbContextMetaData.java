@@ -31,7 +31,6 @@ public class DbContextMetaData implements Closeable {
     private transient DbType type = DbType.Unknown;
     private transient DbDialect dialect;
 
-    protected transient DatabaseMetaData real;
     public final transient ReentrantLock SYNC_LOCK = new ReentrantLock();
 
     public DbContextMetaData() {
@@ -63,13 +62,6 @@ public class DbContextMetaData implements Closeable {
      */
     protected void setDataSource(DataSource ds) {
         dataSource = ds;
-    }
-
-    /**
-     * 获取真实元信息
-     */
-    public DatabaseMetaData getReal() {
-        return real;
     }
 
     /**
@@ -258,18 +250,18 @@ public class DbContextMetaData implements Closeable {
         initPrintln("The db metadata dialect", false);
 
         return openMetaConnection(conn -> {
-            real = conn.getMetaData();
+            DatabaseMetaData metaData = conn.getMetaData();
 
-            url = real.getURL();
-            productName = real.getDatabaseProductName();
-            productVersion = real.getDatabaseProductVersion();
+            url = metaData.getURL();
+            productName = metaData.getDatabaseProductName();
+            productVersion = metaData.getDatabaseProductVersion();
 
             if (dialect == null) {
                 //1.
                 setDatabaseType(url);
 
                 //2.
-                setSchema(conn);
+                setSchema(conn, metaData);
             }
         });
     }
@@ -326,7 +318,7 @@ public class DbContextMetaData implements Closeable {
         }
     }
 
-    private void setSchema(Connection conn) throws SQLException {
+    private void setSchema(Connection conn, DatabaseMetaData metaData) throws SQLException {
         try {
             catalog = conn.getCatalog();
         } catch (Throwable e) {
@@ -355,7 +347,7 @@ public class DbContextMetaData implements Closeable {
                 case SQLServer:
                     schema = "dbo";
                 case Oracle:
-                    schema = real.getUserName();
+                    schema = metaData.getUserName();
                     break;
             }
         }
@@ -371,6 +363,7 @@ public class DbContextMetaData implements Closeable {
             if (tableAll != null) {
                 return;
             }
+
             initTablesDo();
         } finally {
             SYNC_LOCK.unlock();
@@ -381,8 +374,8 @@ public class DbContextMetaData implements Closeable {
         //这段不能去掉
         initPrintln("The db metadata tables", false);
 
-        try {
-            initTablesLoadDo(real);
+        try (Connection conn = getMetaConnection()) {
+            initTablesLoadDo(conn.getMetaData());
         } catch (Throwable e) {
             initPrintln("The db metadata-tables is loaded failed", true);
             e.printStackTrace();
