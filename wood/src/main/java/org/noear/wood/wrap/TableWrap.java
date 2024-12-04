@@ -82,18 +82,23 @@ public class TableWrap {
         }
     }
 
-    private void addPk(String name) {
+    public void addPk(String name) {
         if (pk1 == null) {
             pk1 = name;
+        }
+        if (pks == null){
+            pks = new ArrayList<>();
         }
         pks.add(name);
     }
 
-    private void addColumn(ColumnWrap col) {
+    public void addColumn(ColumnWrap col) {
         if (columnFirst == null) {
             columnFirst = col;
         }
-
+        if (columns == null) {
+            columns = new LinkedHashMap<>();
+        }
         columns.put(col.getName(), col);
     }
 
