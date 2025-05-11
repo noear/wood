@@ -121,6 +121,14 @@ public class DbUtil {
         return ds;
     }
 
+    private final static HikariDataSource dbDuckDbCfg(){
+        HikariDataSource ds = new HikariDataSource();
+
+        ds.setJdbcUrl("jdbc:duckdb:/db/duckdb.db");
+        ds.setDriverClassName("org.duckdb.DuckDBDriver");
+
+        return ds;
+    }
 
     public static DbContext getDb() {
         //

@@ -7,6 +7,8 @@ package org.noear.wood.dialect;
  * @since 3.2
  * */
 public class DbDuckDbDialect extends DbDialectBase{
+
+
     @Override
     public boolean supportsVariablePaging() {
         return true;
