@@ -122,14 +122,14 @@ db.table(logger)
 <dependency>
     <groupId>org.noear</groupId>
     <artifactId>wood</artifactId>
-    <version>1.3.17</version>
+    <version>1.3.18</version>
 </dependency>
 
 <!-- 可选：maven 插件，用于生成Xml sql mapper接口 -->
 <plugin>
     <groupId>org.noear</groupId>
     <artifactId>wood-maven-plugin</artifactId>
-    <version>1.3.17</version>
+    <version>1.3.18</version>
 </plugin>
 ```
 

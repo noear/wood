@@ -1,3 +1,12 @@
+### 1.3.18
+
+* 优化 selectCount 查询时 _flag 改为 woodflag（oralce 里不能用 _flag）
+
+### 1.3.16
+
+* 优化 TableWrap addColumn与addPk方法设置为public,并额外初始化columns与pks参数.
+
+
 ### 1.3.15
 
 * 添加 cmd.result
