@@ -767,7 +767,7 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
         try {
             if(_hasGroup){
                 //有分组时，需要用子表的形式查询
-                DbQuery groupQuery = selectCompile("1 as _flag", false);
+                DbQuery groupQuery = selectCompile("1 as woodflag", false);
 
                 _builder.backup();
 
