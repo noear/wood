@@ -21,6 +21,7 @@ public class BaseEntityWrap {
     private static final ReentrantLock SYNC_LOCK = new ReentrantLock();
 
     private static Map<BaseMapper, BaseEntityWrap> _lib = new HashMap<>();
+
     public static BaseEntityWrap get(BaseMapper bm) {
         BaseEntityWrap tmp = _lib.get(bm);
         if (tmp == null) {
@@ -40,15 +41,15 @@ public class BaseEntityWrap {
     }
 
     private BaseEntityWrap(BaseMapper baseMapper) {
-        if(baseMapper instanceof BaseMapperWrap){
-            entityClz = (Class<?>) ((BaseMapperWrap)baseMapper).entityType();
-        }else{
+        if (baseMapper instanceof BaseMapperWrap) {
+            entityClz = (Class<?>) ((BaseMapperWrap) baseMapper).entityType();
+        } else {
             Type type = baseMapper.getClass().getInterfaces()[0].getGenericInterfaces()[0];
-            entityClz = (Class<?>)((ParameterizedType) type).getActualTypeArguments()[0];
+            entityClz = (Class<?>) ((ParameterizedType) type).getActualTypeArguments()[0];
         }
 
-        if(entityClz == Object.class){
-            throw new RuntimeException("请为BaseMapper申明实体类型");
+        if (entityClz == Object.class) {
+            throw new RuntimeException("There is no entity type declaration, baseMapper：" + baseMapper.getClass().getName());
         }
 
         ClassWrap classWrap = ClassWrap.get(entityClz);
@@ -67,8 +68,8 @@ public class BaseEntityWrap {
             }
         }
 
-        if(pkName == null){
-            throw new RuntimeException("没申明主键");
+        if (pkName == null) {
+            throw new RuntimeException("There is no primary key declaration，entity: " + entityClz.getName());
         }
     }
 }
