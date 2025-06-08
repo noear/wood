@@ -11,8 +11,8 @@
         <relativePath>../wood-parent/pom.xml</relativePath>
     </parent>
 
-
     <artifactId>wood.plus</artifactId>
+    <name>${project.artifactId}</name>
     <packaging>jar</packaging>
 
     <dependencies>
