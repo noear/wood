@@ -12,6 +12,7 @@
     </parent>
 
     <artifactId>wood.cache.memcached</artifactId>
+    <name>${project.artifactId}</name>
     <packaging>jar</packaging>
 
     <dependencies>
