@@ -1,8 +1,22 @@
 package org.noear.wood;
 
-import org.noear.wood.dialect.*;
+import org.noear.wood.dialect.DbClickHouseDialect;
+import org.noear.wood.dialect.DbDb2Dialect;
+import org.noear.wood.dialect.DbDialect;
+import org.noear.wood.dialect.DbDuckDbDialect;
+import org.noear.wood.dialect.DbH2Dialect;
+import org.noear.wood.dialect.DbMySQLDialect;
+import org.noear.wood.dialect.DbOceanBaseMySQLDialect;
+import org.noear.wood.dialect.DbOceanBaseOracleDialect;
+import org.noear.wood.dialect.DbOracleDialect;
+import org.noear.wood.dialect.DbPhoenixDialect;
+import org.noear.wood.dialect.DbPostgreSQLDialect;
+import org.noear.wood.dialect.DbPrestoDialect;
+import org.noear.wood.dialect.DbSQLServerDialect;
+import org.noear.wood.dialect.DbSQLiteDialect;
 import org.noear.wood.ext.Act1Ex;
-import org.noear.wood.wrap.*;
+import org.noear.wood.wrap.DbType;
+import org.noear.wood.wrap.TableWrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,9 +25,13 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class DbContextMetaData implements Closeable {
@@ -258,7 +276,7 @@ public class DbContextMetaData implements Closeable {
 
             if (dialect == null) {
                 //1.
-                setDatabaseType(url);
+                setDatabaseType(conn, url);
 
                 //2.
                 setSchema(conn, metaData);
@@ -266,7 +284,7 @@ public class DbContextMetaData implements Closeable {
         });
     }
 
-    private void setDatabaseType(String jdbcUrl) {
+    private void setDatabaseType(Connection conn, String jdbcUrl) {
         if (jdbcUrl != null) {
             String pn = jdbcUrl.toLowerCase().replace(" ", "");
 
@@ -306,6 +324,13 @@ public class DbContextMetaData implements Closeable {
             } else if (pn.startsWith("jdbc:duckdb:")) {
                 type = DbType.DuckDb;
                 dialect = new DbDuckDbDialect();
+            } else if (pn.startsWith("jdbc:oceanbase:")) {
+                type = DbType.OceanBase;
+                if (isOceanBaseUseMysqlMode(conn)) {
+                    dialect = new DbOceanBaseMySQLDialect();
+                } else {
+                    dialect = new DbOceanBaseOracleDialect();
+                }
             } else {
                 //做为默认
                 dialect = new DbMySQLDialect();
@@ -419,6 +444,34 @@ public class DbContextMetaData implements Closeable {
                 }
             }
         }
+    }
+
+    /**
+     * 判断是否为 MySQL 模式
+     *
+     * @return true MySQL, false Oracle
+     */
+    private boolean isOceanBaseUseMysqlMode(Connection connection) {
+        String sql = "show global variables where variable_name = 'ob_compatibility_mode'";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    String value = resultSet.getString(2);
+                    if (Objects.nonNull(value)) {
+                        return value.toUpperCase().contains("MYSQL");
+                    } else {
+                        throw new RuntimeException("Execute SQL[" + sql + "] return null value");
+                    }
+                } else {
+                    throw new RuntimeException("Execute SQL[" + sql + "] no result");
+                }
+            }
+        } catch (SQLException sqlException) {
+            if (log.isDebugEnabled()) {
+                log.debug("Failed to execute sql :{}, and guesses OceanBase is MySQL Mode!", sql);
+            }
+        }
+        return true;
     }
 
     @Override
