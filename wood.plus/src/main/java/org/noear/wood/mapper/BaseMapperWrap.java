@@ -89,7 +89,7 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         }
 
         return RunUtils.call(()
-                -> getQr().insert(data));
+                -> getQr().usingNull(excludeNull == false).insert(data));
     }
 
     /**
@@ -176,7 +176,7 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         Object id = data.get(tablePk());
 
         return RunUtils.call(()
-                -> getQr().whereEq(tablePk(), id).update(data));
+                -> getQr().whereEq(tablePk(), id).usingNull(excludeNull == false).update(data));
     }
 
     /**
@@ -206,7 +206,7 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         }
 
         return RunUtils.call(() -> {
-            return getQr(c).update(data);
+            return getQr(c).usingNull(excludeNull == false).update(data);
         });
     }
 
@@ -258,9 +258,9 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
         Object id = data.get(tablePk());
 
         if (id == null) {
-            return RunUtils.call(() -> getQr().insert(data));
+            return RunUtils.call(() -> getQr().usingNull(excludeNull == false).insert(data));
         } else {
-            return RunUtils.call(() -> getQr().upsertBy(data, tablePk()));
+            return RunUtils.call(() -> getQr().usingNull(excludeNull == false).upsertBy(data, tablePk()));
         }
     }
 
@@ -296,7 +296,7 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
             data.setEntityIf(entity, (k, v) -> true);
         }
 
-        return RunUtils.call(() -> getQr().upsertBy(data, conditionFields));
+        return RunUtils.call(() -> getQr().usingNull(excludeNull == false).upsertBy(data, conditionFields));
     }
 
     /**

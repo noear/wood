@@ -1,3 +1,7 @@
+### 1.3.19
+
+* 修复 BaseMapperWrap 没有传导 excludeNull 到 usingNull 
+
 ### 1.3.18
 
 * 优化 selectCount 查询时 _flag 改为 woodflag（oralce 里不能用 _flag）
