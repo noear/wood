@@ -66,9 +66,10 @@ class SQLer {
         try {
             rset = query(false, 0);
 
-            if (rset != null && rset.next())
+            if (rset != null && rset.next()) {
+                cmd.affectRow = new long[]{1};
                 return new Variate(null, getObject(1));
-            else
+            } else
                 return null;//new Variate(null,null);
         } catch (SQLException ex) {
             cmd.context.runExceptionEvent(cmd, ex);
@@ -96,6 +97,7 @@ class SQLer {
                     }
                 });
 
+                cmd.affectRow = new long[]{1};
                 return model;
             } else
                 return null;
@@ -139,10 +141,12 @@ class SQLer {
                 list.add(item);
             }
 
-            if (list.size() > 0)
+            if (list.size() > 0) {
+                cmd.affectRow = new long[]{list.size()};
                 return list;
-            else
+            } else {
                 return null;
+            }
 
         } catch (SQLException ex) {
             cmd.context.runExceptionEvent(cmd, ex);
@@ -172,10 +176,12 @@ class SQLer {
                 }
             }
 
-            if (row.count() > 0)
+            if (row.count() > 0) {
+                cmd.affectRow = new long[]{row.count()};
                 return row;
-            else
+            } else {
                 return null;
+            }
 
         } catch (SQLException ex) {
             cmd.context.runExceptionEvent(cmd, ex);
@@ -207,10 +213,12 @@ class SQLer {
                 table.addRow(row);
             }
 
-            if (table.getRowCount() > 0)
+            if (table.getRowCount() > 0) {
+                cmd.affectRow = new long[]{table.getRowCount()};
                 return table;
-            else
+            } else {
                 return null;
+            }
 
         } catch (SQLException ex) {
             cmd.context.runExceptionEvent(cmd, ex);
@@ -309,6 +317,7 @@ class SQLer {
 
     /**
      * 插入并返回生成的主键
+     *
      * @return 生成的主键
      * @throws SQLException
      */
