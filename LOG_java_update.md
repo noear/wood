@@ -1,3 +1,8 @@
+
+### 1.3.22
+
+* 查询时添加 cmd.affectRow 输出
+
 ### 1.3.19
 
 * 修复 BaseMapperWrap 没有传导 excludeNull 到 usingNull 
