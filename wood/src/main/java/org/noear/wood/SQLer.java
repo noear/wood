@@ -70,11 +70,13 @@ class SQLer {
                 cmd.affectRow = new long[]{1};
                 return new Variate(null, getObject(1));
             } else
+                cmd.affectRow = new long[]{0};
                 return null;//new Variate(null,null);
         } catch (SQLException ex) {
             cmd.context.runExceptionEvent(cmd, ex);
             throw ex;
         } finally {
+            cmd.context.runExecuteAftEvent(cmd);
             tryClose();
         }
     }
@@ -145,6 +147,7 @@ class SQLer {
                 cmd.affectRow = new long[]{list.size()};
                 return list;
             } else {
+                cmd.affectRow = new long[]{0};
                 return null;
             }
 
@@ -152,6 +155,7 @@ class SQLer {
             cmd.context.runExceptionEvent(cmd, ex);
             throw ex;
         } finally {
+            cmd.context.runExecuteAftEvent(cmd);
             tryClose();
         }
     }
@@ -180,6 +184,7 @@ class SQLer {
                 cmd.affectRow = new long[]{row.count()};
                 return row;
             } else {
+                cmd.affectRow = new long[]{0};
                 return null;
             }
 
@@ -187,6 +192,7 @@ class SQLer {
             cmd.context.runExceptionEvent(cmd, ex);
             throw ex;
         } finally {
+            cmd.context.runExecuteAftEvent(cmd);
             tryClose();
         }
     }
@@ -217,6 +223,7 @@ class SQLer {
                 cmd.affectRow = new long[]{table.getRowCount()};
                 return table;
             } else {
+                cmd.affectRow = new long[]{0};
                 return null;
             }
 
@@ -224,6 +231,7 @@ class SQLer {
             cmd.context.runExceptionEvent(cmd, ex);
             throw ex;
         } finally {
+            cmd.context.runExecuteAftEvent(cmd);
             tryClose();
         }
     }
@@ -240,6 +248,8 @@ class SQLer {
             cmd.context.runExceptionEvent(cmd, ex);
             tryClose();
             throw ex;
+        } finally {
+            cmd.context.runExecuteAftEvent(cmd);
         }
     }
 
@@ -367,13 +377,9 @@ class SQLer {
             return null;
         }
 
-        try {
-            //3.执行
-            return stmt.executeQuery();
-        } finally {
-            //*.监听
-            cmd.context.runExecuteAftEvent(cmd);
-        }
+        //3.执行
+        return stmt.executeQuery();
+
     }
 
     private boolean buildCMD(boolean isInsert, boolean isStream, int fetchSize) throws SQLException {
