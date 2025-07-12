@@ -181,7 +181,7 @@ class SQLer {
             }
 
             if (row.count() > 0) {
-                cmd.affectRow = new long[]{row.count()};
+                cmd.affectRow = new long[]{1};
                 return row;
             } else {
                 cmd.affectRow = new long[]{0};
