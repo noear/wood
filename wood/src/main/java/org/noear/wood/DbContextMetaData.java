@@ -1,6 +1,7 @@
 package org.noear.wood;
 
 import org.noear.wood.dialect.DbClickHouseDialect;
+import org.noear.wood.dialect.DbDamengDialect;
 import org.noear.wood.dialect.DbDb2Dialect;
 import org.noear.wood.dialect.DbDialect;
 import org.noear.wood.dialect.DbDuckDbDialect;
@@ -331,6 +332,9 @@ public class DbContextMetaData implements Closeable {
                 } else {
                     dialect = new DbOceanBaseOracleDialect();
                 }
+            } else if (pn.startsWith("jdbc:dm:")) {
+                type = DbType.DM;
+                dialect = new DbDamengDialect();
             } else {
                 //做为默认
                 dialect = new DbMySQLDialect();
