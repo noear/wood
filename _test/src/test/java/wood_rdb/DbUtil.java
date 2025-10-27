@@ -2,8 +2,8 @@ package wood_rdb;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.noear.solon.Utils;
+import org.noear.solon.core.util.ResourceUtil;
 import org.noear.wood.DbContext;
-import org.noear.wood.WoodConfig;
 import org.noear.wood.cache.ICacheServiceEx;
 import org.noear.wood.cache.LocalCache;
 
@@ -161,7 +161,7 @@ public class DbUtil {
 
     private static String[] getSqlFromFile(String uri){
         try{
-            InputStream ins = Utils.getResource(uri).openStream();
+            InputStream ins = ResourceUtil.getResourceAsStream(uri);
             int len = ins.available();
             byte[] bs = new byte[len];
             ins.read(bs);

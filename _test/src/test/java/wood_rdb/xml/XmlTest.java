@@ -2,6 +2,7 @@ package wood_rdb.xml;
 
 import org.junit.jupiter.api.Test;
 import org.noear.solon.Utils;
+import org.noear.solon.core.util.ResourceUtil;
 import org.noear.wood.xml.XmlSqlCompiler;
 
 import java.net.URL;
@@ -10,7 +11,7 @@ public class XmlTest {
     @Test
     public void test1() throws Exception {
 
-        URL url = Utils.getResource("bak/test2.xml");
+        URL url = ResourceUtil.getResource("bak/test2.xml");
 
         String code = XmlSqlCompiler.parse(url);
 
@@ -20,7 +21,7 @@ public class XmlTest {
     @Test
     public void test2() throws Exception {
 
-        URL url = Utils.getResource("wood/SqlMapper.xml");
+        URL url = ResourceUtil.getResource("wood/SqlMapper.xml");
 
         String code = XmlSqlCompiler.parse(url);
 

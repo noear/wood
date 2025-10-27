@@ -3,7 +3,7 @@ package lock;
 import lock.web.App;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
-import org.noear.solon.test.HttpTestBase;
+import org.noear.solon.test.HttpTester;
 import org.noear.solon.test.SolonTest;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author noear 2022/4/4 created
  */
 @SolonTest(App.class)
-public class LockOkTest extends HttpTestBase {
+public class LockOkTest extends HttpTester {
 
     @Test
     public void test() throws Exception {

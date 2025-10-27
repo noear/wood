@@ -3,7 +3,7 @@ package lock;
 import lock.web.App;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
-import org.noear.solon.test.HttpTestBase;
+import org.noear.solon.test.HttpTester;
 import org.noear.solon.test.SolonTest;
 
 import java.util.*;
@@ -12,7 +12,7 @@ import java.util.*;
  * @author noear 2022/4/4 created
  */
 @SolonTest(App.class)
-public class NoLockTest extends HttpTestBase {
+public class NoLockTest extends HttpTester {
 
     @Test
     public void test() throws Exception {

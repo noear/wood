@@ -24,7 +24,7 @@
         <dependency>
             <groupId>org.noear</groupId>
             <artifactId>liquor</artifactId>
-            <version>1.6.2</version>
+            <version>${liquor.version}</version>
         </dependency>
     </dependencies>
 </project>
