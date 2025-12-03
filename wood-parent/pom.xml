@@ -36,14 +36,14 @@
     </scm>
 
     <properties>
-        <revision>1.4.2</revision>
+        <revision>1.4.3</revision>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
 
         <slf4j.version>2.0.17</slf4j.version>
-        <redisx.version>1.8.2</redisx.version>
+        <redisx.version>1.8.3</redisx.version>
         <liquor.version>1.6.3</liquor.version>
 
         <maven.compiler.source>${java.version}</maven.compiler.source>

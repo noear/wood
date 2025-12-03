@@ -15,7 +15,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
 
-        <solon.version>2.9.2</solon.version>
+        <solon.version>3.7.2</solon.version>
         <wood.version>1.4.2</wood.version>
     </properties>
 

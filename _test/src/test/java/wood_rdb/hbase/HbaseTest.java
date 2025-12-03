@@ -2,7 +2,7 @@ package wood_rdb.hbase;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.Test;
-import org.noear.snack.ONode;
+import org.noear.snack4.ONode;
 import org.noear.wood.DbContext;
 
 import java.util.List;
@@ -48,6 +48,6 @@ public class HbaseTest {
 //                "ORDER BY sum(population) DESC LIMIT 1","CN")
 //                .getDataItem();
 
-        System.out.println(ONode.stringify(dl));
+        System.out.println(ONode.serialize(dl));
     }
 }
