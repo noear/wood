@@ -23,6 +23,11 @@ public enum DbType {
 
     OceanBase,
 
+    /**
+     * kingbase
+     */
+    KingbaseES,
+
     DM,
     /*
     Unknown(DatabaseType.Unknown, "Unknown", "Unknown", 0),
