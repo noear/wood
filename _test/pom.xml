@@ -19,7 +19,8 @@
 
     <properties>
         <jmh.version>1.25</jmh.version>
-        <solon.version>3.7.2</solon.version>
+        <solon.version>3.8.0</solon.version>
+        <snack4.version>4.0.22</snack4.version>
     </properties>
 
     <dependencies>
@@ -52,6 +53,12 @@
         <dependency>
             <groupId>org.noear</groupId>
             <artifactId>wood.plus</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.noear</groupId>
+            <artifactId>snack4</artifactId>
+            <version>${snack4.version}</version>
         </dependency>
 
         <dependency>
