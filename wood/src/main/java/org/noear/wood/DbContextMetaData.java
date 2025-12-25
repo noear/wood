@@ -6,6 +6,9 @@ import org.noear.wood.dialect.DbDb2Dialect;
 import org.noear.wood.dialect.DbDialect;
 import org.noear.wood.dialect.DbDuckDbDialect;
 import org.noear.wood.dialect.DbH2Dialect;
+import org.noear.wood.dialect.DbKingbaseMySQLDialect;
+import org.noear.wood.dialect.DbKingbaseOracleDialect;
+import org.noear.wood.dialect.DbKingbasePostgreDialect;
 import org.noear.wood.dialect.DbMySQLDialect;
 import org.noear.wood.dialect.DbOceanBaseMySQLDialect;
 import org.noear.wood.dialect.DbOceanBaseOracleDialect;
@@ -335,6 +338,17 @@ public class DbContextMetaData implements Closeable {
             } else if (pn.startsWith("jdbc:dm:")) {
                 type = DbType.DM;
                 dialect = new DbDamengDialect();
+            } else if (pn.startsWith("jdbc:kingbase")) {
+                type = DbType.KingbaseES;
+                String kingbaseMode = getKingbaseMode(conn);
+                if ("mysql".equalsIgnoreCase(kingbaseMode)) {
+                    dialect = new DbKingbaseMySQLDialect();
+                } else if ("oracle".equalsIgnoreCase(kingbaseMode)) {
+                    dialect = new DbKingbaseOracleDialect();
+                } else {
+                    // 做为默认
+                    dialect = new DbKingbasePostgreDialect();
+                }
             } else {
                 //做为默认
                 dialect = new DbMySQLDialect();
@@ -476,6 +490,25 @@ public class DbContextMetaData implements Closeable {
             }
         }
         return true;
+    }
+
+    /**
+     * 获取 kingbase 使用的模式，oracle, MySQL
+     */
+    private static String getKingbaseMode(Connection connection) {
+        String sql = "show database_mode";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getString(1);
+                } else {
+                    throw new RuntimeException("Execute SQL[" + sql + "] no result");
+                }
+            }
+        } catch (SQLException sqlException) {
+            log.error("Failed to execute sql :{}, message:", sql, sqlException);
+            throw new RuntimeException("SQL execution failed", sqlException);
+        }
     }
 
     @Override
