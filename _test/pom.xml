@@ -19,8 +19,8 @@
 
     <properties>
         <jmh.version>1.25</jmh.version>
-        <solon.version>3.8.0</solon.version>
-        <snack4.version>4.0.22</snack4.version>
+        <solon.version>3.10.4</solon.version>
+        <snack4.version>4.0.46</snack4.version>
     </properties>
 
     <dependencies>
