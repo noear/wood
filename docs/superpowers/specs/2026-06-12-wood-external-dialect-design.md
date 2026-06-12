@@ -1,11 +1,11 @@
 # Wood 外部方言可插拔机制 — 设计
 
-| 项目 | Wood |
-|---|---|
-| 日期 | 2026-06-12 |
-| 状态 | 待复核（设计已通过 §1–§4 确认） |
-| 适用版本 | 1.4.5+ |
-| 目标读者 | Wood 维护者、二方库开发者 |
+| 项目   | Wood                |
+|------|---------------------|
+| 日期   | 2026-06-12          |
+| 状态   | 待复核（设计已通过 §1–§4 确认） |
+| 适用版本 | 1.4.5+              |
+| 目标读者 | Wood 维护者、二方库开发者     |
 
 ---
 
@@ -16,8 +16,10 @@
 Wood 的方言机制由三个相互耦合的部分组成：
 
 - `DbType` 是一个 enum（`wood/src/main/java/org/noear/wood/wrap/DbType.java`），共 17 个常量，定义在核心包中。
-- `DbContextMetaData.setDatabaseType()` 通过一长串 `if/else jdbcUrl.startsWith(...)` 把 JDBC URL 映射到内置 `DbDialect` 实现（`DbContextMetaData.java:292-367`）。
-- Kingbase mode、OceanBase mode 这类"需要查连接"的判断散落在 `DbContextMetaData.isOceanBaseUseMysqlMode()` / `getKingbaseMode()` 私有方法里。
+- `DbContextMetaData.setDatabaseType()` 通过一长串 `if/else jdbcUrl.startsWith(...)` 把 JDBC URL 映射到内置 `DbDialect`
+  实现（`DbContextMetaData.java:292-367`）。
+- Kingbase mode、OceanBase mode 这类"需要查连接"的判断散落在 `DbContextMetaData.isOceanBaseUseMysqlMode()` /
+  `getKingbaseMode()` 私有方法里。
 
 每次新增数据库都要：
 
@@ -50,18 +52,19 @@ Wood 的方言机制由三个相互耦合的部分组成：
 
 ### 2.1 核心思路
 
-把"识别数据库 → 选方言"的逻辑从 `DbContextMetaData.setDatabaseType()` 的硬编码 if/else 中抽出来，落到一个可扩展的 Registry 上。原 if/else 退化为"内置兜底"，作为全局 Registry 的预填项；行为完全等价。
+把"识别数据库 → 选方言"的逻辑从 `DbContextMetaData.setDatabaseType()` 的硬编码 if/else 中抽出来，落到一个可扩展的
+Registry 上。原 if/else 退化为"内置兜底"，作为全局 Registry 的预填项；行为完全等价。
 
 ### 2.2 组件清单
 
-| 组件 | 位置 | 角色 |
-|---|---|---|
-| `DbDialect`（接口扩展） | `wood/.../dialect/DbDialect.java` | 新增 1 个 `default` 方法 `typeName()` |
-| `DbDialectRegistry`（新） | `wood/.../dialect/DbDialectRegistry.java` | 持有 matcher 列表 + fixed 槽位 + fallback；提供 `find(conn)` |
-| `WoodConfig`（扩展） | `wood/.../WoodConfig.java` | 新增 `static DbDialectRegistry globalDialectRegistry` 与 `registerDialect(...)` 便捷方法 |
-| `DbContext`（扩展） | `wood/.../DbContext.java` | 持有实例级 `DbDialectRegistry`；新增 `getDialectRegistry()` / `setDialectRegistry(...)`；构造 metadata 时设 `owner` 反向引用；`setDialect(DbType, DbDialect)` 内部重写为 `setFixed` |
-| `DbContextMetaData`（重构） | `wood/.../DbContextMetaData.java` | 新增 `owner` 反向引用；`setDatabaseType()` 改为"实例 → 全局"两级查找 |
-| `DbType`（兼容保留） | `wood/.../wrap/DbType.java` | 新增 1 个 `External` 常量；其余 17 个保持不变 |
+| 组件                      | 位置                                        | 角色                                                                                                                                                           |
+|-------------------------|-------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `DbDialect`（接口扩展）       | `wood/.../dialect/DbDialect.java`         | 新增 1 个 `default` 方法 `typeName()`                                                                                                                             |
+| `DbDialectRegistry`（新）  | `wood/.../dialect/DbDialectRegistry.java` | 持有 matcher 列表 + fixed 槽位 + fallback；提供 `find(conn)`                                                                                                          |
+| `WoodConfig`（扩展）        | `wood/.../WoodConfig.java`                | 新增 `static DbDialectRegistry globalDialectRegistry` 与 `registerDialect(...)` 便捷方法                                                                            |
+| `DbContext`（扩展）         | `wood/.../DbContext.java`                 | 持有实例级 `DbDialectRegistry`；新增 `getDialectRegistry()` / `setDialectRegistry(...)`；构造 metadata 时设 `owner` 反向引用；`setDialect(DbType, DbDialect)` 内部重写为 `setFixed` |
+| `DbContextMetaData`（重构） | `wood/.../DbContextMetaData.java`         | 新增 `owner` 反向引用；`setDatabaseType()` 改为"实例 → 全局"两级查找                                                                                                          |
+| `DbType`（兼容保留）          | `wood/.../wrap/DbType.java`               | 新增 1 个 `External` 常量；其余 17 个保持不变                                                                                                                             |
 
 ### 2.3 调用形态
 
@@ -69,20 +72,38 @@ Wood 的方言机制由三个相互耦合的部分组成：
 // 方式一：全局一次性注册（最常见场景）
 WoodConfig.registerDialect(
     new DbGbase8sDialect(),
-    conn -> {
-        String url = conn.getMetaData().getURL();
-        return url.startsWith("jdbc:gbasedbt-sqli:")
-            || url.startsWith("jdbc:informix-sqli:");
+
+conn ->{
+String url = conn.getMetaData().getURL();
+        return url.
+
+startsWith("jdbc:gbasedbt-sqli:")
+            ||url.
+
+startsWith("jdbc:informix-sqli:");
     }
-);
+            );
 
 // 方式二：实例级覆盖（多数据源 / 测试用）
 DbContext ctx = new DbContext(ds);
-ctx.getDialectRegistry().register(new DbMyDialect(),
-    conn -> conn.getMetaData().getURL().startsWith("jdbc:mydb:"));
+ctx.
+
+getDialectRegistry().
+
+register(new DbMyDialect(),
+
+conn ->conn.
+
+getMetaData().
+
+getURL().
+
+startsWith("jdbc:mydb:"));
 
 // 方式三：手动 setDialect（保持现有 API，内部转写为 setFixed）
-ctx.setDialect(DbType.GBase8s, new DbGbase8sDialect());
+        ctx.
+
+setDialect(DbType.GBase8s, new DbGbase8sDialect());
 ```
 
 ---
@@ -104,7 +125,8 @@ public interface DbDialect {
 }
 ```
 
-仅此一项加法。`urlPrefixes()` / `matcher(Connection)` 经讨论后**不放在接口上**，匹配条件完全由注册方提供，dialect 类不需要自描述 URL 知识。
+仅此一项加法。`urlPrefixes()` / `matcher(Connection)` 经讨论后**不放在接口上**，匹配条件完全由注册方提供，dialect 类不需要自描述
+URL 知识。
 
 ### 3.2 `DbDialectRegistry`（新类）
 
@@ -155,7 +177,8 @@ public class DbDialectRegistry {
 2. 否则顺序遍历 `matchers`，调用 `matcher.run(conn)`，首个 `true` 返回对应 `Match`；
 3. 全未命中 → 返回 `Match(fallback, fallbackType, isFallback=true)`。
 
-**`builtin()` 静态工厂**：把现有 if/else 等价转写为 matcher 条目。OceanBase / Kingbase 这类需要查连接的 ad-hoc 判断转写为闭包，逻辑平移（行为不变）。
+**`builtin()` 静态工厂**：把现有 if/else 等价转写为 matcher 条目。OceanBase / Kingbase 这类需要查连接的 ad-hoc
+判断转写为闭包，逻辑平移（行为不变）。
 
 ### 3.3 `WoodConfig` 扩展
 
@@ -180,8 +203,13 @@ public class DbContext {
     // ... 现有字段 ...
     private DbDialectRegistry registry = new DbDialectRegistry();
 
-    public DbDialectRegistry getDialectRegistry() { return registry; }
-    public void setDialectRegistry(DbDialectRegistry registry) { this.registry = registry; }
+    public DbDialectRegistry getDialectRegistry() {
+        return registry;
+    }
+
+    public void setDialectRegistry(DbDialectRegistry registry) {
+        this.registry = registry;
+    }
 
     /** 兼容旧 API：等价于"强制指定"，无视 URL/连接 */
     public void setDialect(DbType dbType, DbDialect dbDialect) {
@@ -200,7 +228,9 @@ public class DbContextMetaData implements Closeable {
     private DbContext owner;        // 新增：用于回查实例级 registry
 
     /** 由 DbContext 在创建 metadata 时设置（protected 包内可见） */
-    protected void setOwner(DbContext owner) { this.owner = owner; }
+    protected void setOwner(DbContext owner) {
+        this.owner = owner;
+    }
 }
 ```
 
@@ -241,7 +271,8 @@ private boolean initDo() {
 }
 ```
 
-`isOceanBaseUseMysqlMode(Connection)` 与 `getKingbaseMode(Connection)` 从 `DbContextMetaData` 平移到 `DbDialectRegistry`（或保留在 metadata 中并在 builtin 闭包内引用，效果相同——见 §6 决策点）。
+`isOceanBaseUseMysqlMode(Connection)` 与 `getKingbaseMode(Connection)` 从 `DbContextMetaData` 平移到 `DbDialectRegistry`
+（或保留在 metadata 中并在 builtin 闭包内引用，效果相同——见 §6 决策点）。
 
 ### 3.6 `DbType` 扩展
 
@@ -255,23 +286,24 @@ public enum DbType {
 }
 ```
 
-外部注册的方言在 `find` 命中时 `type` 字段统一为 `DbType.External`；调用方若需具体名字，通过 `ctx.getDialect().typeName()` 拿。
+外部注册的方言在 `find` 命中时 `type` 字段统一为 `DbType.External`；调用方若需具体名字，通过 `ctx.getDialect().typeName()`
+拿。
 
 ---
 
 ## 4. 错误处理
 
-| 场景 | 行为 |
-|---|---|
-| `matcher.run(conn)` 抛 `SQLException` | 捕获后**继续遍历下一个 matcher**，记 warn 日志 |
-| `matcher.run(conn)` 抛 `RuntimeException` | 同上，捕获并 warn |
-| `register(dialect, matcher)` 时 `dialect == null` | 抛 `IllegalArgumentException`（fail-fast） |
-| `register(dialect, matcher)` 时 `matcher == null` | 抛 `IllegalArgumentException` |
-| `setFixed(null, _)` | 等价于"取消强制"，fixed 槽位清空 |
-| 多次 `setFixed` | 后注册覆盖前一次 |
-| 多次 `register` 同一 dialect | 允许（不报错），按注册顺序匹配 |
-| `find()` 全未命中 | 返回 fallback（默认 MySQL） |
-| `WoodConfig.globalDialectRegistry == null`（被用户清空） | 退化为空匹配，命中 fallback |
+| 场景                                                | 行为                                      |
+|---------------------------------------------------|-----------------------------------------|
+| `matcher.run(conn)` 抛 `SQLException`              | 捕获后**继续遍历下一个 matcher**，记 warn 日志        |
+| `matcher.run(conn)` 抛 `RuntimeException`          | 同上，捕获并 warn                             |
+| `register(dialect, matcher)` 时 `dialect == null`  | 抛 `IllegalArgumentException`（fail-fast） |
+| `register(dialect, matcher)` 时 `matcher == null`  | 抛 `IllegalArgumentException`            |
+| `setFixed(null, _)`                               | 等价于"取消强制"，fixed 槽位清空                    |
+| 多次 `setFixed`                                     | 后注册覆盖前一次                                |
+| 多次 `register` 同一 dialect                          | 允许（不报错），按注册顺序匹配                         |
+| `find()` 全未命中                                     | 返回 fallback（默认 MySQL）                   |
+| `WoodConfig.globalDialectRegistry == null`（被用户清空） | 退化为空匹配，命中 fallback                      |
 
 ### 4.1 日志规范
 
@@ -288,19 +320,19 @@ public enum DbType {
 
 1. **零破坏**：现有 20 个内置方言类、`DbDialect` 现有 15 个方法、`DbType` 已有 17 个常量 —— **完全不动**。
 2. **加法**：
-   - `DbType.External` 增 1 个 enum 常量；
-   - `DbDialect` 增 1 个 `default` 方法；
-   - `WoodConfig` 增 1 个静态字段 + 1 个静态方法；
-   - `DbContext` 增 1 个字段 + 2 个 getter/setter + `setDialect` 内部重写 + 构造 metadata 时设 owner；
-   - `DbContextMetaData` 增 1 个 `owner` 字段 + 1 个 `setOwner` 方法；
-   - 新增 1 个类 `DbDialectRegistry`。
+    - `DbType.External` 增 1 个 enum 常量；
+    - `DbDialect` 增 1 个 `default` 方法；
+    - `WoodConfig` 增 1 个静态字段 + 1 个静态方法；
+    - `DbContext` 增 1 个字段 + 2 个 getter/setter + `setDialect` 内部重写 + 构造 metadata 时设 owner；
+    - `DbContextMetaData` 增 1 个 `owner` 字段 + 1 个 `setOwner` 方法；
+    - 新增 1 个类 `DbDialectRegistry`。
 3. **重构（行为等价）**：
-   - `DbContextMetaData.setDatabaseType()` 改为两级 registry 查找；
-   - `isOceanBaseUseMysqlMode` / `getKingbaseMode` 从 `DbContextMetaData` 平移到 `DbDialectRegistry`（行为不变）。
+    - `DbContextMetaData.setDatabaseType()` 改为两级 registry 查找；
+    - `isOceanBaseUseMysqlMode` / `getKingbaseMode` 从 `DbContextMetaData` 平移到 `DbDialectRegistry`（行为不变）。
 4. **API 兼容**：
-   - `DbContext.setDialect(DbType, DbDialect)` 签名与可观察语义不变；
-   - `DbContextMetaData.setDialect(DbDialect)` 仍可用（走 `setFixed`）；
-   - `DbContext.getDialect()` / `getType()` 返回值不变。
+    - `DbContext.setDialect(DbType, DbDialect)` 签名与可观察语义不变；
+    - `DbContextMetaData.setDialect(DbDialect)` 仍可用（走 `setFixed`）；
+    - `DbContext.getDialect()` / `getType()` 返回值不变。
 
 ---
 
@@ -315,7 +347,10 @@ public enum DbType {
 
 ### 6.2 待决
 
-- `isOceanBaseUseMysqlMode` / `getKingbaseMode` 是平移到 `DbDialectRegistry` 静态私有方法，还是保留在 `DbContextMetaData` 作为 package-private 方法供 builtin 闭包引用？两者行为等价。前者内聚性更好，后者改动面更小。**倾向：保留在 `DbContextMetaData`，builtin 闭包通过调用方注入**（即 `DbDialectRegistry.builtin()` 接受一个 `DbContextMetaData` 引用或一组工具函数）。最终实现期定。
+- `isOceanBaseUseMysqlMode` / `getKingbaseMode` 是平移到 `DbDialectRegistry` 静态私有方法，还是保留在 `DbContextMetaData`
+  作为 package-private 方法供 builtin 闭包引用？两者行为等价。前者内聚性更好，后者改动面更小。*
+  *倾向：保留在 `DbContextMetaData`，builtin 闭包通过调用方注入**（即 `DbDialectRegistry.builtin()` 接受一个
+  `DbContextMetaData` 引用或一组工具函数）。最终实现期定。
 
 ---
 
@@ -373,5 +408,117 @@ src/test/java/org/noear/wood/dialect/
 ## 10. 歧义核对
 
 - "内置 vs 外部"以**注册源**区分：`builtin()` 预填的算"内置"，运行时 `register(...)` 算"外部"；
-- "fallback"在 `Match.isFallback` 上明确标记为 `true`，调用方可区分"显式命中 fallback"与"主动用 fallback"——本设计中两者等价，但保留字段便于未来扩展；
+- "fallback"在 `Match.isFallback` 上明确标记为 `true`，调用方可区分"显式命中 fallback"与"主动用 fallback"
+  ——本设计中两者等价，但保留字段便于未来扩展；
 - `DbType.External` 不会被 builtin 使用，仅外部注册时填入。
+
+---
+
+## 11. `DbType` 演化评估
+
+### 11.1 现状与痛点
+
+`DbType` 是一个**封闭 enum**（`wood/src/main/java/org/noear/wood/wrap/DbType.java`，17 个常量）。其角色有三：
+
+1. **类型标签**：`ctx.getType()` 返回它，调用方用以识别"当前是哪种数据库"；
+2. **switch 分支键**：`DbContextMetaData.setSchema()` 里 `switch (type) { case PostgreSQL: ... }` 是它在核心代码里唯一的内部消费者；
+3. **API 形参**：`setDialect(DbType, DbDialect)` 接收它。
+
+新增 `DbType.External` 只是**承认"我不够用了"**的妥协 —— 外部方言统一打上 `External` 标签后，`getType()` 不再能区分 GBase 8s 和 Kingbase，外围判断还得回到 `getDialect().typeName()`。这等于让 enum 和 typeName **同时存在并承担同一职责**，长期是双源真相。
+
+### 11.2 三种走法
+
+#### 走法 A：保留 enum + `DbType.External`（当前 spec 默认）
+
+- 不破坏现有 API，`getType()` 仍是 `DbType` 枚举；
+- 双源真相：enum 用于"内置 17 种"的快速分支，typeName 用于"任意字符串"的扩展标识；
+- **代价**：外部方言在 `getType()` 上被压扁成 `External`，调用方必须组合使用两个 API。
+
+#### 走法 B：把 enum 降级为 class，保留内置常量做静态字段
+
+```java
+public final class DbType {
+    public static final DbType MySQL     = new DbType("MySQL");
+    public static final DbType MariaDB   = new DbType("MariaDB");
+    // ... 其他 15 个 ...
+    public static final DbType GBase8s   = new DbType("GBase8s");
+    public static final DbType External  = new DbType("External"); // 兜底占位
+
+    private final String name;
+    public DbType(String name) { this.name = name; }
+    public String name() { return name; }
+
+    @Override public boolean equals(Object o) { ... }   // 按 name 比
+    @Override public int hashCode() { ... }
+    @Override public String toString() { return name; }
+}
+```
+
+- **保留 `DbType.MySQL` 这种调用语法**（同一标识符），但语义从"枚举常量"变成"单例对象"；
+- 外部可以 `new DbType("MyDb")` 或 `DbType.named("MyDb")`，无注册门槛；
+- `getType()` 签名不变，行为更准确：外部方言拿到自己声明的 `DbType("MyDb")` 而不是 `External`；
+- **唯一破坏点**：现有 `switch (type)`（`setSchema`）需要改成 `if-else` 或迁移到 `DbDialect` 接口（见 §11.3）。
+
+#### 走法 C：彻底去 enum，`getType()` 直接返回 `String`（或 `typeName()`）
+
+- `DbType` 类删除，`ctx.getType()` 返回 `String`；
+- 所有 `== DbType.X` 调用点全断（user-facing breaking change）；
+- 不推荐 —— 改动面铺到所有调用方，enum 提供的可读性和编译期检查也丢了。
+
+### 11.3 内部 `switch (type)` 的归宿（无论 B 还是 A+）
+
+`DbContextMetaData.setSchema` 当前是唯一内部消费者：
+
+```java
+switch (type) {
+    case PostgreSQL: schema = "public"; break;
+    case H2:         schema = "PUBLIC"; break;
+    case SQLServer:  schema = "dbo";
+    case Oracle:     schema = metaData.getUserName(); break;
+}
+```
+
+不管选 A 还是 B，这段都应该从 enum 上解耦。最干净的做法：在 `DbDialect` 接口加一个 `default` 方法：
+
+```java
+public interface DbDialect {
+    // ... 现有 15 个方法 + typeName() ...
+
+    /** 默认 schema 名（用于 schema 解析失败时的兜底） */
+    default String defaultSchema() {
+        return null;  // 多数方言用 conn.getSchema() 就够了
+    }
+}
+```
+
+`setSchema` 改为：
+
+```java
+if (schema == null) {
+    schema = dialect.defaultSchema();   // 各方言自报家门
+}
+if (schema == null) {
+    schema = catalog;                   // 再兜底到 catalog
+}
+```
+
+各内置方言按需 override `defaultSchema()`。这样 enum 的 `switch` 分支被消解，type 字段在 `setSchema` 里彻底无依赖。
+
+### 11.4 建议
+
+**推荐走法 B + §11.3 的 `defaultSchema()` 重构**。理由：
+
+1. **真正解决"封闭 enum"问题**：外部方言能拿到自己的 `DbType("MyDb")`，`getType()` 不再被压成 `External`；
+2. **API 兼容面最大化**：`getType()` 仍是 `DbType` 类型，调用方 `== DbType.MySQL` 写法不用改；
+3. **改动半径可控**：核心代码改动仍然是 5 个文件 + 1 新类，`setSchema` 迁移到 `defaultSchema()` 反而是净简化（去掉一段 switch）；
+4. **为后续 Java SPI 铺路**：走法 B 让 `DbType` 不再是注册障碍，SPI 实现里 `DbType.named("FooDb")` 一行就够。
+
+如果觉得 B 的"enum 变 class"在用户认知上太重，可以**降级到走法 A + §11.3 的 `defaultSchema()`**。两者的核心区别就是"外部方言的 `getType()` 是统一的 `External` 还是各自有名字"。
+
+### 11.5 决策点（待用户确认）
+
+- [ ] 走法 A / B / C 选哪个？
+- [ ] 是否同步引入 `DbDialect.defaultSchema()`？
+
+确认后我会更新 §1.3、§3.2、§3.5、§5 等相关段落。
+
