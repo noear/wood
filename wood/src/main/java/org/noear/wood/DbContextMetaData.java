@@ -53,6 +53,8 @@ public class DbContextMetaData implements Closeable {
     private transient DbType type = DbType.Unknown;
     private transient DbDialect dialect;
 
+    private DbContext owner;        // 反向引用：用于回查实例级 registry
+
     public final transient ReentrantLock SYNC_LOCK = new ReentrantLock();
 
     public DbContextMetaData() {
@@ -167,6 +169,13 @@ public class DbContextMetaData implements Closeable {
     public void setDialect(DbDialect dialect) {
         init();
         this.dialect = dialect;
+    }
+
+    /**
+     * 由 DbContext 在创建 metadata 时设置
+     */
+    public void setOwner(DbContext owner) {
+        this.owner = owner;
     }
 
     public Collection<TableWrap> getTableAll() {
