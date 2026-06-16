@@ -168,7 +168,7 @@ git commit -m "feat(wood): add typeName() and defaultSchema() defaults to DbDial
 
 - [ ] **Step 1: Append `External` to the enum**
 
-Open `wood/src/main/java/org/noear/wood/wrap/DbType.java` and find the existing `GBase8s,` line. Add after it (before the trailing `}`):
+Open `wood/src/main/java/org/noear/wood/wrap/DbType.java` and find the existing `DM,` line (the last built-in constant). Add after it (before the trailing `}`):
 
 ```java
     /**
@@ -683,16 +683,6 @@ class DbDialectRegistryBuiltinTest {
     }
 
     @Test
-    void gbase8s_byUrlPrefix() throws SQLException {
-        assertMatch("jdbc:gbasedbt-sqli://localhost:9088/test", "DbGbase8sDialect", DbType.GBase8s);
-    }
-
-    @Test
-    void gbase8s_informixCompat_byUrlPrefix() throws SQLException {
-        assertMatch("jdbc:informix-sqli://localhost:9088/test", "DbGbase8sDialect", DbType.GBase8s);
-    }
-
-    @Test
     void kingbaseByPostgresByDefault() throws SQLException {
         // 没设置 sql stub 时，getKingbaseMode 会抛 SQLException → catch 后返回 null → 落到 postgre fallback
         // 但因为 matcher 中 try/catch 会 swallow，期望: DbKingbasePostgreDialect
@@ -743,8 +733,6 @@ Replace the `builtin()` method in `DbDialectRegistry.java` with:
         r.register(new DbPrestoDialect(),       DbType.Presto,       c -> urlOf(c).startsWith("jdbc:presto:"));
         r.register(new DbDuckDbDialect(),       DbType.DuckDb,       c -> urlOf(c).startsWith("jdbc:duckdb:"));
         r.register(new DbDamengDialect(),       DbType.DM,           c -> urlOf(c).startsWith("jdbc:dm:"));
-        r.register(new DbGbase8sDialect(),      DbType.GBase8s,      c -> urlOf(c).startsWith("jdbc:gbasedbt-sqli:")
-                                                                  || urlOf(c).startsWith("jdbc:informix-sqli:"));
         r.register(new DbOceanBaseMySQLDialect(),  DbType.OceanBase,  c -> urlOf(c).startsWith("jdbc:oceanbase:") && isOceanBaseMysql(c));
         r.register(new DbOceanBaseOracleDialect(), DbType.OceanBase,  c -> urlOf(c).startsWith("jdbc:oceanbase:") && !isOceanBaseMysql(c));
         r.register(new DbKingbaseMySQLDialect(),   DbType.KingbaseES, c -> urlOf(c).startsWith("jdbc:kingbase") && "mysql".equalsIgnoreCase(getKingbaseMode(c)));
