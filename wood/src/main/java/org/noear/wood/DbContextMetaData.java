@@ -309,22 +309,23 @@ public class DbContextMetaData implements Closeable {
             schema = conn.getSchema();
 
             if (schema == null) {
-                schema = catalog;
+                // 优先级：dialect.defaultSchema() > Oracle 特例 > catalog
+                schema = (dialect != null) ? dialect.defaultSchema() : null;
+                if (schema == null && type == DbType.Oracle && metaData != null) {
+                    // Oracle 特殊处理：getUserName()（有副作用的查询，仅在 fallback 分支调用）
+                    try {
+                        schema = metaData.getUserName();
+                    } catch (Throwable ignore) {
+                    }
+                }
+                if (schema == null) {
+                    schema = catalog;
+                }
             }
-
         } catch (Throwable e) {
-            switch (type) {
-                case PostgreSQL:
-                    schema = "public";
-                    break;
-                case H2:
-                    schema = "PUBLIC";
-                    break;
-                case SQLServer:
-                    schema = "dbo";
-                case Oracle:
-                    schema = metaData.getUserName();
-                    break;
+            schema = (dialect != null) ? dialect.defaultSchema() : null;
+            if (schema == null) {
+                schema = catalog;
             }
         }
     }
