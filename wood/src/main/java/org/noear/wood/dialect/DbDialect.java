@@ -96,4 +96,18 @@ public interface DbDialect {
      */
     void deleteCmd(StringBuilder sb, String table1, boolean addFrom);
 
+    /**
+     * 类型名（用于日志/调试/外部标识）
+     */
+    default String typeName() {
+        return getClass().getSimpleName();
+    }
+
+    /**
+     * 默认 schema 名（用于 schema 解析失败时的兜底；返回 null 表示不设默认值）
+     */
+    default String defaultSchema() {
+        return null;
+    }
+
 }
