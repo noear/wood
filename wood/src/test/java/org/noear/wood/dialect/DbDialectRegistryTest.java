@@ -102,4 +102,33 @@ class DbDialectRegistryTest {
         DbDialectRegistry r = new DbDialectRegistry();
         assertThrows(IllegalArgumentException.class, () -> r.register(new DbH2Dialect(), null));
     }
+
+    @Test
+    void setFixed_overridesMatchersAndFallback() throws SQLException {
+        DbDialectRegistry r = new DbDialectRegistry();
+        Connection conn = mock(Connection.class);
+        r.register(new DbH2Dialect(), c -> true);  // 这个本来会匹配
+        DbOracleDialect oracle = new DbOracleDialect();
+        r.setFixed(oracle, DbType.Oracle);         // 但 fixed 应该胜出
+
+        DbDialectRegistry.Match m = r.find(conn);
+
+        assertTrue(m.isFallback, "fixed 视为兜底命中（isFallback=true），但 dialect 来自 setFixed");
+        assertSame(oracle, m.dialect);
+        assertEquals(DbType.Oracle, m.type);
+    }
+
+    @Test
+    void setFixed_null_clearsOverride() throws SQLException {
+        DbDialectRegistry r = new DbDialectRegistry();
+        Connection conn = mock(Connection.class);
+        DbH2Dialect h2 = new DbH2Dialect();
+        r.setFixed(h2, DbType.H2);
+        r.setFixed(null, null);
+
+        DbDialectRegistry.Match m = r.find(conn);
+
+        assertTrue(m.isFallback);
+        assertEquals(DbType.MySQL, m.type, "clear 后回到默认 fallback");
+    }
 }
