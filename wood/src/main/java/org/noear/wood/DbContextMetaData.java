@@ -298,7 +298,7 @@ public class DbContextMetaData implements Closeable {
         try {
             catalog = conn.getCatalog();
         } catch (Throwable e) {
-            e.printStackTrace();
+            log.error("set schema error: ", e);
         }
 
         if (schema != null) {
