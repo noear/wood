@@ -51,4 +51,9 @@ public class DbPostgreSQLDialect extends DbDialectBase{
     }
 
     //top 和mysql一样
+
+    @Override
+    public String defaultSchema() {
+        return "public";
+    }
 }

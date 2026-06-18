@@ -106,4 +106,10 @@ public class DbOracleDialect extends DbDialectBase{
             sqlB.append(orderBy);
         }
     }
+
+    @Override
+    public String defaultSchema() {
+        // 返回 null —— 真正的取值在 DbContextMetaData.setSchema 里用 metaData.getUserName()
+        return null;
+    }
 }

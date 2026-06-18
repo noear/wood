@@ -29,6 +29,12 @@ public enum DbType {
     KingbaseES,
 
     DM,
+
+    /**
+     * 通过外部 registry 注册的方言（具体类型由 getDialect().typeName() 给出）
+     */
+    External,
+
     /*
     Unknown(DatabaseType.Unknown, "Unknown", "Unknown", 0),
     OracleThinServiceName(DatabaseType.Oracle, "oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:@//${host}:${port}/${name}", 1521),

@@ -62,4 +62,9 @@ public class DbSQLServerDialect extends DbDialectBase{
             sqlB.append(orderBy);
         }
     }
+
+    @Override
+    public String defaultSchema() {
+        return "dbo";
+    }
 }

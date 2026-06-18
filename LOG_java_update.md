@@ -1,3 +1,13 @@
+### 1.4.6
+
+* 新增外部方言可插拔机制：`DbDialectRegistry` 允许不修改 Wood 核心源码注册新数据库方言
+    - `WoodConfig.registerDialect(dialect, matcher)` 全局注册
+    - `DbContext.getDialectRegistry()` / `setDialectRegistry()` 实例级覆盖
+    - `DbDialect` 接口新增 `default String typeName()` 与 `default String defaultSchema()`
+    - `DbType.External` 表示外部注册的方言
+* `DbDialect.defaultSchema()` 替代原 `DbContextMetaData.setSchema` 里的 `switch (type)`，各内置方言自报默认 schema
+
+
 ### 1.4.5
 
 * snack4 升为 4.0.46

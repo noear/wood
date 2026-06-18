@@ -370,3 +370,38 @@ public interface BaseMapper<T> {
 }
 ```
 
+## 外部方言注册（1.4.5+）
+
+Wood 1.4.5 起支持不修改核心源码注册新数据库方言。
+
+### 全局注册（最常见）
+
+```java
+WoodConfig.registerDialect(
+    new DbYourDialect(),
+    conn -> conn.getMetaData().getURL().startsWith("jdbc:yourdb:")
+);
+```
+
+### 实例级覆盖（多数据源 / 测试）
+
+```java
+DbContext ctx = new DbContext(dataSource);
+ctx.getDialectRegistry().register(new DbYourDialect(),
+    conn -> conn.getMetaData().getURL().startsWith("jdbc:yourdb:"));
+
+// 或者整体替换 registry
+ctx.setDialectRegistry(new DbDialectRegistry());
+```
+
+### 旧 API 兼容
+
+```java
+ctx.setDialect(DbType.MySQL, new DbH2Dialect());
+// 内部转写为 setFixed，等价于"无视 URL 强制使用该方言"
+```
+
+### 优先级
+
+查找顺序：实例 `setDialect` 强制 > 实例 `register` > 全局 `register` > 内置 `builtin()` 兜底（MySQL）。
+
