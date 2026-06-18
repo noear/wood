@@ -1,6 +1,7 @@
 package org.noear.wood;
 
 import org.noear.wood.dialect.DbDialect;
+import org.noear.wood.dialect.DbDialectRegistry;
 import org.noear.wood.ext.*;
 import org.noear.wood.utils.StringUtils;
 import org.noear.wood.wrap.DbFormater;
@@ -62,10 +63,29 @@ public class DbContext extends DbEventBus implements Closeable {
     private final DbContextMetaData metaData = new DbContextMetaData();
 
     /**
+     * 实例级方言注册表
+     */
+    private DbDialectRegistry registry = new DbDialectRegistry();
+
+    /**
      * 获取元信息
      */
     public DbContextMetaData getMetaData() {
         return metaData;
+    }
+
+    /**
+     * 获取实例级方言注册表
+     */
+    public DbDialectRegistry getDialectRegistry() {
+        return registry;
+    }
+
+    /**
+     * 设置实例级方言注册表
+     */
+    public void setDialectRegistry(DbDialectRegistry registry) {
+        this.registry = registry;
     }
 
     /**
@@ -103,8 +123,7 @@ public class DbContext extends DbEventBus implements Closeable {
      * @param dbDialect 数据库方言
      */
     public void setDialect(DbType dbType, DbDialect dbDialect) {
-        getMetaData().setDialect(dbDialect);
-        getMetaData().setType(dbType);
+        registry.setFixed(dbDialect, dbType);
     }
 
     /**
@@ -238,6 +257,7 @@ public class DbContext extends DbEventBus implements Closeable {
     public DbContext(DataSource dataSource, String schema) {
         schemaSet(schema);
         getMetaData().setDataSource(dataSource);
+        getMetaData().setOwner(this);
     }
 
     public DbContext(Properties prop) {
@@ -268,6 +288,7 @@ public class DbContext extends DbEventBus implements Closeable {
         } else {
             getMetaData().setDataSource(new DbDataSource(url, username, password));
         }
+        getMetaData().setOwner(this);
     }
 
 
@@ -275,17 +296,20 @@ public class DbContext extends DbEventBus implements Closeable {
     public DbContext(String schema, String url) {
         schemaSet(schema);
         getMetaData().setDataSource(new DbDataSource(url));
+        getMetaData().setOwner(this);
     }
 
     //基于手动配置（无线程池）
     public DbContext(String schema, String url, String username, String password) {
         schemaSet(schema);
         getMetaData().setDataSource(new DbDataSource(url, username, password));
+        getMetaData().setOwner(this);
     }
 
     public DbContext(String schema, DataSource dataSource) {
         schemaSet(schema);
         getMetaData().setDataSource(dataSource);
+        getMetaData().setOwner(this);
     }
 
     //

@@ -1,6 +1,8 @@
 package org.noear.wood;
 
 import org.noear.wood.cache.ICacheServiceEx;
+import org.noear.wood.dialect.DbDialect;
+import org.noear.wood.dialect.DbDialectRegistry;
 import org.noear.wood.ext.Act1;
 import org.noear.wood.ext.Act2;
 import org.noear.wood.ext.Fun1;
@@ -10,6 +12,7 @@ import org.noear.wood.wrap.PrimaryKeyStrategy;
 import org.noear.wood.wrap.NamingStrategy;
 import org.noear.wood.wrap.TypeConverter;
 
+import java.sql.Connection;
 import java.sql.Statement;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,6 +64,18 @@ public final class WoodConfig {
     public static Map<String, DbContext> libOfDb = new ConcurrentHashMap<>();
 
     protected static DbEventBus eventBus = new DbEventBus();
+
+    /**
+     * 全局方言注册表。启动时已预填内置方言；外部可追加；实例级条目优先于这里。
+     */
+    public static DbDialectRegistry globalDialectRegistry = DbDialectRegistry.builtin();
+
+    /**
+     * 便捷方法：向全局注册表注册一个方言 + 匹配器
+     */
+    public static void registerDialect(DbDialect dialect, Fun1<Boolean, Connection> matcher) {
+        globalDialectRegistry.register(dialect, matcher);
+    }
 
 
     protected static boolean isEmpty(CharSequence s) {

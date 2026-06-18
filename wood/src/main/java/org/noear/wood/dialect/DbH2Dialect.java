@@ -53,4 +53,9 @@ public class DbH2Dialect extends DbDialectBase{
     public boolean supportsVariablePaging() {
         return true;
     }
+
+    @Override
+    public String defaultSchema() {
+        return "PUBLIC";
+    }
 }
