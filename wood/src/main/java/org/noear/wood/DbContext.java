@@ -124,6 +124,8 @@ public class DbContext extends DbEventBus implements Closeable {
      */
     public void setDialect(DbType dbType, DbDialect dbDialect) {
         registry.setFixed(dbDialect, dbType);
+        getMetaData().setDialect(dbDialect);
+        getMetaData().setType(dbType);
     }
 
     /**
