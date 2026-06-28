@@ -113,7 +113,7 @@ class DbDialectRegistryTest {
 
         DbDialectRegistry.Match m = r.find(conn);
 
-        assertTrue(m.isFallback, "fixed 视为兜底命中（isFallback=true），但 dialect 来自 setFixed");
+        assertFalse(m.isFallback, "fixed 应作为强制命中，不能被上层当作 fallback 再覆盖");
         assertSame(oracle, m.dialect);
         assertEquals(DbType.Oracle, m.type);
     }

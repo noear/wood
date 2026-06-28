@@ -92,7 +92,7 @@ public class DbDialectRegistry {
     /** 查找 */
     public Match find(Connection conn) {
         if (fixedDialect != null) {
-            return new Match(fixedDialect, fixedType, true);
+            return new Match(fixedDialect, fixedType, false);
         }
         // 一次 find 内只取一次 url、只探测一次 OceanBase/Kingbase，避免 matcher 重复开销
         FindContext ctx = new FindContext(conn);
