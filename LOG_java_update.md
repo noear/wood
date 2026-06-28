@@ -1,3 +1,8 @@
+
+### 1.4.7
+
+* 修复 DbContext.setDialect 直接设置方言未生效
+
 ### 1.4.6
 
 * 新增 外部方言可插拔机制：`DbDialectRegistry` 允许不修改 Wood 核心源码注册新数据库方言
