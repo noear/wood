@@ -34,7 +34,7 @@ public class BaseMapperWrap<T> implements BaseMapper<T> {
     public BaseMapperWrap(DbContext db, Class<?> entityType, String tableName) {
         _db = db;
         _entityType = entityType; //给 BaseEntityWrap 用的
-        _table = BaseEntityWrap.get(this);
+        _table = BaseEntityWrap.get(entityType);
 
         if (StringUtils.isEmpty(tableName)) {
             _tabelName = _table.tableName;

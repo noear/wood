@@ -1,7 +1,11 @@
+### 1.4.8
+
+* 修复 BaseEntityWrap 以 BaseMapper 实例为静态缓存 key 导致的内存泄漏（频繁 mapperBase 场景会 OOM）
 
 ### 1.4.7
 
 * 修复 DbContext.setDialect 直接设置方言未生效
+
 
 ### 1.4.6
 
