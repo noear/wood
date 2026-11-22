@@ -302,30 +302,31 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
 
         _builder.backup();
 
-        _context.getDialect().buildInsertOneCode(_context, _table, _builder, this::isSqlExpr, true, cols);
+        try {
+            _context.getDialect().buildInsertOneCode(_context, _table, _builder, this::isSqlExpr, true, cols);
 
-        List<Object[]> argList = new ArrayList<>();
-        String tml = _builder.toString();
+            List<Object[]> argList = new ArrayList<>();
+            String tml = _builder.toString();
 
-        for (GetHandler item : valuesList) {
-            List<Object> tmp = new ArrayList<>();
-            for (String key : cols.keys()) {
-                tmp.add(item.get(key));
+            for (GetHandler item : valuesList) {
+                List<Object> tmp = new ArrayList<>();
+                for (String key : cols.keys()) {
+                    tmp.add(item.get(key));
+                }
+
+                argList.add(tmp.toArray());
             }
 
-            argList.add(tmp.toArray());
+
+            _builder.clear();
+            _builder.append(tml, argList.toArray());
+
+            int[] rst = compile().executeBatch();
+
+            return rst.length > 0;
+        } finally {
+            _builder.restore();
         }
-
-
-        _builder.clear();
-        _builder.append(tml, argList.toArray());
-
-        int[] rst = compile().executeBatch();
-
-        _builder.restore();
-
-
-        return rst.length > 0;
     }
 
     /**
@@ -543,39 +544,39 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
 
         _builder.backup();
 
-        this.where("1=1");
-        for (String f : ff) {
-            this.and(f + "=?");
-        }
-
-        List<Object[]> argList = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
-
-        _context.getDialect().updateCmdBegin(sb, _table);
-        _context.getDialect().updateCmdSet(sb, _table);
-
-        updateItemsBuildByFields0(cols, sb);
-
-        for (GetHandler item : valuesList) {
-            List<Object> tmp = new ArrayList<>();
-            for (String key : cols.keys()) {
-                tmp.add(item.get(key));
+        try {
+            this.where("1=1");
+            for (String f : ff) {
+                this.and(f + "=?");
             }
 
-            for (String key : ff) {
-                tmp.add(item.get(key));
+            List<Object[]> argList = new ArrayList<>();
+            StringBuilder sb = new StringBuilder();
+
+            _context.getDialect().updateCmdBegin(sb, _table);
+            _context.getDialect().updateCmdSet(sb, _table);
+
+            updateItemsBuildByFields0(cols, sb);
+
+            for (GetHandler item : valuesList) {
+                List<Object> tmp = new ArrayList<>();
+                for (String key : cols.keys()) {
+                    tmp.add(item.get(key));
+                }
+
+                for (String key : ff) {
+                    tmp.add(item.get(key));
+                }
+                argList.add(tmp.toArray());
             }
-            argList.add(tmp.toArray());
+
+
+            _builder.insert(sb.toString(), argList.toArray());
+
+            return compile().executeBatch();
+        } finally {
+            _builder.restore();
         }
-
-
-        _builder.insert(sb.toString(), argList.toArray());
-
-        int[] rst = compile().executeBatch();
-
-        _builder.restore();
-
-        return rst;
     }
 
 
@@ -601,20 +602,27 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
 
         _context.getDialect().deleteCmd(sb, _table, _builder.indexOf(" FROM ") < 0);
 
-        _builder.insert(sb.toString());
+        _builder.backup();
 
-        if (limit_top > 0) {
-            if (dbType() == DbType.MySQL || dbType() == DbType.MariaDB) {
-                _builder.append(" LIMIT ?", limit_top);
+        try {
+            _builder.insert(sb.toString());
+
+            if (limit_top > 0) {
+                if (dbType() == DbType.MySQL || dbType() == DbType.MariaDB) {
+                    _builder.append(" LIMIT ?", limit_top);
+                }
             }
+
+
+            if (WoodConfig.isDeleteMustConditional && _builder.indexOf(" WHERE ") < 0) {
+                throw new RuntimeException("Lack of delete condition!!!");
+            }
+
+            return compile();
+        } finally {
+            //还原（不管成功或异常，都不污染查询对象，以便复用）
+            _builder.restore();
         }
-
-
-        if (WoodConfig.isDeleteMustConditional && _builder.indexOf(" WHERE ") < 0) {
-            throw new RuntimeException("Lack of delete condition!!!");
-        }
-
-        return compile();
     }
 
 
@@ -877,7 +885,11 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
     public SelectQ selectQ(String columns) {
         select_do(columns, true);
 
-        return new SelectQ(_builder);
+        SelectQ rst = new SelectQ(_builder);
+
+        _builder.restore();
+
+        return rst;
     }
 
     private void select_do(String columns, boolean doFormat) {

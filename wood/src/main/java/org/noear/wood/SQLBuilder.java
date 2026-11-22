@@ -32,17 +32,23 @@ public class SQLBuilder {
         paramS.clear();
     }
 
-    //备分状态
+    //备分状态（覆盖式备份）
     protected void backup() {
-        b_builder.append(builder.toString());
+        b_builder.setLength(0);
+        b_builder.append(builder);
+
+        b_paramS.clear();
         b_paramS.addAll(paramS);
     }
 
-    //还原状态
+    //还原状态（还原后清空备份）
     protected void restore() {
         clear();
         builder.append(b_builder);
         paramS.addAll(b_paramS);
+
+        b_builder.setLength(0);
+        b_paramS.clear();
     }
 
     /**
