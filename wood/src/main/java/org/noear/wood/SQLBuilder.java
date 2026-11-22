@@ -137,7 +137,7 @@ public class SQLBuilder {
 
             while (true) {
                 int idx = tmp.lastIndexOf(str);
-                if (idx == tmp.length() - len) {
+                if (idx >= 0 && idx == tmp.length() - len) {
                     tmp = tmp.substring(0, tmp.length() - len);
                 } else {
                     break;

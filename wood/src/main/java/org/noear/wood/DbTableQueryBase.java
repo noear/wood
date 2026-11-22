@@ -262,7 +262,7 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
      * 执行批量合并插入，使用集合数据
      */
     public boolean insertList(List<DataItem> valuesList) throws SQLException {
-        if (valuesList == null) {
+        if (valuesList == null || valuesList.size() == 0) {
             return false;
         }
 
@@ -323,7 +323,7 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
 
             int[] rst = compile().executeBatch();
 
-            return rst.length > 0;
+            return rst != null && rst.length > 0;
         } finally {
             _builder.restore();
         }
@@ -921,7 +921,6 @@ public class DbTableQueryBase<T extends DbTableQueryBase> extends WhereBase<T> i
 
         //3.构建hint
         if (_hint != null) {
-            sb.append(_hint);
             _builder.insert(0, _hint);
         }
 
