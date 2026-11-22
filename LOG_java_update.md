@@ -1,3 +1,9 @@
+### 1.4.9
+
+* 修复：查询对象多次构建 SQL 时条件与参数累积问题，backup 改为覆盖式并在 delete/insertList/updateList/selectQ 后（含异常）还原构建器状态
+* 修复：insertList 空列表及批量结果为空的判断，hint 重复拼接，SQLBuilder 截尾越界
+
+
 ### 1.4.8
 
 * 修复 BaseEntityWrap 以 BaseMapper 实例为静态缓存 key 导致的内存泄漏（频繁 mapperBase 场景会 OOM）
